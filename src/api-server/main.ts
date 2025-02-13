@@ -29,7 +29,7 @@ TypeORM.initDB({
   logging: false,
   entities: db_entities,
 });
-app.regisModules(
+app.registerModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),
   new JwTokenModule(
     new JwTokenSettings(app.env.JWT_SECRET, {

@@ -10,16 +10,17 @@ import { IUserRepository } from "../../../persistence/IUserRepository";
 import { JWT_TYPES } from "../../../../../lib/jwTokenLib/types";
 import { IJwTokenHelper } from "../../../../../lib/jwTokenLib/interfaces/IJwTokenHelper";
 import { SuccessReturn } from "../../../SuccessReturn";
+import { BaseReturn } from "../../../../../lib/applicationLib/baseReturn";
 
 @injectable()
-export class LoginHandler implements IReqHandler<LoginCommand, any> {
+export class LoginHandler implements IReqHandler<LoginCommand, BaseReturn> {
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,
     @inject(UserRepository) private _userRepository: IUserRepository,
     @inject(JWT_TYPES.IJwTokenHelper) private _jwt: IJwTokenHelper,
   ) {}
 
-  async handle(req: LoginCommand): Promise<any> {
+  async handle(req: LoginCommand): Promise<BaseReturn> {
     const user = await this._userRepository.getByAccount(req.account);
     if (!user) return new LoginFailError();
 
@@ -31,7 +32,6 @@ export class LoginHandler implements IReqHandler<LoginCommand, any> {
     }
 
     const token = this._userRepository.getValidToken(user, this._jwt);
-
     return new SuccessReturn({ token });
   }
 }

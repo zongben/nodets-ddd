@@ -41,11 +41,13 @@ describe("LoginHandler", () => {
   test("when password is incorrect, should return LoginFailError", async () => {
     mockUserRepository.getByAccount = jest
       .fn(mockUserRepository.getByAccount)
-      .mockResolvedValue(UserRoot.create({
-        account: "account",
-        password: "password",
-        username: "username",
-      }));
+      .mockResolvedValue(
+        UserRoot.create({
+          account: "account",
+          password: "password",
+          username: "username",
+        }),
+      );
 
     const loginHandler = new LoginHandler(
       mockPublisher,
@@ -66,11 +68,13 @@ describe("LoginHandler", () => {
 
     mockUserRepository.getByAccount = jest
       .fn(mockUserRepository.getByAccount)
-      .mockResolvedValue(UserRoot.create({
-        account: "account",
-        password,
-        username: "username",
-      }));
+      .mockResolvedValue(
+        UserRoot.create({
+          account: "account",
+          password,
+          username: "username",
+        }),
+      );
 
     mockUserRepository.getValidToken = jest
       .fn(mockUserRepository.getValidToken)

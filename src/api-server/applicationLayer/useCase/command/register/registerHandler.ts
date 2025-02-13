@@ -8,14 +8,15 @@ import { UserExsistError } from "./userExsistError";
 import { CryptoService } from "../../../services/cryptoService";
 import { RegisterResult } from "./registerResult";
 import { SuccessReturn } from "../../../SuccessReturn";
+import { BaseReturn } from "../../../../../lib/applicationLib/baseReturn";
 
 @injectable()
-export class RegisterHandler implements IReqHandler<RegisterCommand, any> {
+export class RegisterHandler implements IReqHandler<RegisterCommand, BaseReturn> {
   constructor(
     @inject(UserRepository) private readonly _userRepository: IUserRepository,
   ) {}
 
-  async handle(req: RegisterCommand): Promise<any> {
+  async handle(req: RegisterCommand): Promise<BaseReturn> {
     const isUserExist =
       (await this._userRepository.getByAccount(req.account)) !== null;
     if (isUserExist) {

@@ -6,13 +6,14 @@ import { IUserRepository } from "../../../persistence/IUserRepository";
 import { UserNotExsistError } from "./userNotExsistError";
 import { GetUserResult } from "./getUserResult";
 import { SuccessReturn } from "../../../SuccessReturn";
+import { BaseReturn } from "../../../../../lib/applicationLib/baseReturn";
 
 @injectable()
-export class GetUserHandler implements IReqHandler<GetUserQuery, any> {
+export class GetUserHandler implements IReqHandler<GetUserQuery, BaseReturn> {
   constructor(
     @inject(UserRepository) private _userRepository: IUserRepository,
   ) {}
-  async handle(query: GetUserQuery): Promise<any> {
+  async handle(query: GetUserQuery): Promise<BaseReturn> {
     const user = await this._userRepository.getByAccount(query.account);
     if (!user) {
       return new UserNotExsistError();
