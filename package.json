@@ -4,16 +4,22 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^22.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.4",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.26.1"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

@@ -4,4 +4,4 @@
 
 GET {{host}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoidGVzdGFjYyIsImlhdCI6MTczMjY5NzU3NCwiZXhwIjoxNzMyNzgzOTc0fQ.aO5DHIxG9XSHnzH_to5ixCtM24pHuLgTk7qPFuLJ87I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoidGVzdCIsImlhdCI6MTc0MjAxNjQ1NiwiZXhwIjoxNzQyMTAyODU2fQ.l0AHfO_usBbS7jEWp15PC1GG-sUsPrPTWXGVykbpZz4
