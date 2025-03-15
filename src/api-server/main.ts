@@ -25,7 +25,7 @@ const app = App.createBuilder((opt) => {
 });
 TypeORM.initDB({
   type: "sqlite",
-  database: "./db.sqlite",
+  database: __dirname + "/db.sqlite",
   synchronize: true,
   logging: false,
   entities: db_entities,

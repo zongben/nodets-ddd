@@ -2,3 +2,4 @@ node_modules
 src/api-server/.env
 db.sqlite
 .env
+dist
