@@ -31,7 +31,7 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
       return new LoginFailError();
     }
 
-    const token = this._userRepository.getValidToken(user, this._jwt);
+    const token = this._jwt.generateToken({ account: user.account, username: user.username });
     return new SuccessReturn({ token });
   }
 }
