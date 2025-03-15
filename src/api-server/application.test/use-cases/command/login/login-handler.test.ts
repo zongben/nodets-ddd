@@ -1,11 +1,11 @@
-import { IJwTokenHelper } from "../../../../../lib/jwTokenLib/interfaces/IJwTokenHelper";
-import { IPublisher } from "../../../../../lib/mediatorLib/interfaces/IPublisher";
-import { IUserRepository } from "../../../../applicationLayer/persistence/IUserRepository";
-import { CryptoService } from "../../../../applicationLayer/services/cryptoService";
-import { SuccessReturn } from "../../../../applicationLayer/SuccessReturn";
-import { LoginFailError } from "../../../../applicationLayer/useCase/command/login/loginFailError";
-import { LoginHandler } from "../../../../applicationLayer/useCase/command/login/loginHandler";
-import { UserRoot } from "../../../../domainLayer/user/userRoot";
+import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
+import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.interface";
+import { IUserRepository } from "../../../../application/persistences/user-repository.interface";
+import { CryptoService } from "../../../../application/services/crypto-service";
+import { SuccessReturn } from "../../../../application/success-return";
+import { LoginFailError } from "../../../../application/use-cases/command/login/login-fail-error";
+import { LoginHandler } from "../../../../application/use-cases/command/login/login-handler";
+import { UserRoot } from "../../../../domain/user/user-root";
 
 let mockUserRepository: IUserRepository;
 let mockPublisher: IPublisher;

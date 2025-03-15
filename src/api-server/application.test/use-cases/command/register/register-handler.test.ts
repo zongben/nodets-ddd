@@ -1,8 +1,8 @@
-import { IUserRepository } from "../../../../applicationLayer/persistence/IUserRepository";
-import { SuccessReturn } from "../../../../applicationLayer/SuccessReturn";
-import { RegisterHandler } from "../../../../applicationLayer/useCase/command/register/registerHandler";
-import { UserExsistError } from "../../../../applicationLayer/useCase/command/register/userExsistError";
-import { UserRoot } from "../../../../domainLayer/user/userRoot";
+import { IUserRepository } from "../../../../application/persistences/user-repository.interface";
+import { SuccessReturn } from "../../../../application/success-return";
+import { RegisterHandler } from "../../../../application/use-cases/command/register/register-handler";
+import { UserExsistError } from "../../../../application/use-cases/command/register/user-exsist-error";
+import { UserRoot } from "../../../../domain/user/user-root";
 
 let mockUserRepository: IUserRepository;
 
