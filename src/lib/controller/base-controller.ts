@@ -25,7 +25,7 @@ export abstract class BaseController {
     return this._asyncWrapper(fn.bind(this));
   }
 
-  sendResult(res: any, ret: IBaseReturn) {
+  sendReturn(res: any, ret: IBaseReturn) {
     if (ret.isSuccess) {
       res.status(200).send(ret.data);
     } else {

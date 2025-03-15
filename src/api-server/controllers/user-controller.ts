@@ -8,7 +8,7 @@ export class UserController extends BaseController {
     const { account } = res.locals.jwt;
     const query = new GetUserQuery(account);
     const ret = await this._sender.send(query);
-    this.sendResult(res, ret);
+    this.sendReturn(res, ret);
     next();
   }
 

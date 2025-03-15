@@ -41,9 +41,9 @@ export class App {
     return this;
   }
 
-  mapController(controllers: any[]) {
+  mapController(controllers: Array<new (...args: any[]) => BaseController>) {
     controllers.forEach((c) => {
-      const _ctor = this.serviceContainer.resolve(c) as BaseController;
+      const _ctor = this.serviceContainer.resolve(c);
       this._app.use(
         `${this.options.routerPrefix}${_ctor.apiPath}`,
         _ctor.mapRoutes(),

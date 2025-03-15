@@ -18,7 +18,7 @@ export class AuthController extends BaseController {
       username
     });
     const ret = await this._sender.send(command);
-    this.sendResult(res, ret);
+    this.sendReturn(res, ret);
     next();
   }
 
@@ -34,7 +34,7 @@ export class AuthController extends BaseController {
       password,
     });
     const ret = await this._sender.send(command);
-    this.sendResult(res, ret);
+    this.sendReturn(res, ret);
     next();
   }
 

@@ -7,12 +7,13 @@ import { IMediator } from "./interfaces/mediator.interface";
 import { ISender } from "./interfaces/sender.interface";
 import { IPublisher } from "./interfaces/publisher.interface";
 import { Module } from "../container/container-module";
+import { MediatorMap } from "./mediator-map";
 
 @injectable()
 export class MediatorModule extends Module {
   constructor(
     private readonly _container: Container,
-    private readonly _mediatorMap: any,
+    private readonly _mediatorMap: new (...args: any[]) => MediatorMap,
     private readonly _pipeline: (typeof MediatorPipe)[],
   ) {
     super();
