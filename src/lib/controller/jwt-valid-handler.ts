@@ -2,7 +2,6 @@ import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 export function jwtValidHandler(secret: string) {
-  console.log("secret ", secret);
   return (req: Request, res: Response, next: NextFunction) => {
     let token = req.headers.authorization;
     if (!token || !token.startsWith("Bearer ")) {

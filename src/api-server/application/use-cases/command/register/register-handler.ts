@@ -3,20 +3,20 @@ import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.
 import { RegisterCommand } from "./register-command";
 import { UserRepository } from "../../../../infra/repositories/user-repository";
 import { IUserRepository } from "../../../persistences/user-repository.interface";
-import { BaseReturn } from "../../../../../lib/application/base-return";
 import { UserExsistError } from "./user-exsist-error";
 import { CryptoService } from "../../../services/crypto-service";
 import { UserRoot } from "../../../../domain/user/user-root";
 import { SuccessReturn } from "../../../success-return";
 import { RegisterResult } from "./register-result";
+import { IBaseReturn } from "../../../../../lib/application/base-return.interface";
 
 @injectable()
-export class RegisterHandler implements IReqHandler<RegisterCommand, BaseReturn> {
+export class RegisterHandler implements IReqHandler<RegisterCommand, IBaseReturn> {
   constructor(
     @inject(UserRepository) private readonly _userRepository: IUserRepository,
   ) {}
 
-  async handle(req: RegisterCommand): Promise<BaseReturn> {
+  async handle(req: RegisterCommand): Promise<IBaseReturn> {
     const isUserExist =
       (await this._userRepository.getByAccount(req.account)) !== null;
     if (isUserExist) {

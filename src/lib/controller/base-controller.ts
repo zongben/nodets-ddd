@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import { validationResult } from "express-validator";
 import { MEDIATOR_TYPES } from "../mediator/types";
 import { ISender } from "../mediator/interfaces/sender.interface";
-import { BaseReturn } from "../application/base-return";
+import { IBaseReturn } from "../application/base-return.interface";
 
 @injectable()
 export abstract class BaseController {
@@ -25,7 +25,7 @@ export abstract class BaseController {
     return this._asyncWrapper(fn.bind(this));
   }
 
-  sendResult(res: any, ret: BaseReturn) {
+  sendResult(res: any, ret: IBaseReturn) {
     if (ret.isSuccess) {
       res.status(200).send(ret.data);
     } else {
