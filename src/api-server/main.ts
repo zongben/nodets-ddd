@@ -1,7 +1,5 @@
 import { App } from "../lib/bootstrap/app";
-import { TypeORM } from "../lib/type-orm/type-orm";
 import { controllers } from "./controllers";
-import { db_entities } from "./infra/db-entities";
 import { MediatorModule } from "../lib/mediator/mediator-module";
 import { HandlerMap } from "./application/handler-map";
 import { JwTokenModule } from "../lib/jwToken/jwtoken-module";
@@ -10,6 +8,7 @@ import { requestMiddleware } from "../lib/middleware/request-middleware";
 import { jwtValidHandler } from "../lib/controller/jwt-valid-handler";
 import { exceptionMiddleware } from "../lib/middleware/exception-middleware";
 import dotenv from "dotenv";
+import { appDataSource } from "./infra/db-entities";
 dotenv.config({ path: __dirname + "/.env" });
 
 const app = App.createBuilder((opt) => {
@@ -23,12 +22,11 @@ const app = App.createBuilder((opt) => {
     autoBindInjectable: true,
   };
 });
-TypeORM.initDB({
-  type: "sqlite",
-  database: __dirname + "/db.sqlite",
-  synchronize: true,
-  logging: false,
-  entities: db_entities,
+app.useExtension(() => {
+  appDataSource
+    .initialize()
+    .then(() => console.log("Database initialized"))
+    .catch((err) => console.error("Error to initialized", err));
 });
 app.registerModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),
