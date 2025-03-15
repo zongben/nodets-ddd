@@ -14,7 +14,7 @@ export function jwtValidHandler(secret: string) {
       res.locals.jwt = payload;
       next();
     } catch (err) {
-      res.status(401).send({ msg: "Unauthorized" });
+      res.status(401).send("Unauthorized");
       return;
     }
   };

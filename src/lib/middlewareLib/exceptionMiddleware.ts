@@ -7,6 +7,6 @@ export function exceptionMiddleware(
   next: NextFunction,
 ) {
   console.error(err);
-  res.status(500).send({ msg: "Internal Server Error" });
+  res.status(500).send("Internal Server Error");
   next();
 }
