@@ -10,7 +10,7 @@ import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-he
 import { LoginFailError } from "./login-fail-error";
 import { LoginFailedEvent } from "./events/login-failed-event";
 import { SuccessReturn } from "../../../success-return";
-import { IBaseReturn } from "../../../../../lib/application/base-return.interface";
+import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 
 @injectable()
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {

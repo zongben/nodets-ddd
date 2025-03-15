@@ -6,7 +6,7 @@ import { IUserRepository } from "../../../persistences/user-repository.interface
 import { UserNotExsistError } from "./user-not-exsist-error";
 import { SuccessReturn } from "../../../success-return";
 import { GetUserResult } from "./get-user-result";
-import { IBaseReturn } from "../../../../../lib/application/base-return.interface";
+import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 
 @injectable()
 export class GetUserHandler implements IReqHandler<GetUserQuery, IBaseReturn> {

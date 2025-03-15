@@ -1,4 +1,4 @@
-import { IBaseReturn } from "../../lib/application/base-return.interface";
+import { IBaseReturn } from "../../lib/application/interfaces/base-return.interface";
 import { MESSAGE_CODES } from "./message-codes";
 
 export class SuccessReturn implements IBaseReturn {

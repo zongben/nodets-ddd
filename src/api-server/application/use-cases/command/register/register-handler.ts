@@ -7,8 +7,8 @@ import { UserExsistError } from "./user-exsist-error";
 import { UserRoot } from "../../../../domain/user/user-root";
 import { SuccessReturn } from "../../../success-return";
 import { RegisterResult } from "./register-result";
-import { IBaseReturn } from "../../../../../lib/application/base-return.interface";
 import { Crypto } from "../../../../../lib/utils/crypto";
+import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 
 @injectable()
 export class RegisterHandler implements IReqHandler<RegisterCommand, IBaseReturn> {

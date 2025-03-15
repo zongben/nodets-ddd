@@ -4,8 +4,8 @@ import { RegisterReq } from "../contract/auth/register/register-req";
 import { RegisterCommand } from "../application/use-cases/command/register/register-command";
 import { LoginReq } from "../contract/auth/login/login-req";
 import { LoginCommand } from "../application/use-cases/command/login/login-command";
-import { registerRule } from "../contract/auth/register/register-rule";
-import { loginRule } from "../contract/auth/login/login-rule";
+import { RegisterRule } from "../contract/auth/register/register-rule";
+import { LoginRule } from "../contract/auth/login/login-rule";
 
 export class AuthController extends BaseController {
   apiPath: string = "/auth";
@@ -15,7 +15,7 @@ export class AuthController extends BaseController {
     const command = new RegisterCommand({
       account,
       password,
-      username
+      username,
     });
     const ret = await this._sender.send(command);
     this.sendReturn(res, ret);
@@ -41,12 +41,12 @@ export class AuthController extends BaseController {
   mapRoutes() {
     this.router.post(
       "/register",
-      this.validate(registerRule),
+      this.validate(new RegisterRule()),
       this.action(this.register),
     );
     this.router.post(
       "/login",
-      this.validate(loginRule),
+      this.validate(new LoginRule()),
       this.action(this.login),
     );
     this.router.get("/error", this.action(this.error));

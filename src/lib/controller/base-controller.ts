@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import { validationResult } from "express-validator";
 import { MEDIATOR_TYPES } from "../mediator/types";
 import { ISender } from "../mediator/interfaces/sender.interface";
-import { IBaseReturn } from "../application/base-return.interface";
+import { IBaseReturn } from "../application/interfaces/base-return.interface";
 
 @injectable()
 export abstract class BaseController {

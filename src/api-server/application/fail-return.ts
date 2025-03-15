@@ -1,4 +1,4 @@
-import { IBaseReturn } from "../../lib/application/base-return.interface";
+import { IBaseReturn } from "../../lib/application/interfaces/base-return.interface";
 
 export class FailReturn implements IBaseReturn {
   isSuccess: boolean = false;
