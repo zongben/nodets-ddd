@@ -4,11 +4,11 @@ import { RegisterCommand } from "./register-command";
 import { UserRepository } from "../../../../infra/repositories/user-repository";
 import { IUserRepository } from "../../../persistences/user-repository.interface";
 import { UserExsistError } from "./user-exsist-error";
-import { CryptoService } from "../../../services/crypto-service";
 import { UserRoot } from "../../../../domain/user/user-root";
 import { SuccessReturn } from "../../../success-return";
 import { RegisterResult } from "./register-result";
 import { IBaseReturn } from "../../../../../lib/application/base-return.interface";
+import { Crypto } from "../../../../../lib/utils/crypto";
 
 @injectable()
 export class RegisterHandler implements IReqHandler<RegisterCommand, IBaseReturn> {
@@ -22,7 +22,7 @@ export class RegisterHandler implements IReqHandler<RegisterCommand, IBaseReturn
     if (isUserExist) {
       return new UserExsistError();
     }
-    const hashedPassword = await CryptoService.hash(req.password);
+    const hashedPassword = await Crypto.hash(req.password);
     const userRoot = UserRoot.create({
       account: req.account,
       password: hashedPassword,

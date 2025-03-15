@@ -1,11 +1,11 @@
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.interface";
 import { IUserRepository } from "../../../../application/persistences/user-repository.interface";
-import { CryptoService } from "../../../../application/services/crypto-service";
 import { SuccessReturn } from "../../../../application/success-return";
 import { LoginFailError } from "../../../../application/use-cases/command/login/login-fail-error";
 import { LoginHandler } from "../../../../application/use-cases/command/login/login-handler";
 import { UserRoot } from "../../../../domain/user/user-root";
+import { Crypto } from "../../../../../lib/utils/crypto";
 
 let mockUserRepository: IUserRepository;
 let mockPublisher: IPublisher;
@@ -64,7 +64,7 @@ describe("LoginHandler", () => {
   });
 
   test("when password is correct, should return token", async () => {
-    const password = await CryptoService.hash("password");
+    const password = await Crypto.hash("password");
 
     mockUserRepository.getByAccount = jest
       .fn(mockUserRepository.getByAccount)

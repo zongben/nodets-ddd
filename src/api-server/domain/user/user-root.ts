@@ -1,4 +1,4 @@
-import { CryptoService } from "../../application/services/crypto-service";
+import { Crypto } from '../../../lib/utils/crypto';
 
 export class UserRoot {
   account: string;
@@ -24,6 +24,6 @@ export class UserRoot {
   }
 
   async isPasswordCorrect(password: string): Promise<boolean> {
-    return await CryptoService.compare(password, this.password);
+    return await Crypto.compare(password, this.password);
   }
 }
