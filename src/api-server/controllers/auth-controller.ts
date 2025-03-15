@@ -1,11 +1,11 @@
 import { NextFunction } from "express";
 import { BaseController } from "../../lib/controller/base-controller";
-import { RegisterReq } from "../contract/auth/register/register-req";
 import { RegisterCommand } from "../application/use-cases/command/register/register-command";
-import { LoginReq } from "../contract/auth/login/login-req";
 import { LoginCommand } from "../application/use-cases/command/login/login-command";
 import { RegisterRule } from "../contract/auth/register/register-rule";
 import { LoginRule } from "../contract/auth/login/login-rule";
+import { RegisterReq } from "../contract/auth/register/register-req.type";
+import { LoginReq } from "../contract/auth/login/login-req.type";
 
 export class AuthController extends BaseController {
   apiPath: string = "/auth";

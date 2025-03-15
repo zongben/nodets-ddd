@@ -1,7 +1,7 @@
 import { body } from "express-validator";
-import { RegisterReq } from "./register-req";
 import { INVALID_MESSAGE } from "../../invalid-message";
 import { Ruler } from "../../../../lib/controller/ruler";
+import { RegisterReq } from "./register-req.type";
 
 export class RegisterRule extends Ruler<RegisterReq> {
   constructor() {

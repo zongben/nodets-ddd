@@ -1,7 +1,7 @@
 import { body } from "express-validator";
-import { LoginReq } from "./login-req";
 import { INVALID_MESSAGE } from "../../invalid-message";
 import { Ruler } from "../../../../lib/controller/ruler";
+import { LoginReq } from "./login-req.type";
 
 export class LoginRule extends Ruler<LoginReq> {
   constructor() {
