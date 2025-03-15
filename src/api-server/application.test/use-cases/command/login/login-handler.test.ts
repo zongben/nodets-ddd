@@ -76,8 +76,8 @@ describe("LoginHandler", () => {
         }),
       );
 
-    mockUserRepository.getValidToken = jest
-      .fn(mockUserRepository.getValidToken)
+    mockJwTokenHelper.generateToken = jest
+      .fn(mockJwTokenHelper.generateToken)
       .mockReturnValue("token");
 
     const loginHandler = new LoginHandler(
