@@ -4,6 +4,7 @@ import { validationResult } from "express-validator";
 import { MEDIATOR_TYPES } from "../mediator/types";
 import { ISender } from "../mediator/interfaces/sender.interface";
 import { IBaseReturn } from "../application/interfaces/base-return.interface";
+import { IEnv } from "./interfaces/env.interface";
 
 @injectable()
 export abstract class BaseController {
@@ -13,6 +14,7 @@ export abstract class BaseController {
 
   constructor(
     @inject(MEDIATOR_TYPES.ISender) protected readonly _sender: ISender,
+    @inject("env") protected readonly _env: IEnv,
   ) {}
 
   private _asyncWrapper(fn: any) {

@@ -4,15 +4,16 @@ import { Container } from "inversify";
 import { AppOptions } from "./app-options";
 import { Module } from "../container/container-module";
 import { BaseController } from "../controller/base-controller";
+import { Env } from "./env";
 
 export class App {
   private _app: express.Application;
+  env: Env;
   serviceContainer: Container;
   options: AppOptions;
-  env: any;
 
   private constructor(options: AppOptions) {
-    this.env = process.env;
+    this.env = new Env(options.envPath);
     this._app = express();
     this.options = options;
     this.serviceContainer = new Container(options.container);
@@ -24,6 +25,7 @@ export class App {
         };
       },
     );
+    this.serviceContainer.bind("env").toConstantValue(this.env);
   }
 
   static createBuilder(fn: (options: AppOptions) => void = () => {}) {
@@ -83,10 +85,10 @@ export class App {
   }
 
   run() {
-    const port = Number(this.env.PORT) || 3000;
+    const port = Number(this.env.get("PORT")) || 3000;
     this._app.listen(port, () => {
       console.log(
-        `Listening on port http://localhost:${port}${this.options.routerPrefix}`,
+        `Listening on port localhost:${port}${this.options.routerPrefix}`,
       );
     });
   }

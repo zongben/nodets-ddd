@@ -7,9 +7,7 @@ import { JwTokenSettings } from "../lib/jwToken/jwtoken-settings";
 import { requestMiddleware } from "../lib/middleware/request-middleware";
 import { jwtValidHandler } from "../lib/controller/jwt-valid-handler";
 import { exceptionMiddleware } from "../lib/middleware/exception-middleware";
-import dotenv from "dotenv";
 import { appDataSource } from "./infra/db-entities";
-dotenv.config({ path: __dirname + "/.env" });
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -21,6 +19,7 @@ const app = App.createBuilder((opt) => {
   opt.container = {
     autoBindInjectable: true,
   };
+  opt.envPath = __dirname + "/.env";
 });
 app.useExtension(() => {
   appDataSource
@@ -31,14 +30,14 @@ app.useExtension(() => {
 app.registerModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),
   new JwTokenModule(
-    new JwTokenSettings(app.env.JWT_SECRET, {
-      expiresIn: app.env.JWT_EXPIRES_IN,
+    new JwTokenSettings(app.env.get('JWT_SECRET'), {
+      expiresIn: app.env.get('JWT_EXPIRES_IN'),
     }),
   ),
 );
 app.useJsonParser();
 app.useMiddleware(requestMiddleware);
-app.useJwtValidMiddleware(jwtValidHandler(app.env.JWT_SECRET));
+app.useJwtValidMiddleware(jwtValidHandler(app.env.get('JWT_SECRET')));
 app.mapController(controllers);
 app.useMiddleware(exceptionMiddleware);
 app.run();

@@ -5,4 +5,5 @@ export class AppOptions {
   routerPrefix: string = "/api";
   container?: interfaces.ContainerOptions;
   allowAnonymousPath: AllowAnonymousPath[] = [];
+  envPath: string = "";
 }
