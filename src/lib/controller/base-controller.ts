@@ -3,8 +3,8 @@ import { inject, injectable } from "inversify";
 import { validationResult } from "express-validator";
 import { MEDIATOR_TYPES } from "../mediator/types";
 import { ISender } from "../mediator/interfaces/sender.interface";
-import { IBaseReturn } from "../application/interfaces/base-return.interface";
 import { IEnv } from "./interfaces/env.interface";
+import { IBaseResponse } from "./interfaces/base-response.interface";
 
 @injectable()
 export abstract class BaseController {
@@ -23,18 +23,14 @@ export abstract class BaseController {
     };
   }
 
-  action(fn: any) {
-    return this._asyncWrapper(fn.bind(this));
-  }
-
-  sendReturn(res: any, ret: IBaseReturn) {
-    if (ret.isSuccess) {
-      res.status(200).send(ret.data);
-    } else {
-      res.status(400).send({
-        msg: ret.messageCode,
-      });
-    }
+  action(fn: (req: any, res: any, next: any) => Promise<IBaseResponse>) {
+    return this._asyncWrapper(
+      async (req: any, res: any, next: any) => {
+        const result = await fn.bind(this)(req, res, next);
+        res.status(result.status).send(result.body);
+        next();
+      },
+    );
   }
 
   validate(rule: any) {
