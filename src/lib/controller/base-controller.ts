@@ -28,7 +28,6 @@ export abstract class BaseController {
       async (req: any, res: any, next: any) => {
         const result = await fn.bind(this)(req, res, next);
         res.status(result.status).send(result.body);
-        next();
       },
     );
   }
