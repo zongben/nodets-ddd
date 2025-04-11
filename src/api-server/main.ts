@@ -34,7 +34,7 @@ app.loadModules(
   ),
 );
 app.addHeaders({
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": app.env.get("CORS_ORIGIN"),
 });
 app.useJsonParser();
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
