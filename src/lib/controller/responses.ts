@@ -1,4 +1,5 @@
 import { BaseResponse } from "./base-response";
+import { ErrorResponse } from "./error-response";
 
 export class Responses {
   static OK(data: any) {
@@ -13,23 +14,23 @@ export class Responses {
     return new BaseResponse(204, null);
   }
 
-  static BadRequest(message: string) {
-    return new BaseResponse(400, message);
+  static BadRequest(error: ErrorResponse) {
+    return new BaseResponse(400, error);
   }
 
-  static Unauthorized(message: string) {
-    return new BaseResponse(401, message);
+  static Unauthorized(error: ErrorResponse) {
+    return new BaseResponse(401, error);
   }
 
-  static Forbidden(message: string) {
-    return new BaseResponse(403, message);
+  static Forbidden(error: ErrorResponse) {
+    return new BaseResponse(403, error);
   }
 
-  static NotFound(message: string) {
-    return new BaseResponse(404, message);
+  static NotFound(error: ErrorResponse) {
+    return new BaseResponse(404, error);
   }
 
-  static Conflict(message: string) {
-    return new BaseResponse(409, message);
+  static Conflict(error: ErrorResponse) {
+    return new BaseResponse(409, error);
   }
 }
