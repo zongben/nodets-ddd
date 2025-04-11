@@ -36,6 +36,9 @@ app.loadModules(
     }),
   ),
 );
+app.useHeaders({
+  "Access-Control-Allow-Origin": "*",
+});
 app.useJsonParser();
 app.useMiddleware(requestMiddleware);
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
