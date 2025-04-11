@@ -84,6 +84,16 @@ export class App {
     return this;
   }
 
+  useHeaders(...headers: { key: string; value: string }[]) {
+    this._app.use((_req, res, next) => {
+      headers.forEach((header) => {
+        res.setHeader(header.key, header.value);
+      });
+      next();
+    });
+    return this;
+  }
+
   run() {
     const port = Number(this.env.get("PORT")) || 3000;
     this._app.listen(port, () => {
