@@ -1,8 +1,8 @@
 import { FailReturn } from "../../../fail-return";
-import { MESSAGE_CODES } from "../../../message-codes";
+import { CODES } from "../../../codes";
 
 export class LoginFailError extends FailReturn {
   constructor() {
-    super(MESSAGE_CODES.ACCOUNT_OR_PASSWORD_INCORRECT);
+    super(CODES.ACCOUNT_OR_PASSWORD_INCORRECT);
   }
 }

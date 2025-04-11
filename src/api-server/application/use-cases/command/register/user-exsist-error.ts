@@ -1,8 +1,8 @@
 import { FailReturn } from "../../../fail-return";
-import { MESSAGE_CODES } from "../../../message-codes";
+import { CODES } from "../../../codes";
 
 export class UserExsistError extends FailReturn {
   constructor() {
-    super(MESSAGE_CODES.USER_ALREADY_EXISTS);
+    super(CODES.USER_ALREADY_EXISTS);
   }
 }

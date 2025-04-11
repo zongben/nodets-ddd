@@ -24,12 +24,10 @@ export abstract class BaseController {
   }
 
   action(fn: (req: any, res: any, next: any) => Promise<IBaseResponse>) {
-    return this._asyncWrapper(
-      async (req: any, res: any, next: any) => {
-        const result = await fn.bind(this)(req, res, next);
-        res.status(result.status).send(result.body);
-      },
-    );
+    return this._asyncWrapper(async (req: any, res: any, next: any) => {
+      const result = await fn.bind(this)(req, res, next);
+      res.status(result.status).send(result.body);
+    });
   }
 
   validate(rule: any) {
@@ -38,9 +36,7 @@ export abstract class BaseController {
       (req: any, res: any, next: NextFunction) => {
         const errs = validationResult(req);
         if (!errs.isEmpty()) {
-          res.status(400).send({
-            msg: errs.array()[0].msg,
-          });
+          res.status(400).send(errs.array()[0].msg);
           return;
         }
         next();

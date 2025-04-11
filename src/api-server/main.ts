@@ -17,9 +17,6 @@ const app = App.createBuilder((opt) => {
       method: "^GET|POST$",
     },
   ];
-  opt.container = {
-    autoBindInjectable: true,
-  };
   opt.envPath = path.join(__dirname, ".env");
 });
 app.useExtension(() => {

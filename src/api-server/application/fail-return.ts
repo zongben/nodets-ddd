@@ -2,11 +2,11 @@ import { IBaseReturn } from "../../lib/application/interfaces/base-return.interf
 
 export class FailReturn implements IBaseReturn {
   isSuccess: boolean = false;
-  messageCode: string;
+  code: string;
   data: any;
 
-  constructor(messageCode: string, data: any = null) {
-    this.messageCode = messageCode;
+  constructor(code: string, data: any = null) {
+    this.code = code;
     this.data = data;
   }
 }
