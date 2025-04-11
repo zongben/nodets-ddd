@@ -5,7 +5,6 @@ import { RegisterRule } from "../contract/auth/register/register-rule";
 import { LoginRule } from "../contract/auth/login/login-rule";
 import { RegisterReq } from "../contract/auth/register/register-req.type";
 import { LoginReq } from "../contract/auth/login/login-req.type";
-import { IBaseReturn } from "../../lib/application/interfaces/base-return.interface";
 import { CommonResponse } from "../../lib/controller/common-response";
 
 export class AuthController extends BaseController {
@@ -18,7 +17,7 @@ export class AuthController extends BaseController {
       password,
       username,
     });
-    const ret = await this._sender.send<IBaseReturn>(command);
+    const ret = await this._sender.send(command);
     return CommonResponse(ret);
   }
 

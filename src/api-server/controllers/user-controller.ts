@@ -1,4 +1,3 @@
-import { IBaseReturn } from "../../lib/application/interfaces/base-return.interface";
 import { BaseController } from "../../lib/controller/base-controller";
 import { CommonResponse } from "../../lib/controller/common-response";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user-query";
@@ -9,7 +8,7 @@ export class UserController extends BaseController {
   async getUser(_req: any, res: any) {
     const { account } = res.locals.jwt;
     const query = new GetUserQuery(account);
-    const ret = await this._sender.send<IBaseReturn>(query);
+    const ret = await this._sender.send(query);
     return CommonResponse(ret);
   }
 
