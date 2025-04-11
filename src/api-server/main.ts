@@ -4,11 +4,11 @@ import { MediatorModule } from "../lib/mediator/mediator-module";
 import { HandlerMap } from "./application/handler-map";
 import { JwTokenModule } from "../lib/jwToken/jwtoken-module";
 import { JwTokenSettings } from "../lib/jwToken/jwtoken-settings";
-import { requestMiddleware } from "../lib/middleware/request-middleware";
 import { jwtValidHandler } from "../lib/controller/jwt-valid-handler";
 import { exceptionMiddleware } from "../lib/middleware/exception-middleware";
 import { appDataSource } from "./infra/db-entities";
 import path from "node:path";
+import { logMiddleware } from "../lib/middleware/log-middleware";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -37,8 +37,8 @@ app.useHeaders({
   "Access-Control-Allow-Origin": "*",
 });
 app.useJsonParser();
-app.useMiddleware(requestMiddleware);
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
 app.mapController(controllers);
 app.useMiddleware(exceptionMiddleware);
+app.useMiddleware(logMiddleware)
 app.run();

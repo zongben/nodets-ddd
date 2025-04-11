@@ -5,11 +5,11 @@ export function exceptionMiddleware(
   err: Error,
   _req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _next: NextFunction,
+  next: NextFunction,
 ) {
-  console.error(err);
   res
     .status(500)
     .send(new ErrorResponse("INTERNAL_SERVER_ERROR", "Internal server error"));
+  res.locals.error = err;
+  next();
 }
