@@ -84,7 +84,7 @@ export class App {
     return this;
   }
 
-  useHeaders(...headers: Record<string, string>[]) {
+  addHeaders(...headers: Record<string, string>[]) {
     this._app.use((_req, res, next) => {
       headers.forEach((header) => {
         Object.keys(header).forEach((key) => {

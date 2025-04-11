@@ -33,7 +33,7 @@ app.loadModules(
     }),
   ),
 );
-app.useHeaders({
+app.addHeaders({
   "Access-Control-Allow-Origin": "*",
 });
 app.useJsonParser();
