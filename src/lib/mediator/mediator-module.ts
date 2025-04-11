@@ -33,7 +33,7 @@ export class MediatorModule extends Module {
       bind<IPublisher>(MEDIATOR_TYPES.IPublisher)
         .to(Mediator)
         .inTransientScope();
-      bind<Container>(Container).toConstantValue(this._container);
+      bind<Container>("container").toConstantValue(this._container);
       bind<(typeof MediatorPipe)[]>(MEDIATOR_TYPES.Pipeline).toConstantValue(
         this._pipeline,
       );

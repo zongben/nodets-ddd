@@ -9,13 +9,14 @@ import { INotification } from "./interfaces/notification.interface";
 @injectable()
 export class Mediator implements IMediator {
   constructor(
-    @inject(Container) private readonly _container: Container,
+    @inject("container") private readonly _container: Container,
     @inject(MEDIATOR_TYPES.IMediatorMap)
     private readonly _mediatorMap: IMediatorMap,
-    @inject(MEDIATOR_TYPES.Pipeline) private readonly _pipeline: any,
+    @inject(MEDIATOR_TYPES.Pipeline)
+    private readonly _pipeline: any,
   ) {}
 
-  send<TRes>(req: any): Promise<TRes> {
+  async send<TRes>(req: any): Promise<TRes> {
     const handler = this._mediatorMap.get(req.constructor) as new (
       ...args: any[]
     ) => IReqHandler<any, TRes>;
@@ -38,15 +39,16 @@ export class Mediator implements IMediator {
       }
     };
 
-    return next();
+    return await next();
   }
 
-  publish<T extends INotification<T>>(event: T): Promise<void> {
-    for (const handler of event.getSubscribers()) {
-      const handlerInstance = this._container.resolve(handler);
-      console.log("publish to handler:", handlerInstance.constructor.name);
-      handlerInstance.handle(event);
-    }
-    return Promise.resolve();
+  async publish<T extends INotification<T>>(event: T): Promise<void> {
+    await Promise.all(
+      event.getSubscribers().map(async (handler) => {
+        const handlerInstance = this._container.resolve(handler);
+        console.log("publish to handler:", handlerInstance.constructor.name);
+        await handlerInstance.handle(event);
+      }),
+    );
   }
 }
