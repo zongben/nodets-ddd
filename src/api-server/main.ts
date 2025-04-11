@@ -40,5 +40,5 @@ app.useJsonParser();
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
 app.mapController(controllers);
 app.useMiddleware(exceptionMiddleware);
-app.useMiddleware(logMiddleware)
+app.useMiddleware(logMiddleware);
 app.run();
