@@ -34,7 +34,7 @@ export class App {
     return new App(options);
   }
 
-  registerModules(...modules: Module[]) {
+  loadModules(...modules: Module[]) {
     this.serviceContainer.load(
       ...modules.map((m) => {
         return m.getModule();

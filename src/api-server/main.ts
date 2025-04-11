@@ -27,7 +27,7 @@ app.useExtension(() => {
     .then(() => console.log("Database initialized"))
     .catch((err) => console.error("Error to initialized", err));
 });
-app.registerModules(
+app.loadModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),
   new JwTokenModule(
     new JwTokenSettings(app.env.get('JWT_SECRET'), {
