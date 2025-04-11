@@ -26,7 +26,8 @@ export abstract class BaseController {
   action(fn: (req: any, res: any, next: any) => Promise<IBaseResponse | void>) {
     return this._asyncWrapper(async (req: any, res: any, next: any) => {
       const result = await fn.bind(this)(req, res, next);
-      if (!result) throw new Error("No result returned from action");
+      if (!result)
+        throw new Error(`No response from action ${req.method} ${req.path}`);
       res.status(result.status).send(result.body);
     });
   }

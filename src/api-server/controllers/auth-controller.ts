@@ -6,9 +6,7 @@ import { LoginRule } from "../contract/auth/login/login-rule";
 import { RegisterReq } from "../contract/auth/register/register-req.type";
 import { LoginReq } from "../contract/auth/login/login-req.type";
 import { IBaseReturn } from "../../lib/application/interfaces/base-return.interface";
-import { Responses } from "../../lib/controller/responses";
-import { CODES } from "../application/codes";
-import { ErrorResponse } from "../../lib/controller/error-response";
+import { CommonResponse } from "../../lib/controller/common-response";
 
 export class AuthController extends BaseController {
   apiPath: string = "/auth";
@@ -21,12 +19,7 @@ export class AuthController extends BaseController {
       username,
     });
     const ret = await this._sender.send<IBaseReturn>(command);
-    if (ret.isSuccess) {
-      return Responses.Created(ret.data);
-    }
-    else if (ret.code == CODES.USER_ALREADY_EXISTS) {
-      return Responses.Conflict(new ErrorResponse(CODES.USER_ALREADY_EXISTS, "User already exists"));
-    }
+    return CommonResponse(ret);
   }
 
   async login(req: any) {
@@ -36,12 +29,7 @@ export class AuthController extends BaseController {
       password,
     });
     const ret = await this._sender.send(command);
-    if (ret.isSuccess) {
-      return Responses.OK(ret.data);
-    }
-    else if (ret.code == CODES.ACCOUNT_OR_PASSWORD_INCORRECT) {
-      return Responses.Unauthorized(new ErrorResponse(CODES.ACCOUNT_OR_PASSWORD_INCORRECT, "Account or password incorrect"));
-    }
+    return CommonResponse(ret);
   }
 
   mapRoutes() {
