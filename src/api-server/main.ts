@@ -8,7 +8,7 @@ import { jwtValidHandler } from "../lib/controller/jwt-valid-handler";
 import { exceptionMiddleware } from "../lib/middleware/exception-middleware";
 import { appDataSource } from "./infra/db-entities";
 import path from "node:path";
-import { logMiddleware } from "../lib/middleware/log-middleware";
+import { notFoundMiddleware } from "../lib/middleware/notfound-middleware";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -39,6 +39,6 @@ app.addHeaders({
 app.useJsonParser();
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
 app.mapController(controllers);
+app.useMiddleware(notFoundMiddleware);
 app.useMiddleware(exceptionMiddleware);
-app.useMiddleware(logMiddleware);
 app.run();

@@ -29,7 +29,6 @@ export abstract class BaseController {
       if (!result)
         throw new Error(`No response from action ${req.method} ${req.path}`);
       res.status(result.status).send(result.body);
-      next();
     });
   }
 
