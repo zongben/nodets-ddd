@@ -9,10 +9,20 @@ export class LoginRule extends Ruler<LoginReq> {
     super((req) => [
       body(req("account"))
         .notEmpty()
-        .withMessage(new ErrorResponse(INVALID_CODES.ACCOUNT_IS_REQUIRED, "Account is required")),
+        .withMessage(
+          new ErrorResponse(
+            INVALID_CODES.ACCOUNT_IS_REQUIRED,
+            "Account is required",
+          ),
+        ),
       body(req("password"))
         .notEmpty()
-        .withMessage(new ErrorResponse(INVALID_CODES.PASSWORD_IS_REQUIRED, "Password is required")),
+        .withMessage(
+          new ErrorResponse(
+            INVALID_CODES.PASSWORD_IS_REQUIRED,
+            "Password is required",
+          ),
+        ),
     ]);
   }
 }

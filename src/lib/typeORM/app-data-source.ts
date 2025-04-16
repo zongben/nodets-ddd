@@ -1,6 +1,8 @@
 import { DataSource, DataSourceOptions } from "typeorm";
 import { IAppDataSource } from "./interfaces/app-data-source.interface";
+import { injectable } from "inversify";
 
+@injectable()
 export class AppDataSource implements IAppDataSource {
   instance: DataSource;
 

@@ -11,7 +11,9 @@ import { Crypto } from "../../../../../lib/utils/crypto";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 
 @injectable()
-export class RegisterHandler implements IReqHandler<RegisterCommand, IBaseReturn> {
+export class RegisterHandler
+  implements IReqHandler<RegisterCommand, IBaseReturn>
+{
   constructor(
     @inject(UserRepository) private readonly _userRepository: IUserRepository,
   ) {}
@@ -26,7 +28,7 @@ export class RegisterHandler implements IReqHandler<RegisterCommand, IBaseReturn
     const userRoot = UserRoot.create({
       account: req.account,
       password: hashedPassword,
-      username: req.username
+      username: req.username,
     });
     const user = await this._userRepository.create(userRoot);
     return new SuccessReturn(new RegisterResult(user.account, user.username));

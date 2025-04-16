@@ -1,4 +1,4 @@
-import { Crypto } from '../../../lib/utils/crypto';
+import { Crypto } from "../../../lib/utils/crypto";
 
 export class UserRoot {
   account: string;
