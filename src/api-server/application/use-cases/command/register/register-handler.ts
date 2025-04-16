@@ -1,7 +1,6 @@
 import { inject, injectable } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
 import { RegisterCommand } from "./register-command";
-import { UserRepository } from "../../../../infra/repositories/user-repository";
 import { IUserRepository } from "../../../persistences/user-repository.interface";
 import { UserExsistError } from "./user-exsist-error";
 import { UserRoot } from "../../../../domain/user/user-root";
@@ -9,6 +8,7 @@ import { SuccessReturn } from "../../../success-return";
 import { RegisterResult } from "./register-result";
 import { Crypto } from "../../../../../lib/utils/crypto";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
+import { UserRepository } from "../../../../infra/repositories/user.repository";
 
 @injectable()
 export class RegisterHandler
