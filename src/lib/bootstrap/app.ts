@@ -20,7 +20,7 @@ export class App {
     this.options.allowAnonymousPath = this.options.allowAnonymousPath.map(
       (p) => {
         return {
-          path: this.options.routerPrefix + p.path,
+          path: `${this.options.routerPrefix}${p.path}`.toLowerCase(),
           method: p.method.toUpperCase(),
         };
       },
@@ -47,7 +47,7 @@ export class App {
     controllers.forEach((c) => {
       const _ctor = this.serviceContainer.resolve(c);
       this._app.use(
-        `${this.options.routerPrefix}${_ctor.apiPath}`,
+        `${this.options.routerPrefix}${_ctor.apiPath}`.toLowerCase(),
         _ctor.mapRoutes(),
       );
     });
