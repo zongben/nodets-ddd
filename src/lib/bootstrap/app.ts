@@ -92,6 +92,7 @@ export class App {
   }
 
   run() {
+    console.log(`NODE_ENV: ${this.env.get("NODE_ENV")}`);
     const port = Number(this.env.get("PORT")) || 3000;
     this._app.listen(port, () => {
       console.log(
