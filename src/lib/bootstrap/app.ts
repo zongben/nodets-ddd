@@ -79,11 +79,6 @@ export class App {
     return this;
   }
 
-  useExtension(extension: (app: App) => void) {
-    extension(this);
-    return this;
-  }
-
   addHeaders(...headers: Record<string, string>[]) {
     this._app.use((_req, res, next) => {
       headers.forEach((header) => {
