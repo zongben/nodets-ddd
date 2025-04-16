@@ -14,7 +14,7 @@ export abstract class BaseController {
 
   constructor(
     @inject(MEDIATOR_TYPES.ISender) protected readonly _sender: ISender,
-    @inject("env") protected readonly _env: IEnv,
+    @inject(Symbol.for("env")) protected readonly _env: IEnv,
   ) {}
 
   private _asyncWrapper(fn: any) {

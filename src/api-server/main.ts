@@ -6,9 +6,11 @@ import { JwTokenModule } from "../lib/jwToken/jwtoken-module";
 import { JwTokenSettings } from "../lib/jwToken/jwtoken-settings";
 import { jwtValidHandler } from "../lib/controller/jwt-valid-handler";
 import { exceptionMiddleware } from "../lib/middleware/exception-middleware";
-import { appDataSource } from "./infra/db-entities";
 import path from "node:path";
 import { notFoundMiddleware } from "../lib/middleware/notfound-middleware";
+import { AppDataSourceModule } from "../lib/typeORM/app-data-source-module";
+import { AppDataSource } from "../lib/typeORM/app-data-source";
+import { entities } from "./infra/db-entities/entities";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -19,17 +21,20 @@ const app = App.createBuilder((opt) => {
   ];
   opt.envPath = path.join(__dirname, ".env");
 });
-app.useExtension(() => {
-  appDataSource
-    .initialize()
-    .then(() => console.log("Database initialized"))
-    .catch((err) => console.error("Error to initialized", err));
-});
 app.loadModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),
   new JwTokenModule(
     new JwTokenSettings(app.env.get("JWT_SECRET"), {
       expiresIn: app.env.get("JWT_EXPIRES_IN"),
+    }),
+  ),
+  new AppDataSourceModule(
+    new AppDataSource({
+      type: "sqlite",
+      database: app.env.get("SQLITE_DB"),
+      synchronize: true,
+      logging: false,
+      entities: entities,
     }),
   ),
 );

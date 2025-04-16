@@ -25,7 +25,7 @@ export class App {
         };
       },
     );
-    this.serviceContainer.bind("env").toConstantValue(this.env);
+    this.serviceContainer.bind(Symbol.for("env")).toConstantValue(this.env);
   }
 
   static createBuilder(fn: (options: AppOptions) => void = () => {}) {
