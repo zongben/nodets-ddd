@@ -1,8 +1,8 @@
 import { interfaces } from "inversify";
 import { JWT_TYPES } from "./types";
-import { Module } from "../container/container-module";
 import { JwTokenSettings } from "./jwtoken-settings";
 import { JwTokenHelper } from "./jwtoken-helper";
+import { Module } from "../container/container.module";
 
 export class JwTokenModule extends Module {
   constructor(private readonly jwtSettings: JwTokenSettings) {

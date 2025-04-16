@@ -1,4 +1,4 @@
-import { MediatorMap } from "../../lib/mediator/mediator-map";
+import { MediatorMap } from "../../lib/mediator/mediator.map";
 import { LoginCommand } from "./use-cases/command/login/login-command";
 import { LoginHandler } from "./use-cases/command/login/login-handler";
 import { RegisterCommand } from "./use-cases/command/register/register-command";

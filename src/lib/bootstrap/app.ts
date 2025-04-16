@@ -2,9 +2,9 @@ import express from "express";
 import "reflect-metadata";
 import { Container } from "inversify";
 import { AppOptions } from "./app-options";
-import { Module } from "../container/container-module";
 import { BaseController } from "../controller/base-controller";
 import { Env } from "./env";
+import { Module } from "../container/container.module";
 
 export class App {
   private _app: express.Application;
