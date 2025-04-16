@@ -32,7 +32,7 @@ app.loadModules(
     new AppDataSource({
       type: "sqlite",
       database: app.env.get("SQLITE_DB"),
-      synchronize: true,
+      synchronize: app.env.get("NODE_ENV") === "dev" ? true : false,
       logging: false,
       entities: entities,
     }),
