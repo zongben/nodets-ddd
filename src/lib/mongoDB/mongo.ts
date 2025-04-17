@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { ClientSession } from "mongoose";
 import { BaseSchema } from "./base-schema";
 import { IMongo } from "./interfaces/mongo.interface";
 
@@ -34,5 +34,22 @@ export class Mongo implements IMongo {
 
   getModel<T>(name: string) {
     return this.instance.model<T>(name);
+  }
+
+  async startTransaction(
+    fn: (session: ClientSession) => Promise<any>,
+  ): Promise<any> {
+    const session = await this.instance.startSession();
+    session.startTransaction();
+    try {
+      const result = await fn(session);
+      await session.commitTransaction();
+      return result;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
   }
 }
