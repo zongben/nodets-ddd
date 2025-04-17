@@ -28,7 +28,7 @@ describe("registerHandler", () => {
 
   test("when user found then return error", async () => {
     mockUserRepository.getByAccount = jest
-      .fn(mockUserRepository.getByAccount)
+      .fn()
       .mockResolvedValue({} as UserRoot);
 
     const registerHandler = new RegisterHandler(mockUserRepository);

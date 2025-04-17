@@ -20,9 +20,7 @@ describe("LoginHandler", () => {
   });
 
   test("when user is not found, should return LoginFailError", async () => {
-    mockUserRepository.getByAccount = jest
-      .fn(mockUserRepository.getByAccount)
-      .mockResolvedValue(null);
+    mockUserRepository.getByAccount = jest.fn().mockResolvedValue(null);
 
     const loginHandler = new LoginHandler(
       mockPublisher,
@@ -39,15 +37,13 @@ describe("LoginHandler", () => {
   });
 
   test("when password is incorrect, should return LoginFailError", async () => {
-    mockUserRepository.getByAccount = jest
-      .fn(mockUserRepository.getByAccount)
-      .mockResolvedValue(
-        UserRoot.create({
-          account: "account",
-          password: "password",
-          username: "username",
-        }),
-      );
+    mockUserRepository.getByAccount = jest.fn().mockResolvedValue(
+      UserRoot.create({
+        account: "account",
+        password: "password",
+        username: "username",
+      }),
+    );
 
     const loginHandler = new LoginHandler(
       mockPublisher,
@@ -66,19 +62,15 @@ describe("LoginHandler", () => {
   test("when password is correct, should return token", async () => {
     const password = await Crypto.hash("password");
 
-    mockUserRepository.getByAccount = jest
-      .fn(mockUserRepository.getByAccount)
-      .mockResolvedValue(
-        UserRoot.create({
-          account: "account",
-          password,
-          username: "username",
-        }),
-      );
+    mockUserRepository.getByAccount = jest.fn().mockResolvedValue(
+      UserRoot.create({
+        account: "account",
+        password,
+        username: "username",
+      }),
+    );
 
-    mockJwTokenHelper.generateToken = jest
-      .fn(mockJwTokenHelper.generateToken)
-      .mockReturnValue("token");
+    mockJwTokenHelper.generateToken = jest.fn().mockReturnValue("token");
 
     const loginHandler = new LoginHandler(
       mockPublisher,
