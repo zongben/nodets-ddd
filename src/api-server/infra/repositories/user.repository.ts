@@ -5,10 +5,11 @@ import { IMongo } from "../../../lib/mongoDB/interfaces/mongo.interface";
 import { COLLECTIONS } from "../schemas/collections.enum";
 import { MONGO_TYPES } from "../../../lib/mongoDB/types";
 import { IUser } from "../schemas/user.schema";
+import { MongoBuilder } from "../../../lib/mongoDB/mongo-builder";
 
 @injectable()
 export class UserRepository implements IUserRepository {
-  constructor(@inject(MONGO_TYPES.IMongo) private readonly _mongo: IMongo) {}
+  constructor(@inject(MONGO_TYPES.IMongo) private readonly _mongo: IMongo) { }
 
   async create(user: UserRoot): Promise<UserRoot> {
     const model = this._mongo.getModel<IUser>(COLLECTIONS.USER);
@@ -23,7 +24,10 @@ export class UserRepository implements IUserRepository {
 
   async getByAccount(account: string): Promise<UserRoot | null> {
     const model = this._mongo.getModel<IUser>(COLLECTIONS.USER);
-    const user = await model.findOne({ account });
+    const user = await new MongoBuilder(model)
+      .Where({ account })
+      .QueryFirstOrDefault()
+
     if (!user) return null;
     return UserRoot.create({
       account: user.account,

@@ -58,6 +58,14 @@ export class MongoBuilder {
     return await this.model.aggregate(this.pipeline);
   }
 
+  async QueryFirstOrDefault() {
+    if (!this.model) {
+      throw new Error("Model not set");
+    }
+    const result = await this.model.aggregate(this.pipeline);
+    return result.length > 0 ? result[0] : null;
+  }
+
   Pipe(pipeline: any) {
     this.pipeline.push(pipeline);
     return this;
