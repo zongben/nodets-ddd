@@ -3,7 +3,6 @@ import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.
 import { LoginCommand } from "./login-command";
 import { MEDIATOR_TYPES } from "../../../../../lib/mediator/types";
 import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.interface";
-import { IUserRepository } from "../../../persistences/user-repository.interface";
 import { JWT_TYPES } from "../../../../../lib/jwToken/types";
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { LoginFailError } from "./login-fail-error";
@@ -11,6 +10,7 @@ import { LoginFailedEvent } from "./events/login-failed-event";
 import { SuccessReturn } from "../../../success-return";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository";
+import { IUserRepository } from "../../../persistences/user.repository.interface";
 
 @injectable()
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
@@ -32,6 +32,7 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
     }
 
     const token = this._jwt.generateToken({
+      id: user.id,
       account: user.account,
       username: user.username,
     });

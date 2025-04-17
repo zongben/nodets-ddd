@@ -1,4 +1,4 @@
-import { IUserRepository } from "../../../../application/persistences/user-repository.interface";
+import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
 import { GetUserHandler } from "../../../../application/use-cases/query/get-user/get-user-handler";
 import { GetUserQuery } from "../../../../application/use-cases/query/get-user/get-user-query";
 import { GetUserResult } from "../../../../application/use-cases/query/get-user/get-user-result";
@@ -12,9 +12,9 @@ describe("getuserHandler", () => {
   });
 
   test("when user not exists return error", async () => {
-    const query = new GetUserQuery("account");
+    const query = new GetUserQuery("id");
 
-    mockUserRepository.getByAccount = jest.fn().mockResolvedValue(null);
+    mockUserRepository.getById = jest.fn().mockResolvedValue(null);
 
     const handler = new GetUserHandler(mockUserRepository);
     const result = await handler.handle(query);
@@ -23,9 +23,10 @@ describe("getuserHandler", () => {
   });
 
   test("when user exists return user", async () => {
-    const query = new GetUserQuery("account");
+    const query = new GetUserQuery("id");
 
-    mockUserRepository.getByAccount = jest.fn().mockResolvedValue({
+    mockUserRepository.getById = jest.fn().mockResolvedValue({
+      id: "id",
       account: "account",
       username: "username",
     });
@@ -33,7 +34,7 @@ describe("getuserHandler", () => {
     const handler = new GetUserHandler(mockUserRepository);
     const result = await handler.handle(query);
 
-    const getUserResult = new GetUserResult("account", "username");
+    const getUserResult = new GetUserResult("id", "account", "username");
     expect(result.data).toEqual(getUserResult);
   });
 });

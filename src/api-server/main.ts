@@ -24,6 +24,7 @@ const app = App.createBuilder((opt) => {
 
 const mongo = Mongo.create(app.env.get("MONGO_URL")).addModels(models);
 mongo.tryConnect()
+mongo.trySyncIndexs()
 
 app.loadModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),

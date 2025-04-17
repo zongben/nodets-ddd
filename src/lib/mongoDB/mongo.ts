@@ -23,6 +23,16 @@ export class Mongo implements IMongo {
     return this;
   }
 
+  async trySyncIndexs() {
+    try {
+      await this.instance.syncIndexes();
+      console.log("MongoDB indexes synced");
+    } catch (error) {
+      console.error("MongoDB index sync error:", error);
+    }
+    return this;
+  }
+
   addModels(models: Array<new (...args: any[]) => BaseSchema>) {
     for (const model of models) {
       const instance = new model();

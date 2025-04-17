@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
-import { IUserRepository } from "../../application/persistences/user-repository.interface";
-import { UserRoot } from "../../domain/user/user-root";
 import { IMongo } from "../../../lib/mongoDB/interfaces/mongo.interface";
 import { COLLECTIONS } from "../schemas/collections.enum";
 import { MONGO_TYPES } from "../../../lib/mongoDB/types";
 import { IUser } from "../schemas/user.schema";
 import { MongoBuilder } from "../../../lib/mongoDB/mongo-builder";
+import { IUserRepository } from "../../application/persistences/user.repository.interface";
+import { UserRoot } from "../../domain/user/user.root";
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -14,6 +14,7 @@ export class UserRepository implements IUserRepository {
   async create(user: UserRoot): Promise<UserRoot> {
     const model = this._mongo.getModel<IUser>(COLLECTIONS.USER);
     const userModel = new model({
+      id: user.id,
       account: user.account,
       password: user.password,
       username: user.username,
@@ -30,6 +31,22 @@ export class UserRepository implements IUserRepository {
 
     if (!user) return null;
     return UserRoot.create({
+      id: user.id,
+      account: user.account,
+      password: user.password,
+      username: user.username,
+    });
+  }
+
+  async getById(id: string): Promise<UserRoot | null> {
+    const model = this._mongo.getModel<IUser>(COLLECTIONS.USER);
+    const user = await MongoBuilder.create(model)
+      .Where({ id })
+      .QueryFirstOrDefault();
+
+    if (!user) return null;
+    return UserRoot.create({
+      id: user.id,
       account: user.account,
       password: user.password,
       username: user.username,

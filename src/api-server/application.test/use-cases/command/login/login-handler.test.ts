@@ -1,11 +1,11 @@
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.interface";
-import { IUserRepository } from "../../../../application/persistences/user-repository.interface";
 import { SuccessReturn } from "../../../../application/success-return";
 import { LoginFailError } from "../../../../application/use-cases/command/login/login-fail-error";
 import { LoginHandler } from "../../../../application/use-cases/command/login/login-handler";
-import { UserRoot } from "../../../../domain/user/user-root";
 import { Crypto } from "../../../../../lib/utils/crypto";
+import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
+import { UserRoot } from "../../../../domain/user/user.root";
 
 let mockUserRepository: IUserRepository;
 let mockPublisher: IPublisher;
@@ -39,6 +39,7 @@ describe("LoginHandler", () => {
   test("when password is incorrect, should return LoginFailError", async () => {
     mockUserRepository.getByAccount = jest.fn().mockResolvedValue(
       UserRoot.create({
+        id: "id",
         account: "account",
         password: "password",
         username: "username",
@@ -64,6 +65,7 @@ describe("LoginHandler", () => {
 
     mockUserRepository.getByAccount = jest.fn().mockResolvedValue(
       UserRoot.create({
+        id: "id",
         account: "account",
         password,
         username: "username",

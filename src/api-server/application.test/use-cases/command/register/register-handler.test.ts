@@ -1,8 +1,8 @@
-import { IUserRepository } from "../../../../application/persistences/user-repository.interface";
+import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
 import { SuccessReturn } from "../../../../application/success-return";
 import { RegisterHandler } from "../../../../application/use-cases/command/register/register-handler";
 import { UserExsistError } from "../../../../application/use-cases/command/register/user-exsist-error";
-import { UserRoot } from "../../../../domain/user/user-root";
+import { UserRoot } from "../../../../domain/user/user.root";
 
 let mockUserRepository: IUserRepository;
 
