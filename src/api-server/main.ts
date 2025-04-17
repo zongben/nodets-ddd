@@ -22,8 +22,8 @@ const app = App.createBuilder((opt) => {
   opt.envPath = path.join(__dirname, ".env");
 });
 
-const mongo = Mongo.create(app.env.get("MONGO_URL"), {}).addModels(models);
-mongo.connect()
+const mongo = Mongo.create(app.env.get("MONGO_URL")).addModels(models);
+mongo.tryConnect()
 
 app.loadModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),

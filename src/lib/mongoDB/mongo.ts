@@ -9,11 +9,11 @@ export class Mongo implements IMongo {
     this.instance = mongoose.createConnection(url, options);
   }
 
-  static create(url: string, options: mongoose.ConnectOptions) {
+  static create(url: string, options: mongoose.ConnectOptions = {}) {
     return new Mongo(url, options);
   }
 
-  async connect() {
+  async tryConnect() {
     try {
       await this.instance.asPromise();
       console.log("MongoDB connected");
