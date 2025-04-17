@@ -9,7 +9,7 @@ import { MongoBuilder } from "../../../lib/mongoDB/mongo-builder";
 
 @injectable()
 export class UserRepository implements IUserRepository {
-  constructor(@inject(MONGO_TYPES.IMongo) private readonly _mongo: IMongo) { }
+  constructor(@inject(MONGO_TYPES.IMongo) private readonly _mongo: IMongo) {}
 
   async create(user: UserRoot): Promise<UserRoot> {
     const model = this._mongo.getModel<IUser>(COLLECTIONS.USER);
@@ -24,9 +24,9 @@ export class UserRepository implements IUserRepository {
 
   async getByAccount(account: string): Promise<UserRoot | null> {
     const model = this._mongo.getModel<IUser>(COLLECTIONS.USER);
-    const user = await new MongoBuilder(model)
+    const user = await MongoBuilder.create(model)
       .Where({ account })
-      .QueryFirstOrDefault()
+      .QueryFirstOrDefault();
 
     if (!user) return null;
     return UserRoot.create({
