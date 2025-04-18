@@ -5,6 +5,7 @@ import { AppOptions } from "./app-options";
 import { BaseController } from "../controller/base-controller";
 import { Env } from "./env";
 import { Module } from "../container/container.module";
+import { logger } from "../logger/logger";
 
 export class App {
   private _app: express.Application;
@@ -92,10 +93,10 @@ export class App {
   }
 
   run() {
-    console.log(`NODE_ENV: ${this.env.get("NODE_ENV")}`);
+    logger.info(`NODE_ENV: ${this.env.get("NODE_ENV")}`);
     const port = Number(this.env.get("PORT")) || 3000;
     this._app.listen(port, () => {
-      console.log(
+      logger.info(
         `Listening on port localhost:${port}${this.options.routerPrefix}`,
       );
     });

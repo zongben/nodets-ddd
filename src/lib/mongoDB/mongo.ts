@@ -1,6 +1,7 @@
 import mongoose, { ClientSession } from "mongoose";
 import { BaseSchema } from "./base-schema";
 import { IMongo } from "./interfaces/mongo.interface";
+import { logger } from "../logger/logger";
 
 export class Mongo implements IMongo {
   private instance: mongoose.Connection;
@@ -16,9 +17,9 @@ export class Mongo implements IMongo {
   async tryConnect() {
     try {
       await this.instance.asPromise();
-      console.log("MongoDB connected");
+      logger.info("MongoDB connected");
     } catch (error) {
-      console.error("MongoDB connection error:", error);
+      logger.warn(`MongoDB connection error: ${error}`);
     }
     return this;
   }
@@ -26,9 +27,9 @@ export class Mongo implements IMongo {
   async trySyncIndexs() {
     try {
       await this.instance.syncIndexes();
-      console.log("MongoDB indexes synced");
+      logger.info("MongoDB indexes synced");
     } catch (error) {
-      console.error("MongoDB index sync error:", error);
+      logger.warn(`MongoDB index sync error: ${error}`);
     }
     return this;
   }

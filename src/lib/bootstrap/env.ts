@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
 import { IEnv } from "../controller/interfaces/env.interface";
+import { logger } from "../logger/logger";
 
 export class Env implements IEnv {
   private _env
 
   constructor(path: string) {
-    console.log(`Loading environment variables from "${path}"`);
+    logger.info(`Loading environment variables from "${path}"`);
     dotenv.config({ path });
     this._env = process.env;
   }
