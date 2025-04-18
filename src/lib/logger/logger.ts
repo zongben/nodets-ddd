@@ -33,8 +33,8 @@ export class Logger {
     });
   }
 
-  error(message: string) {
-    this.logger.error(message);
+  error(err: Error) {
+    this.logger.error(err.stack || err.message);
   }
 
   warn(message: string) {
@@ -43,10 +43,6 @@ export class Logger {
 
   info(message: string) {
     this.logger.info(message);
-  }
-
-  http(message: string) {
-    this.logger.http(message);
   }
 
   debug(message: string) {
