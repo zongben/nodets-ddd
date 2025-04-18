@@ -1,8 +1,9 @@
 import { injectable } from "inversify";
 import jwt from "jsonwebtoken";
+import { IJwTokenSettings } from "./interfaces/jwtoken-settings.interface";
 
 @injectable()
-export class JwTokenSettings {
+export abstract class JwTokenSettings implements IJwTokenSettings {
   secret: string;
   options?: jwt.SignOptions;
 

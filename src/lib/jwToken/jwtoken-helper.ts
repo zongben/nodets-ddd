@@ -1,9 +1,7 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { injectable } from "inversify";
 import { IJwTokenHelper } from "./interfaces/jwtoken-helper.interface";
 import { JwTokenSettings } from "./jwtoken-settings";
 
-@injectable()
 export class JwTokenHelper implements IJwTokenHelper {
   constructor(private settings: JwTokenSettings) {}
 

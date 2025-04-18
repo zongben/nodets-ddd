@@ -6,6 +6,7 @@ import { LoginRule } from "../contract/auth/login/login-rule";
 import { RegisterReq } from "../contract/auth/register/register-req.type";
 import { LoginReq } from "../contract/auth/login/login-req.type";
 import { CommonResponse } from "../../lib/controller/common-response";
+import { SuccessReturn } from "../application/success-return";
 
 export class AuthController extends BaseController {
   apiPath: string = "/auth";
@@ -21,14 +22,29 @@ export class AuthController extends BaseController {
     return CommonResponse(ret);
   }
 
-  async login(req: any) {
+  async login(req: any, res: any) {
     const { account, password } = req.body as LoginReq;
     const command = new LoginCommand({
       account,
       password,
     });
     const ret = await this._sender.send(command);
-    return CommonResponse(ret);
+    if (!ret.isSuccess) {
+      return CommonResponse(ret);
+    }
+
+    res.cookie("refresh_token", ret.data.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
+
+    return CommonResponse(
+      new SuccessReturn({
+        token: ret.data.accessToken,
+      }),
+    );
   }
 
   mapRoutes() {

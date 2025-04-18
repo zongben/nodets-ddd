@@ -3,21 +3,24 @@ import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.
 import { LoginCommand } from "./login-command";
 import { MEDIATOR_TYPES } from "../../../../../lib/mediator/types";
 import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.interface";
-import { JWT_TYPES } from "../../../../../lib/jwToken/types";
-import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { LoginFailError } from "./login-fail-error";
 import { LoginFailedEvent } from "./events/login-failed-event";
 import { SuccessReturn } from "../../../success-return";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
+import { JWT_TYPES } from "../../../../infra/jwtoken-setting/types";
+import { IJwTokenSettings } from "../../../../../lib/jwToken/interfaces/jwtoken-settings.interface";
+import { JwTokenHelper } from "../../../../../lib/jwToken/jwtoken-helper";
+import { guid } from "../../../../../lib/utils/guid";
 
 @injectable()
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,
     @inject(UserRepository) private _userRepository: IUserRepository,
-    @inject(JWT_TYPES.IJwTokenHelper) private _jwt: IJwTokenHelper,
+    @inject(JWT_TYPES.ACCESSTOKEN) private _accessTokenSetting: IJwTokenSettings,
+    @inject(JWT_TYPES.REFRESHTOKEN) private _refreshTokenSetting: IJwTokenSettings
   ) {}
 
   async handle(req: LoginCommand): Promise<IBaseReturn> {
@@ -31,11 +34,17 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
       return new LoginFailError();
     }
 
-    const token = this._jwt.generateToken({
+    const accessTokenHelper = new JwTokenHelper(this._accessTokenSetting);
+    const accessToken = accessTokenHelper.generateToken({
       id: user.id,
       account: user.account,
       username: user.username,
     });
-    return new SuccessReturn({ token });
+
+    const refreshTokenHelper = new JwTokenHelper(this._refreshTokenSetting);
+    const refreshToken = refreshTokenHelper.generateToken({
+      id: guid()
+    });
+    return new SuccessReturn({ accessToken, refreshToken });
   }
 }

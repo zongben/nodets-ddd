@@ -1,11 +1,12 @@
 import { interfaces } from "inversify";
-import { JWT_TYPES } from "./types";
-import { JwTokenSettings } from "./jwtoken-settings";
-import { JwTokenHelper } from "./jwtoken-helper";
 import { Module } from "../container/container.module";
+import { IJwTokenSettings } from "./interfaces/jwtoken-settings.interface";
 
-export class JwTokenModule extends Module {
-  constructor(private readonly jwtSettings: JwTokenSettings) {
+export class JwTokenSettingModule extends Module {
+  constructor(
+    private symbol: symbol,
+    private jwtSettings: IJwTokenSettings,
+  ) {
     super();
   }
 
@@ -15,8 +16,7 @@ export class JwTokenModule extends Module {
     ) => interfaces.ContainerModuleCallBack,
   ): interfaces.ContainerModuleCallBack {
     return fn((bind) => {
-      bind(JwTokenSettings).toConstantValue(this.jwtSettings);
-      bind(JWT_TYPES.IJwTokenHelper).to(JwTokenHelper).inTransientScope();
+      bind(this.symbol).toConstantValue(this.jwtSettings);
     });
   }
 }
