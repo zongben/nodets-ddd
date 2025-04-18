@@ -12,7 +12,6 @@ import { IUserRepository } from "../../../persistences/user.repository.interface
 import { JWT_TYPES } from "../../../../infra/jwtoken-setting/types";
 import { IJwTokenSettings } from "../../../../../lib/jwToken/interfaces/jwtoken-settings.interface";
 import { JwTokenHelper } from "../../../../../lib/jwToken/jwtoken-helper";
-import { guid } from "../../../../../lib/utils/guid";
 
 @injectable()
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
@@ -36,14 +35,14 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
 
     const accessTokenHelper = new JwTokenHelper(this._accessTokenSetting);
     const accessToken = accessTokenHelper.generateToken({
-      id: user.id,
+      userid: user.id,
       account: user.account,
       username: user.username,
     });
 
     const refreshTokenHelper = new JwTokenHelper(this._refreshTokenSetting);
     const refreshToken = refreshTokenHelper.generateToken({
-      id: guid()
+      userid: user.id
     });
     return new SuccessReturn({ accessToken, refreshToken });
   }
