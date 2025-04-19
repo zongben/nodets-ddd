@@ -14,7 +14,14 @@ export function jwtValidHandler(secret: string) {
       const payload = jwt.verify(token, secret);
       res.locals.jwt = payload;
       next();
-    } catch {
+    } catch (err: any) {
+      if (err.name === "TokenExpiredError") {
+        res
+          .status(401)
+          .send(new ErrorResponse("TOKEN_EXPIRED", "Token expired"));
+        return;
+      }
+
       res.status(401).send(new ErrorResponse("UNAUTHORIZED", "Unauthorized"));
       return;
     }
