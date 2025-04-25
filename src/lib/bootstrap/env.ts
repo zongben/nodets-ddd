@@ -12,8 +12,7 @@ export class Env implements IEnv {
   get(key: string): any {
     const value = this._env[key];
     if (!value) {
-      console.warn(`Environment variable "${key}" not found`);
-      return undefined;
+      throw new Error(`Environment variable ${key} is not defined`);
     }
     return value;
   }
