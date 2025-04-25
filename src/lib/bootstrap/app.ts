@@ -5,16 +5,23 @@ import { AppOptions } from "./app-options";
 import { BaseController } from "../controller/base-controller";
 import { Env } from "./env";
 import { Module } from "../container/container.module";
-import { logger } from "../logger/logger";
+import { Logger } from "./logger";
+import { ILogger } from "./interfaces/logger.interface";
+import { IEnv } from "../controller/interfaces/env.interface";
+import { APP_TYPES } from "./types";
 
 export class App {
   private _app: express.Application;
+  logger: ILogger;
   env: Env;
   serviceContainer: Container;
   options: AppOptions;
 
   private constructor(options: AppOptions) {
     this.env = new Env(options.envPath);
+    this.logger = new Logger(this.env.get("NODE_ENV"));
+    this.logger.info(`Dotenv is loaded from ${options.envPath}`);
+
     this._app = express();
     this.options = options;
     this.serviceContainer = new Container(options.container);
@@ -26,7 +33,10 @@ export class App {
         };
       },
     );
-    this.serviceContainer.bind(Symbol.for("env")).toConstantValue(this.env);
+    this.serviceContainer.bind<IEnv>(APP_TYPES.IEnv).toConstantValue(this.env);
+    this.serviceContainer
+      .bind<ILogger>(APP_TYPES.ILogger)
+      .toConstantValue(this.logger);
   }
 
   static createBuilder(fn: (options: AppOptions) => void = () => {}) {
@@ -93,12 +103,10 @@ export class App {
   }
 
   run() {
-    logger.info(`NODE_ENV: ${this.env.get("NODE_ENV")}`);
+    this.logger.info(`NODE_ENV: ${this.env.get("NODE_ENV")}`);
     const port = Number(this.env.get("PORT")) || 3000;
     this._app.listen(port, () => {
-      logger.info(
-        `Listening on port localhost:${port}${this.options.routerPrefix}`,
-      );
+      this.logger.info(`Listening on port ${port}`);
     });
   }
 }

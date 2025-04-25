@@ -5,7 +5,6 @@ import path from "node:path";
 import { MediatorModule } from "../lib/mediator/mediator.module";
 import { JwTokenSettingModule } from "../lib/jwToken/jwtoken.module";
 import { notFoundMiddleware } from "../lib/middleware/notfound.middleware";
-import { exceptionMiddleware } from "../lib/middleware/exception.middleware";
 import { HandlerMap } from "./application/handler.map";
 import { Mongo } from "../lib/mongoDB/mongo";
 import { models } from "./infra/schemas";
@@ -15,6 +14,7 @@ import {
   RefreshTokenSetting,
 } from "./infra/jwtoken-setting/jwtoken-setting";
 import { JWT_TYPES } from "./infra/jwtoken-setting/types";
+import { exceptionMiddleware } from "../lib/middleware/exception.middleware";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -27,8 +27,8 @@ const app = App.createBuilder((opt) => {
 });
 
 const mongo = Mongo.create(app.env.get("MONGO_URL")).addModels(models);
-mongo.tryConnect();
-mongo.trySyncIndexs();
+mongo.tryConnect(app.logger);
+mongo.trySyncIndexs(app.logger);
 
 app.loadModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),
@@ -53,5 +53,5 @@ app.useJsonParser();
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
 app.mapController(controllers);
 app.useMiddleware(notFoundMiddleware);
-app.useMiddleware(exceptionMiddleware);
+app.useMiddleware(exceptionMiddleware(app.logger));
 app.run();

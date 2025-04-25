@@ -1,7 +1,7 @@
 import mongoose, { ClientSession } from "mongoose";
 import { BaseSchema } from "./base-schema";
 import { IMongo } from "./interfaces/mongo.interface";
-import { logger } from "../logger/logger";
+import { ILogger } from "../bootstrap/interfaces/logger.interface";
 
 export class Mongo implements IMongo {
   private instance: mongoose.Connection;
@@ -14,7 +14,7 @@ export class Mongo implements IMongo {
     return new Mongo(url, options);
   }
 
-  async tryConnect() {
+  async tryConnect(logger: ILogger) {
     try {
       await this.instance.asPromise();
       logger.info("MongoDB connected");
@@ -24,7 +24,7 @@ export class Mongo implements IMongo {
     return this;
   }
 
-  async trySyncIndexs() {
+  async trySyncIndexs(logger: ILogger) {
     try {
       await this.instance.syncIndexes();
       logger.info("MongoDB indexes synced");

@@ -3,7 +3,6 @@ import { inject, injectable } from "inversify";
 import { validationResult } from "express-validator";
 import { MEDIATOR_TYPES } from "../mediator/types";
 import { ISender } from "../mediator/interfaces/sender.interface";
-import { IEnv } from "./interfaces/env.interface";
 import { IBaseResponse } from "./interfaces/base-response.interface";
 
 @injectable()
@@ -14,7 +13,6 @@ export abstract class BaseController {
 
   constructor(
     @inject(MEDIATOR_TYPES.ISender) protected readonly _sender: ISender,
-    @inject(Symbol.for("env")) protected readonly _env: IEnv,
   ) {}
 
   private _asyncWrapper(fn: any) {
