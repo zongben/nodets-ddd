@@ -1,6 +1,7 @@
 {
   "scripts": {
     "start": "nodemon src/api-server/main.ts",
+    "build": "npx tsc",
     "test": "jest",
     "migrate": "npx prisma migrate dev --schema=prisma/api-server/schema.prisma",
     "studio": "npx prisma studio --schema=prisma/api-server/schema.prisma"
