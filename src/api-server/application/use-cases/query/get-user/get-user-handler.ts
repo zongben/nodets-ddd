@@ -5,7 +5,7 @@ import { UserNotExsistError } from "./user-not-exsist-error";
 import { SuccessReturn } from "../../../success-return";
 import { GetUserResult } from "./get-user-result";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
-import { UserRepository } from "../../../../infra/repositories/user.repository";
+import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 
 @injectable()

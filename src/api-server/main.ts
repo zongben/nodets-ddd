@@ -6,9 +6,9 @@ import { MediatorModule } from "../lib/mediator/mediator.module";
 import { JwTokenSettingModule } from "../lib/jwToken/jwtoken.module";
 import { notFoundMiddleware } from "../lib/middleware/notfound.middleware";
 import { HandlerMap } from "./application/handler.map";
-import { Mongo } from "../lib/mongoDB/mongo";
-import { models } from "./infra/schemas";
-import { MongoModule } from "../lib/mongoDB/mongo.module";
+// import { Mongo } from "../lib/mongoDB/mongo";
+// import { models } from "./infra/schemas";
+// import { MongoModule } from "../lib/mongoDB/mongo.module";
 import {
   AccesTokenSetting,
   RefreshTokenSetting,
@@ -26,9 +26,9 @@ const app = App.createBuilder((opt) => {
   opt.envPath = path.join(__dirname, ".env");
 });
 
-const mongo = Mongo.create(app.env.get("MONGO_URL")).addModels(models);
-mongo.tryConnect(app.logger);
-mongo.trySyncIndexs(app.logger);
+// const mongo = Mongo.create(app.env.get("MONGO_URL")).addModels(models);
+// mongo.tryConnect(app.logger);
+// mongo.trySyncIndexs(app.logger);
 
 app.loadModules(
   new MediatorModule(app.serviceContainer, HandlerMap, []),
@@ -44,7 +44,7 @@ app.loadModules(
       expiresIn: app.env.get("REFRESHTOKEN_EXPIRES_IN"),
     }),
   ),
-  new MongoModule(mongo),
+  // new MongoModule(mongo),
 );
 app.addHeaders({
   "Access-Control-Allow-Origin": app.env.get("CORS_ORIGIN"),

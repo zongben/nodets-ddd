@@ -7,11 +7,11 @@ import { LoginFailError } from "./login-fail-error";
 import { LoginFailedEvent } from "./events/login-failed-event";
 import { SuccessReturn } from "../../../success-return";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
-import { UserRepository } from "../../../../infra/repositories/user.repository";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { JWT_TYPES } from "../../../../infra/jwtoken-setting/types";
 import { IJwTokenSettings } from "../../../../../lib/jwToken/interfaces/jwtoken-settings.interface";
 import { JwTokenHelper } from "../../../../../lib/jwToken/jwtoken-helper";
+import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 
 @injectable()
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {

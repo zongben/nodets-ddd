@@ -1,7 +1,9 @@
 {
   "scripts": {
     "start": "nodemon src/api-server/main.ts",
-    "test": "jest"
+    "test": "jest",
+    "migrate": "npx prisma migrate dev --schema=prisma/api-server/schema.prisma",
+    "studio": "npx prisma studio --schema=prisma/api-server/schema.prisma"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -17,6 +19,7 @@
     "globals": "^16.0.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.4",
+    "prisma": "^6.6.0",
     "reflect-metadata": "^0.2.2",
     "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2",
@@ -24,6 +27,7 @@
     "typescript-eslint": "^8.26.1"
   },
   "dependencies": {
+    "@prisma/client": "^6.6.0",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

@@ -6,7 +6,7 @@ import { SuccessReturn } from "../../../success-return";
 import { RegisterResult } from "./register-result";
 import { Crypto } from "../../../../../lib/utils/crypto";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
-import { UserRepository } from "../../../../infra/repositories/user.repository";
+import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
