@@ -5,6 +5,6 @@ import { LoginFailedEvent } from "../../use-cases/command/login/events/login-fai
 @injectable()
 export class SendNotification implements IEventHandler<LoginFailedEvent> {
   async handle(event: LoginFailedEvent): Promise<void> {
-    console.log("SendNotification", event);
+    console.log("SendNotification", event.account);
   }
 }

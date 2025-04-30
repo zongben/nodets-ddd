@@ -30,7 +30,7 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
     const isPasswordCorrect = await user.isPasswordCorrect(req.password);
 
     if (!isPasswordCorrect) {
-      this._publisher.publish(new LoginFailedEvent(req.account));
+      await this._publisher.publish(new LoginFailedEvent(req.account));
       return new LoginFailError();
     }
 

@@ -34,7 +34,6 @@ export class Mediator implements IMediator {
         return await pipe.handle(req, next);
       } else {
         const handlerInstance = this._container.resolve(handler);
-        // console.log("send to handler:", handlerInstance.constructor.name);
         return await handlerInstance.handle(req);
       }
     };
@@ -46,7 +45,6 @@ export class Mediator implements IMediator {
     await Promise.all(
       event.getSubscribers().map(async (handler) => {
         const handlerInstance = this._container.resolve(handler);
-        // console.log("publish to handler:", handlerInstance.constructor.name);
         await handlerInstance.handle(event);
       }),
     );
