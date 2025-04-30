@@ -7,8 +7,10 @@ import { GetUserResult } from "./get-user-result";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
+import { Handler } from "../../../../../lib/mediator/mediator.decorator";
 
 @injectable()
+@Handler(GetUserQuery)
 export class GetUserHandler implements IReqHandler<GetUserQuery, IBaseReturn> {
   constructor(
     @inject(UserRepository) private _userRepository: IUserRepository,

@@ -1,8 +1,9 @@
 import { injectable } from "inversify";
 import { IMediatorMap } from "./interfaces/mediator-map.interface";
+import { METADATA_KEY } from "./mediator.decorator";
 
 @injectable()
-export abstract class MediatorMap implements IMediatorMap {
+export class MediatorMap implements IMediatorMap {
   private _map = new Map();
 
   set(req: any, handler: any) {
@@ -11,5 +12,15 @@ export abstract class MediatorMap implements IMediatorMap {
 
   get(req: any) {
     return this._map.get(req);
+  }
+
+  loadFromHandlers(handlers: any[]) {
+    for (const handler of handlers) {
+      const req = Reflect.getMetadata(METADATA_KEY.handlerFor, handler);
+      if (!req) {
+        throw new Error(`Handler ${handler.name} is missing @Handler() decorator`);
+      }
+      this._map.set(req, handler);
+    }
   }
 }

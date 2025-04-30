@@ -13,7 +13,7 @@ import { MediatorMap } from "./mediator.map";
 export class MediatorModule extends Module {
   constructor(
     private readonly _container: Container,
-    private readonly _mediatorMap: new (...args: any[]) => MediatorMap,
+    private readonly _mediatorMap: MediatorMap,
     private readonly _pipeline: (typeof MediatorPipe)[],
   ) {
     super();
@@ -25,9 +25,9 @@ export class MediatorModule extends Module {
     ) => interfaces.ContainerModuleCallBack,
   ): interfaces.ContainerModuleCallBack {
     return fn((bind) => {
-      bind<IMediatorMap>(MEDIATOR_TYPES.IMediatorMap)
-        .to(this._mediatorMap)
-        .inSingletonScope();
+      bind<IMediatorMap>(MEDIATOR_TYPES.IMediatorMap).toConstantValue(
+        this._mediatorMap,
+      );
       bind<IMediator>(MEDIATOR_TYPES.IMediator).to(Mediator).inTransientScope();
       bind<ISender>(MEDIATOR_TYPES.ISender).to(Mediator).inTransientScope();
       bind<IPublisher>(MEDIATOR_TYPES.IPublisher)

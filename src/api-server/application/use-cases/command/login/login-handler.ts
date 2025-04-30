@@ -12,8 +12,10 @@ import { JWT_TYPES } from "../../../../infra/jwtoken-setting/types";
 import { IJwTokenSettings } from "../../../../../lib/jwToken/interfaces/jwtoken-settings.interface";
 import { JwTokenHelper } from "../../../../../lib/jwToken/jwtoken-helper";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
+import { Handler } from "../../../../../lib/mediator/mediator.decorator";
 
 @injectable()
+@Handler(LoginCommand)
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,
