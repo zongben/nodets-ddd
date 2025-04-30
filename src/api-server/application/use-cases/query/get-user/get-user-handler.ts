@@ -1,4 +1,4 @@
-import { inject, injectable } from "inversify";
+import { inject } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
 import { GetUserQuery } from "./get-user-query";
 import { UserNotExsistError } from "./user-not-exsist-error";
@@ -9,7 +9,6 @@ import { UserRepository } from "../../../../infra/repositories/user.repository.p
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { Handler } from "../../../../../lib/mediator/mediator.decorator";
 
-@injectable()
 @Handler(GetUserQuery)
 export class GetUserHandler implements IReqHandler<GetUserQuery, IBaseReturn> {
   constructor(

@@ -1,4 +1,4 @@
-import { inject, injectable } from "inversify";
+import { inject } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
 import { LoginCommand } from "./login-command";
 import { MEDIATOR_TYPES } from "../../../../../lib/mediator/types";
@@ -14,7 +14,6 @@ import { JwTokenHelper } from "../../../../../lib/jwToken/jwtoken-helper";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { Handler } from "../../../../../lib/mediator/mediator.decorator";
 
-@injectable()
 @Handler(LoginCommand)
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
   constructor(

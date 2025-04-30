@@ -1,4 +1,4 @@
-import { inject, injectable } from "inversify";
+import { inject } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
 import { RegisterCommand } from "./register-command";
 import { UserExsistError } from "./user-exsist-error";
@@ -12,7 +12,6 @@ import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
 import { Handler } from "../../../../../lib/mediator/mediator.decorator";
 
-@injectable()
 @Handler(RegisterCommand)
 export class RegisterHandler
   implements IReqHandler<RegisterCommand, IBaseReturn>
