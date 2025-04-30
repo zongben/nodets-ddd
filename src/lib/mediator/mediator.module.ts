@@ -14,7 +14,7 @@ export class MediatorModule extends Module {
   constructor(
     private readonly _container: Container,
     private readonly _mediatorMap: MediatorMap,
-    private readonly _pipeline: (typeof MediatorPipe)[],
+    private readonly _pipeline: (typeof MediatorPipe)[] = [],
   ) {
     super();
   }

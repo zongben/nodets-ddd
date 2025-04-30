@@ -31,7 +31,7 @@ const app = App.createBuilder((opt) => {
 // mongo.trySyncIndexs(app.logger);
 
 app.loadModules(
-  new MediatorModule(app.serviceContainer, map, []),
+  new MediatorModule(app.serviceContainer, map),
   new JwTokenSettingModule(
     JWT_TYPES.ACCESSTOKEN,
     new AccesTokenSetting(app.env.get("JWT_SECRET"), {
