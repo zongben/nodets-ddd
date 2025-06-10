@@ -6,6 +6,6 @@ import { ILogger } from "../bootstrap/interfaces/logger.interface";
 export function exceptionMiddleware(logger: ILogger) {
   return (err: Error, _req: Request, res: Response, _next: any) => {
     logger.error(err);
-    res.status(500).send(new ErrorResponse("INTERNAL_SERVER_ERROR", "Internal server error"));
+    res.status(500).json(new ErrorResponse("INTERNAL_SERVER_ERROR", "Internal server error"));
   }
 }

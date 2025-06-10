@@ -6,7 +6,7 @@ export function jwtValidHandler(secret: string) {
   return (req: Request, res: Response, next: NextFunction) => {
     let token = req.headers.authorization;
     if (!token || !token.startsWith("Bearer ")) {
-      res.status(401).send(new ErrorResponse("UNAUTHORIZED", "Unauthorized"));
+      res.status(401).json(new ErrorResponse("UNAUTHORIZED", "Unauthorized"));
       return;
     }
     token = token.slice(7, token.length);
@@ -18,11 +18,11 @@ export function jwtValidHandler(secret: string) {
       if (err.name === "TokenExpiredError") {
         res
           .status(401)
-          .send(new ErrorResponse("TOKEN_EXPIRED", "Token expired"));
+          .json(new ErrorResponse("TOKEN_EXPIRED", "Token expired"));
         return;
       }
 
-      res.status(401).send(new ErrorResponse("UNAUTHORIZED", "Unauthorized"));
+      res.status(401).json(new ErrorResponse("UNAUTHORIZED", "Unauthorized"));
       return;
     }
   };

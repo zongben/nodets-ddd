@@ -26,7 +26,7 @@ export abstract class BaseController {
       const result = await fn.bind(this)(req, res, next);
       if (!result)
         throw new Error(`No response from action ${req.method} ${req.path}`);
-      res.status(result.status).send(result.body);
+      res.status(result.status).json(result.body);
     });
   }
 
@@ -36,7 +36,7 @@ export abstract class BaseController {
       (req: any, res: any, next: NextFunction) => {
         const errs = validationResult(req);
         if (!errs.isEmpty()) {
-          res.status(400).send(errs.array()[0].msg);
+          res.status(400).json(errs.array()[0].msg);
           return;
         }
         next();
