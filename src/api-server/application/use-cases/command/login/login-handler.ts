@@ -21,7 +21,7 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
     @inject(UserRepository) private _userRepository: IUserRepository,
     @inject(JWT_TYPES.ACCESSTOKEN) private _accessTokenSetting: IJwTokenSettings,
     @inject(JWT_TYPES.REFRESHTOKEN) private _refreshTokenSetting: IJwTokenSettings
-  ) {}
+  ) { }
 
   async handle(req: LoginCommand): Promise<IBaseReturn> {
     const user = await this._userRepository.getByAccount(req.account);

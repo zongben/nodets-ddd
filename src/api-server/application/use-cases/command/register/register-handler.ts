@@ -14,11 +14,10 @@ import { Handler } from "../../../../../lib/mediator/mediator.decorator";
 
 @Handler(RegisterCommand)
 export class RegisterHandler
-  implements IReqHandler<RegisterCommand, IBaseReturn>
-{
+  implements IReqHandler<RegisterCommand, IBaseReturn> {
   constructor(
     @inject(UserRepository) private readonly _userRepository: IUserRepository,
-  ) {}
+  ) { }
 
   async handle(req: RegisterCommand): Promise<IBaseReturn> {
     const isUserExist =

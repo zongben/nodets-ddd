@@ -13,7 +13,7 @@ import { Handler } from "../../../../../lib/mediator/mediator.decorator";
 export class GetUserHandler implements IReqHandler<GetUserQuery, IBaseReturn> {
   constructor(
     @inject(UserRepository) private _userRepository: IUserRepository,
-  ) {}
+  ) { }
   async handle(query: GetUserQuery): Promise<IBaseReturn> {
     const user = await this._userRepository.getById(query.id);
     if (!user) {
