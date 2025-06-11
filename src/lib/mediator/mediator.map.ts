@@ -22,5 +22,6 @@ export class MediatorMap implements IMediatorMap {
       }
       this._map.set(req, handler);
     }
+    return this;
   }
 }

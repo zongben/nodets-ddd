@@ -1,10 +1,8 @@
 import { BaseController } from "../../lib/controller/base-controller";
 import { RegisterCommand } from "../application/use-cases/command/register/register-command";
 import { LoginCommand } from "../application/use-cases/command/login/login-command";
-import { RegisterRule } from "../contract/auth/register/register-rule";
-import { LoginRule } from "../contract/auth/login/login-rule";
-import { RegisterReq } from "../contract/auth/register/register-req.type";
-import { LoginReq } from "../contract/auth/login/login-req.type";
+import { RegisterReq, RegisterRule } from "../contract/auth/register/register-rule";
+import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
 import { CommonResponse } from "../../lib/controller/common-response";
 import { SuccessReturn } from "../application/success-return";
 

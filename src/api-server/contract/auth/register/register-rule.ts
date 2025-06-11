@@ -1,8 +1,13 @@
 import { body } from "express-validator";
 import { INVALID_CODES } from "../../invalid-codes";
 import { Ruler } from "../../../../lib/controller/ruler";
-import { RegisterReq } from "./register-req.type";
 import { ErrorResponse } from "../../../../lib/controller/error-response";
+
+export type RegisterReq = {
+  account: string;
+  password: string;
+  username: string;
+};
 
 export class RegisterRule extends Ruler<RegisterReq> {
   constructor() {
