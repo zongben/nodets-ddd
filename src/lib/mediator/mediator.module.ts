@@ -14,7 +14,8 @@ export class MediatorModule extends Module {
   constructor(
     private readonly _container: Container,
     private readonly _mediatorMap: MediatorMap,
-    private readonly _pipeline: (typeof MediatorPipe)[] = [],
+    private readonly _prePipeline: (typeof MediatorPipe)[] = [],
+    private readonly _postPipeline: (typeof MediatorPipe)[] = [],
   ) {
     super();
   }
@@ -34,9 +35,12 @@ export class MediatorModule extends Module {
         .to(Mediator)
         .inTransientScope();
       bind<Container>("container").toConstantValue(this._container);
-      bind<(typeof MediatorPipe)[]>(MEDIATOR_TYPES.Pipeline).toConstantValue(
-        this._pipeline,
+      bind<(typeof MediatorPipe)[]>(MEDIATOR_TYPES.PrePipeline).toConstantValue(
+        this._prePipeline,
       );
+      bind<(typeof MediatorPipe)[]>(
+        MEDIATOR_TYPES.PostPipeline,
+      ).toConstantValue(this._postPipeline);
     });
   }
 }

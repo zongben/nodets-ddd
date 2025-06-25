@@ -12,9 +12,29 @@ export class Mediator implements IMediator {
     @inject("container") private readonly _container: Container,
     @inject(MEDIATOR_TYPES.IMediatorMap)
     private readonly _mediatorMap: IMediatorMap,
-    @inject(MEDIATOR_TYPES.Pipeline)
-    private readonly _pipeline: any,
+    @inject(MEDIATOR_TYPES.PrePipeline)
+    private readonly _prePipeline: any,
+    @inject(MEDIATOR_TYPES.PostPipeline)
+    private readonly _postPipeline: any,
   ) {}
+
+  private async processPipeline(
+    req: any,
+    pipelines: Array<new (...args: any[]) => MediatorPipe>,
+  ): Promise<any> {
+    let index = 0;
+    const next = async (pipe: any): Promise<any> => {
+      if (index < pipelines.length) {
+        const PipelineClass = pipelines[index++];
+        const pipeline = this._container.resolve(PipelineClass);
+        return await pipeline.handle(pipe, (nextInput: any) => next(nextInput));
+      } else {
+        return pipe;
+      }
+    };
+
+    return await next(req);
+  }
 
   async send<TRes>(req: any): Promise<TRes> {
     const handler = this._mediatorMap.get(req.constructor) as new (
@@ -24,21 +44,9 @@ export class Mediator implements IMediator {
       throw new Error("handler not found");
     }
 
-    let index = 0;
-    const pipeLength = this._pipeline.length;
-    const next = async () => {
-      if (index < pipeLength) {
-        const pipe = this._container.resolve(
-          this._pipeline[index++],
-        ) as MediatorPipe;
-        return await pipe.handle(req, next);
-      } else {
-        const handlerInstance = this._container.resolve(handler);
-        return await handlerInstance.handle(req);
-      }
-    };
-
-    return await next();
+    return await this.processPipeline(req, this._prePipeline)
+      .then((input) => this._container.resolve(handler).handle(input))
+      .then((output) => this.processPipeline(output, this._postPipeline));
   }
 
   async publish<T extends INotification<T>>(event: T): Promise<void> {

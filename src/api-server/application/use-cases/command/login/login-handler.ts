@@ -19,9 +19,11 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,
     @inject(UserRepository) private _userRepository: IUserRepository,
-    @inject(JWT_TYPES.ACCESSTOKEN) private _accessTokenSetting: IJwTokenSettings,
-    @inject(JWT_TYPES.REFRESHTOKEN) private _refreshTokenSetting: IJwTokenSettings
-  ) { }
+    @inject(JWT_TYPES.ACCESSTOKEN)
+    private _accessTokenSetting: IJwTokenSettings,
+    @inject(JWT_TYPES.REFRESHTOKEN)
+    private _refreshTokenSetting: IJwTokenSettings,
+  ) {}
 
   async handle(req: LoginCommand): Promise<IBaseReturn> {
     const user = await this._userRepository.getByAccount(req.account);
@@ -43,7 +45,7 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
 
     const refreshTokenHelper = new JwTokenHelper(this._refreshTokenSetting);
     const refreshToken = refreshTokenHelper.generateToken({
-      userid: user.id
+      userid: user.id,
     });
     return new SuccessReturn({ accessToken, refreshToken });
   }
