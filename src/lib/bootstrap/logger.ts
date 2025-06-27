@@ -51,4 +51,3 @@ export class Logger implements ILogger {
     this.logger.debug(message);
   }
 }
-

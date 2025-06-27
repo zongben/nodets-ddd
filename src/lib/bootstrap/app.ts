@@ -9,9 +9,13 @@ import { Logger } from "./logger";
 import { ILogger } from "./interfaces/logger.interface";
 import { IEnv } from "../controller/interfaces/env.interface";
 import { APP_TYPES } from "./types";
+import http from "http";
+import { Socket } from "net";
 
 export class App {
   private _app: express.Application;
+  private _server: http.Server;
+  private _connections: Set<Socket>;
   logger: ILogger;
   env: Env;
   serviceContainer: Container;
@@ -23,6 +27,9 @@ export class App {
     this.logger.info(`Dotenv is loaded from ${options.envPath}`);
 
     this._app = express();
+    this._server = http.createServer(this._app);
+    this._connections = new Set<Socket>();
+
     this.options = options;
     this.serviceContainer = new Container(options.container);
     this.options.allowAnonymousPath = this.options.allowAnonymousPath.map(
@@ -108,5 +115,31 @@ export class App {
     this._app.listen(port, () => {
       this.logger.info(`Listening on port ${port}`);
     });
+
+    this._server.on("connection", (conn) => {
+      this._connections.add(conn);
+      conn.on("close", () => {
+        this._connections.delete(conn);
+      });
+    });
+
+    process.on("SIGINT", this.gracefulShutdown.bind(this));
+    process.on("SIGTERM", this.gracefulShutdown.bind(this));
+  }
+
+  private gracefulShutdown() {
+    this.logger.info("Starting graceful shutdown...");
+
+    this._server.close(() => {
+      this.logger.info("Closed server, exiting process.");
+      setTimeout(() => {
+        process.exit(0);
+      }, 1000);
+    });
+
+    setTimeout(() => {
+      this.logger.info("Forcing close of connections...");
+      this._connections.forEach((conn) => conn.destroy());
+    }, 30_000);
   }
 }
