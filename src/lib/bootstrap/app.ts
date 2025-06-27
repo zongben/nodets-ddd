@@ -14,7 +14,7 @@ import { Socket } from "net";
 
 export class App {
   private _app: express.Application;
-  private _server: http.Server;
+  private _server?: http.Server;
   private _connections: Set<Socket>;
   logger: ILogger;
   env: Env;
@@ -26,7 +26,6 @@ export class App {
     this.env = new Env(this.options.envPath);
 
     this._app = express();
-    this._server = http.createServer(this._app);
     this._connections = new Set<Socket>();
 
     this.logger = new Logger(
@@ -83,9 +82,14 @@ export class App {
 
   useJwtValidMiddleware(handler: (req: any, res: any, next: any) => void) {
     this._app.use((req, res, next) => {
-      const isAnonymous = this.options.allowAnonymousPath.some(
-        (x) => req.url.match(x.path) && req.method.match(x.method),
-      );
+      const isAnonymous = this.options.allowAnonymousPath.some((x) => {
+        const methodMatch = new RegExp(x.method).test(req.method);
+        const pathMatch = new RegExp(
+          "^" + x.path.replace(/\*/g, ".*").replace(/\//g, "\\/"),
+          "i",
+        ).test(req.path);
+        return methodMatch && pathMatch;
+      });
 
       if (isAnonymous) {
         next();
@@ -116,7 +120,7 @@ export class App {
   run() {
     this.logger.info(`NODE_ENV: ${this.env.get("NODE_ENV")}`);
     const port = Number(this.env.get("PORT")) || 3000;
-    this._app.listen(port, () => {
+    this._server = this._app.listen(port, () => {
       this.logger.info(`Listening on port ${port}`);
     });
 
@@ -134,7 +138,7 @@ export class App {
   private gracefulShutdown() {
     this.logger.info("Starting graceful shutdown...");
 
-    this._server.close(() => {
+    this._server?.close(() => {
       this.logger.info("Closed server, exiting process.");
       setTimeout(() => {
         process.exit(0);
