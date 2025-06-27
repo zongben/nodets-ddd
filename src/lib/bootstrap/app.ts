@@ -22,16 +22,20 @@ export class App {
   options: AppOptions;
 
   private constructor(options: AppOptions) {
-    this.env = new Env(options.envPath);
-    this.logger = new Logger(this.env.get("NODE_ENV"));
-    this.logger.info(`Dotenv is loaded from ${options.envPath}`);
+    this.options = options;
+    this.env = new Env(this.options.envPath);
 
     this._app = express();
     this._server = http.createServer(this._app);
     this._connections = new Set<Socket>();
 
-    this.options = options;
-    this.serviceContainer = new Container(options.container);
+    this.logger = new Logger(
+      this.env.get("NODE_ENV"),
+      this.options.loggerOptions,
+    );
+    this.logger.info(`Dotenv is loaded from ${this.options.envPath}`);
+
+    this.serviceContainer = new Container(this.options.container);
     this.options.allowAnonymousPath = this.options.allowAnonymousPath.map(
       (p) => {
         return {

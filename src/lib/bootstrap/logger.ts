@@ -3,23 +3,21 @@ import "dotenv/config";
 import "winston-daily-rotate-file";
 import { ILogger } from "./interfaces/logger.interface";
 import { injectable } from "inversify";
+import DailyRotateFile from "winston-daily-rotate-file";
 
 @injectable()
 export class Logger implements ILogger {
   private logger: winston.Logger;
 
-  constructor(env: string) {
+  constructor(
+    env: string,
+    options: DailyRotateFile.DailyRotateFileTransportOptions,
+  ) {
     if (!env) {
       throw new Error("env is required");
     }
 
-    const transport = new winston.transports.DailyRotateFile({
-      filename: `./log/%DATE%.log`,
-      datePattern: "YYYY-MM-DD",
-      zippedArchive: true,
-      maxSize: "20m",
-      maxFiles: "14d",
-    });
+    const transport = new winston.transports.DailyRotateFile(options);
 
     this.logger = winston.createLogger({
       format: winston.format.combine(
