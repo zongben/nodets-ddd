@@ -15,8 +15,6 @@ import {
 import { JWT_TYPES } from "./infra/jwtoken-setting/types";
 import { exceptionMiddleware } from "../lib/middleware/exception.middleware";
 import { map } from "./application/handler.map";
-import { TestPrePipeline } from "../service/mediator-pipeline/test.pre";
-import { TestPostPipeline } from "../service/mediator-pipeline/test.post";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -33,12 +31,7 @@ const app = App.createBuilder((opt) => {
 // mongo.trySyncIndexs(app.logger);
 
 app.loadModules(
-  new MediatorModule(
-    app.serviceContainer,
-    map,
-    [TestPrePipeline],
-    [TestPostPipeline],
-  ),
+  new MediatorModule(app.serviceContainer, map),
   new JwTokenSettingModule(
     JWT_TYPES.ACCESSTOKEN,
     new AccesTokenSetting(app.env.get("JWT_SECRET"), {
