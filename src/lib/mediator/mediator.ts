@@ -19,7 +19,7 @@ export class Mediator implements IMediator {
   ) {}
 
   private async processPipeline(
-    req: any,
+    input: any,
     pipelines: Array<new (...args: any[]) => MediatorPipe>,
   ): Promise<any> {
     let index = 0;
@@ -33,7 +33,7 @@ export class Mediator implements IMediator {
       }
     };
 
-    return await next(req);
+    return await next(input);
   }
 
   async send<TRes>(req: any): Promise<TRes> {
