@@ -46,8 +46,10 @@ app.loadModules(
   ),
   // new MongoModule(mongo),
 );
-app.addHeaders({
-  "Access-Control-Allow-Origin": app.env.get("CORS_ORIGIN"),
+app.useCors({
+  origin: app.env.get("CORS_ORIGIN"),
+  methods: "GET,PUT,PATCH,POST,DELETE",
+  credentials: true,
 });
 app.useJsonParser();
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));

@@ -11,6 +11,7 @@ import { IEnv } from "../controller/interfaces/env.interface";
 import { APP_TYPES } from "./types";
 import http from "http";
 import { Socket } from "net";
+import cors from "cors";
 
 export class App {
   private _app: express.Application;
@@ -102,6 +103,11 @@ export class App {
 
   useJsonParser() {
     this._app.use(express.json());
+    return this;
+  }
+
+  useCors(options: cors.CorsOptions) {
+    this._app.use(cors(options));
     return this;
   }
 
