@@ -1,11 +1,11 @@
 import { interfaces } from "inversify";
 import { Module } from "../container/container.module";
-import { IJwTokenSettings } from "./interfaces/jwtoken-settings.interface";
+import { IJwTokenHelper } from "./interfaces/jwtoken-helper.interface";
 
-export class JwTokenSettingModule extends Module {
+export class JwTokenHelperModule extends Module {
   constructor(
     private symbol: symbol,
-    private jwtSettings: IJwTokenSettings,
+    private jwtHelper: IJwTokenHelper,
   ) {
     super();
   }
@@ -16,7 +16,7 @@ export class JwTokenSettingModule extends Module {
     ) => interfaces.ContainerModuleCallBack,
   ): interfaces.ContainerModuleCallBack {
     return fn((bind) => {
-      bind(this.symbol).toConstantValue(this.jwtSettings);
+      bind(this.symbol).toConstantValue(this.jwtHelper);
     });
   }
 }

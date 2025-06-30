@@ -4,14 +4,11 @@ import { LoginHandler } from "../../../../application/use-cases/command/login/lo
 import { Crypto } from "../../../../../lib/utils/crypto";
 import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
 import { UserRoot } from "../../../../domain/user/user.root";
-import { AccesTokenSetting } from "../../../../infra/jwtoken-setting/jwtoken-setting";
 import { MESSAGE_CODES } from "../../../../application/message-codes";
 
 let mockUserRepository: IUserRepository;
 let mockPublisher: IPublisher;
 let mockJwTokenHelper: IJwTokenHelper;
-const mockAccessTokenSettings = new AccesTokenSetting("test");
-const mockRefreshTokenSettings = new AccesTokenSetting("test");
 
 describe("LoginHandler", () => {
   beforeEach(() => {
@@ -27,8 +24,8 @@ describe("LoginHandler", () => {
     const loginHandler = new LoginHandler(
       mockPublisher,
       mockUserRepository,
-      mockAccessTokenSettings,
-      mockRefreshTokenSettings,
+      mockJwTokenHelper,
+      mockJwTokenHelper,
     );
     const result = await loginHandler.handle({
       account: "account",
@@ -55,8 +52,8 @@ describe("LoginHandler", () => {
     const loginHandler = new LoginHandler(
       mockPublisher,
       mockUserRepository,
-      mockAccessTokenSettings,
-      mockRefreshTokenSettings,
+      mockJwTokenHelper,
+      mockJwTokenHelper,
     );
     const result = await loginHandler.handle({
       account: "account",
@@ -87,8 +84,8 @@ describe("LoginHandler", () => {
     const loginHandler = new LoginHandler(
       mockPublisher,
       mockUserRepository,
-      mockAccessTokenSettings,
-      mockRefreshTokenSettings,
+      mockJwTokenHelper,
+      mockJwTokenHelper,
     );
     const result = await loginHandler.handle({
       account: "account",
