@@ -1,18 +1,17 @@
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.interface";
-import { SuccessReturn } from "../../../../application/success-return";
-import { LoginFailError } from "../../../../application/use-cases/command/login/login-fail-error";
 import { LoginHandler } from "../../../../application/use-cases/command/login/login-handler";
 import { Crypto } from "../../../../../lib/utils/crypto";
 import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
 import { UserRoot } from "../../../../domain/user/user.root";
 import { AccesTokenSetting } from "../../../../infra/jwtoken-setting/jwtoken-setting";
+import { MESSAGE_CODES } from "../../../../application/message-codes";
 
 let mockUserRepository: IUserRepository;
 let mockPublisher: IPublisher;
 let mockJwTokenHelper: IJwTokenHelper;
-const mockAccessTokenSettings = new AccesTokenSetting("test")
-const mockRefreshTokenSettings = new AccesTokenSetting("test")
+const mockAccessTokenSettings = new AccesTokenSetting("test");
+const mockRefreshTokenSettings = new AccesTokenSetting("test");
 
 describe("LoginHandler", () => {
   beforeEach(() => {
@@ -36,7 +35,10 @@ describe("LoginHandler", () => {
       password: "password",
     });
 
-    expect(result).toBeInstanceOf(LoginFailError);
+    expect(result.messageCode).toBe(
+      MESSAGE_CODES.ACCOUNT_OR_PASSWORD_INCORRECT,
+    );
+    expect(result.isSuccess).toBe(false);
     expect(mockPublisher.publish).not.toHaveBeenCalled();
   });
 
@@ -61,7 +63,10 @@ describe("LoginHandler", () => {
       password: "incorrectPassword",
     });
 
-    expect(result).toBeInstanceOf(LoginFailError);
+    expect(result.messageCode).toBe(
+      MESSAGE_CODES.ACCOUNT_OR_PASSWORD_INCORRECT,
+    );
+    expect(result.isSuccess).toBe(false);
     expect(mockPublisher.publish).toHaveBeenCalled();
   });
 
@@ -90,7 +95,7 @@ describe("LoginHandler", () => {
       password: "password",
     });
 
-    expect(result).toBeInstanceOf(SuccessReturn);
+    expect(result.isSuccess).toBe(true);
     expect(result.data.accessToken).toBeDefined();
     expect(result.data.refreshToken).toBeDefined();
     expect(mockPublisher.publish).not.toHaveBeenCalled();

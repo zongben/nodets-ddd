@@ -1,7 +1,6 @@
+import { MESSAGE_CODES } from "../../../../application/message-codes";
 import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
-import { SuccessReturn } from "../../../../application/success-return";
 import { RegisterHandler } from "../../../../application/use-cases/command/register/register-handler";
-import { UserExistError } from "../../../../application/use-cases/command/register/user-exist-error";
 import { UserRoot } from "../../../../domain/user/user.root";
 
 let mockUserRepository: IUserRepository;
@@ -23,7 +22,7 @@ describe("registerHandler", () => {
       username: "username",
     });
 
-    expect(result).toBeInstanceOf(SuccessReturn);
+    expect(result.isSuccess).toBe(true);
   });
 
   test("when user found then return error", async () => {
@@ -38,6 +37,7 @@ describe("registerHandler", () => {
       username: "username",
     });
 
-    expect(result).toBeInstanceOf(UserExistError);
+    expect(result.isSuccess).toBe(false);
+    expect(result.messageCode).toBe(MESSAGE_CODES.USER_ALREADY_EXISTS);
   });
 });

@@ -7,10 +7,9 @@ import {
 } from "../contract/auth/register/register-rule";
 import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
 import { CommonResponse } from "../../lib/controller/common-response";
-import { UserExistError } from "../application/use-cases/command/register/user-exist-error";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorResponse } from "../../lib/controller/error-response";
-import { LoginFailError } from "../application/use-cases/command/login/login-fail-error";
+import { MESSAGE_CODES } from "../application/message-codes";
 
 export class AuthController extends BaseController {
   apiPath: string = "/auth";
@@ -24,7 +23,7 @@ export class AuthController extends BaseController {
     });
     const ret = await this._sender.send(command);
     return CommonResponse(ret, (ret) => {
-      if (ret instanceof UserExistError) {
+      if (ret.messageCode === MESSAGE_CODES.USER_ALREADY_EXISTS) {
         return Responses.Conflict(new ErrorResponse(ret.messageCode, ""));
       }
     });
@@ -46,7 +45,7 @@ export class AuthController extends BaseController {
       });
     }
     return CommonResponse(ret, (ret) => {
-      if (ret instanceof LoginFailError) {
+      if (ret.messageCode === MESSAGE_CODES.ACCOUNT_OR_PASSWORD_INCORRECT) {
         return Responses.Unauthorized(new ErrorResponse(ret.messageCode, ""));
       }
     });

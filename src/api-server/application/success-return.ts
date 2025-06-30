@@ -1,9 +1,9 @@
 import { IBaseReturn } from "../../lib/application/interfaces/base-return.interface";
-import { CODES } from "./codes";
+import { MESSAGE_CODES } from "./message-codes";
 
 export class SuccessReturn implements IBaseReturn {
   isSuccess = true;
-  messageCode = CODES.SUCCESS;
+  messageCode = MESSAGE_CODES.SUCCESS;
   data: any;
 
   constructor(data: any) {

@@ -2,8 +2,8 @@ import { BaseController } from "../../lib/controller/base-controller";
 import { CommonResponse } from "../../lib/controller/common-response";
 import { ErrorResponse } from "../../lib/controller/error-response";
 import { Responses } from "../../lib/controller/responses";
+import { MESSAGE_CODES } from "../application/message-codes";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user-query";
-import { UserNotExistError } from "../application/use-cases/query/get-user/user-not-exist-error";
 
 export class UserController extends BaseController {
   apiPath: string = "/user";
@@ -13,7 +13,7 @@ export class UserController extends BaseController {
     const query = new GetUserQuery(userid);
     const ret = await this._sender.send(query);
     return CommonResponse(ret, (ret) => {
-      if (ret instanceof UserNotExistError) {
+      if (ret.messageCode === MESSAGE_CODES.USER_NOT_EXISTS) {
         return Responses.NotFound(new ErrorResponse(ret.messageCode, ""));
       }
     });
