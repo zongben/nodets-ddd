@@ -43,6 +43,10 @@ export class AuthController extends BaseController {
         sameSite: "Strict",
         maxAge: 60 * 60 * 24 * 30, // 30 days
       });
+
+      ret.data = {
+        accessToken: ret.data.accessToken,
+      };
     }
     return CommonResponse(ret, (ret) => {
       if (ret.messageCode === MESSAGE_CODES.ACCOUNT_OR_PASSWORD_INCORRECT) {
