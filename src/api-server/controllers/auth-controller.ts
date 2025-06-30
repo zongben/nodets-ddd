@@ -1,10 +1,16 @@
 import { BaseController } from "../../lib/controller/base-controller";
 import { RegisterCommand } from "../application/use-cases/command/register/register-command";
 import { LoginCommand } from "../application/use-cases/command/login/login-command";
-import { RegisterReq, RegisterRule } from "../contract/auth/register/register-rule";
+import {
+  RegisterReq,
+  RegisterRule,
+} from "../contract/auth/register/register-rule";
 import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
 import { CommonResponse } from "../../lib/controller/common-response";
-import { SuccessReturn } from "../application/success-return";
+import { UserExistError } from "../application/use-cases/command/register/user-exist-error";
+import { Responses } from "../../lib/controller/responses";
+import { ErrorResponse } from "../../lib/controller/error-response";
+import { LoginFailError } from "../application/use-cases/command/login/login-fail-error";
 
 export class AuthController extends BaseController {
   apiPath: string = "/auth";
@@ -17,7 +23,11 @@ export class AuthController extends BaseController {
       username,
     });
     const ret = await this._sender.send(command);
-    return CommonResponse(ret);
+    return CommonResponse(ret, (ret) => {
+      if (ret instanceof UserExistError) {
+        return Responses.Conflict(new ErrorResponse(ret.messageCode, ""));
+      }
+    });
   }
 
   async login(req: any, res: any) {
@@ -27,22 +37,19 @@ export class AuthController extends BaseController {
       password,
     });
     const ret = await this._sender.send(command);
-    if (!ret.isSuccess) {
-      return CommonResponse(ret);
+    if (ret.isSuccess) {
+      res.cookie("refresh_token", ret.data.refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict",
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      });
     }
-
-    res.cookie("refresh_token", ret.data.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: 60 * 60 * 24 * 30, // 30 days
+    return CommonResponse(ret, (ret) => {
+      if (ret instanceof LoginFailError) {
+        return Responses.Unauthorized(new ErrorResponse(ret.messageCode, ""));
+      }
     });
-
-    return CommonResponse(
-      new SuccessReturn({
-        token: ret.data.accessToken,
-      }),
-    );
   }
 
   mapRoutes() {

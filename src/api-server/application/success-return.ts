@@ -3,7 +3,7 @@ import { CODES } from "./codes";
 
 export class SuccessReturn implements IBaseReturn {
   isSuccess = true;
-  code = CODES.SUCCESS;
+  messageCode = CODES.SUCCESS;
   data: any;
 
   constructor(data: any) {

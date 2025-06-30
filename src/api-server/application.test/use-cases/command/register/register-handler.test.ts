@@ -1,7 +1,7 @@
 import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
 import { SuccessReturn } from "../../../../application/success-return";
 import { RegisterHandler } from "../../../../application/use-cases/command/register/register-handler";
-import { UserExsistError } from "../../../../application/use-cases/command/register/user-exsist-error";
+import { UserExistError } from "../../../../application/use-cases/command/register/user-exist-error";
 import { UserRoot } from "../../../../domain/user/user.root";
 
 let mockUserRepository: IUserRepository;
@@ -38,6 +38,6 @@ describe("registerHandler", () => {
       username: "username",
     });
 
-    expect(result).toBeInstanceOf(UserExsistError);
+    expect(result).toBeInstanceOf(UserExistError);
   });
 });

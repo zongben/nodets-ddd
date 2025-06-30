@@ -1,5 +1,5 @@
 export interface IBaseReturn {
   isSuccess: boolean;
-  code: string;
+  messageCode: string;
   data: any;
 }

@@ -1,7 +1,7 @@
 import { inject } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
 import { RegisterCommand } from "./register-command";
-import { UserExsistError } from "./user-exsist-error";
+import { UserExistError } from "./user-exist-error";
 import { SuccessReturn } from "../../../success-return";
 import { RegisterResult } from "./register-result";
 import { Crypto } from "../../../../../lib/utils/crypto";
@@ -23,7 +23,7 @@ export class RegisterHandler
     const isUserExist =
       (await this._userRepository.getByAccount(req.account)) !== null;
     if (isUserExist) {
-      return new UserExsistError();
+      return new UserExistError();
     }
     const hashedPassword = await Crypto.hash(req.password);
     const userRoot = UserRoot.create({

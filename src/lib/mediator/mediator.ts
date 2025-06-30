@@ -32,7 +32,6 @@ export class Mediator implements IMediator {
         return pipe;
       }
     };
-
     return await next(input);
   }
 

@@ -2,7 +2,7 @@ import { IUserRepository } from "../../../../application/persistences/user.repos
 import { GetUserHandler } from "../../../../application/use-cases/query/get-user/get-user-handler";
 import { GetUserQuery } from "../../../../application/use-cases/query/get-user/get-user-query";
 import { GetUserResult } from "../../../../application/use-cases/query/get-user/get-user-result";
-import { UserNotExsistError } from "../../../../application/use-cases/query/get-user/user-not-exsist-error";
+import { UserNotExistError } from "../../../../application/use-cases/query/get-user/user-not-exist-error";
 
 let mockUserRepository: IUserRepository;
 
@@ -19,7 +19,7 @@ describe("getuserHandler", () => {
     const handler = new GetUserHandler(mockUserRepository);
     const result = await handler.handle(query);
 
-    expect(result).toBeInstanceOf(UserNotExsistError);
+    expect(result).toBeInstanceOf(UserNotExistError);
   });
 
   test("when user exists return user", async () => {
