@@ -91,6 +91,8 @@ describe("LoginHandler", () => {
     });
 
     expect(result).toBeInstanceOf(SuccessReturn);
+    expect(result.data.accessToken).toBeDefined();
+    expect(result.data.refreshToken).toBeDefined();
     expect(mockPublisher.publish).not.toHaveBeenCalled();
   });
 });
