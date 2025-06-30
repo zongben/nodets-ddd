@@ -54,6 +54,6 @@ app.useCors({
 app.useJsonParser();
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
 app.mapController(controllers);
-app.useMiddleware(notFoundMiddleware);
+app.useMiddleware(notFoundMiddleware(app.logger));
 app.useMiddleware(exceptionMiddleware(app.logger));
 app.run();
