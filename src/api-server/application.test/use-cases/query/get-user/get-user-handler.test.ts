@@ -2,7 +2,6 @@ import { MESSAGE_CODES } from "../../../../application/message-codes";
 import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
 import { GetUserHandler } from "../../../../application/use-cases/query/get-user/get-user-handler";
 import { GetUserQuery } from "../../../../application/use-cases/query/get-user/get-user-query";
-import { GetUserResult } from "../../../../application/use-cases/query/get-user/get-user-result";
 
 let mockUserRepository: IUserRepository;
 
@@ -35,8 +34,11 @@ describe("getuserHandler", () => {
     const handler = new GetUserHandler(mockUserRepository);
     const result = await handler.handle(query);
 
-    const getUserResult = new GetUserResult("id", "account", "username");
-    expect(result.data).toEqual(getUserResult);
+    expect(result.data).toEqual({
+      id: "id",
+      account: "account",
+      username: "username",
+    });
     expect(result.isSuccess).toBe(true);
   });
 });

@@ -43,6 +43,9 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
     const refreshToken = this._refreshTokenHelper.generateToken({
       userid: user.id,
     });
-    return new SuccessReturn({ accessToken, refreshToken });
+    return new SuccessReturn({
+      accessToken,
+      refreshToken,
+    });
   }
 }

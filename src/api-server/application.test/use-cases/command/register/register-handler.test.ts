@@ -13,7 +13,11 @@ describe("registerHandler", () => {
   test("when user not found then create user", async () => {
     mockUserRepository.getByAccount = jest.fn().mockResolvedValue(null);
 
-    mockUserRepository.create = jest.fn().mockResolvedValue({} as UserRoot);
+    mockUserRepository.create = jest.fn().mockResolvedValue({
+      id: "id",
+      account: "account",
+      username: "username",
+    } as UserRoot);
 
     const registerHandler = new RegisterHandler(mockUserRepository);
     const result = await registerHandler.handle({
@@ -23,6 +27,10 @@ describe("registerHandler", () => {
     });
 
     expect(result.isSuccess).toBe(true);
+    expect(result.data).toEqual({
+      account: "account",
+      username: "username",
+    });
   });
 
   test("when user found then return error", async () => {

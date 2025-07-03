@@ -3,7 +3,6 @@ import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.
 import { GetUserQuery } from "./get-user-query";
 import { UserNotExistError } from "./user-not-exist-error";
 import { SuccessReturn } from "../../../success-return";
-import { GetUserResult } from "./get-user-result";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
@@ -20,8 +19,10 @@ export class GetUserHandler implements IReqHandler<GetUserQuery, IBaseReturn> {
       return new UserNotExistError();
     }
 
-    return new SuccessReturn(
-      new GetUserResult(user.id, user.account, user.username),
-    );
+    return new SuccessReturn({
+      id: user.id,
+      account: user.account,
+      username: user.username,
+    });
   }
 }

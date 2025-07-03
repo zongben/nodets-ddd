@@ -3,7 +3,6 @@ import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.
 import { RegisterCommand } from "./register-command";
 import { UserExistError } from "./user-exist-error";
 import { SuccessReturn } from "../../../success-return";
-import { RegisterResult } from "./register-result";
 import { Crypto } from "../../../../../lib/utils/crypto";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
@@ -14,10 +13,11 @@ import { Handler } from "../../../../../lib/mediator/mediator.decorator";
 
 @Handler(RegisterCommand)
 export class RegisterHandler
-  implements IReqHandler<RegisterCommand, IBaseReturn> {
+  implements IReqHandler<RegisterCommand, IBaseReturn>
+{
   constructor(
     @inject(UserRepository) private readonly _userRepository: IUserRepository,
-  ) { }
+  ) {}
 
   async handle(req: RegisterCommand): Promise<IBaseReturn> {
     const isUserExist =
@@ -33,6 +33,9 @@ export class RegisterHandler
       username: req.username,
     });
     const user = await this._userRepository.create(userRoot);
-    return new SuccessReturn(new RegisterResult(user.account, user.username));
+    return new SuccessReturn({
+      account: user.account,
+      username: user.username,
+    });
   }
 }
