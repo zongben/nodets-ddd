@@ -6,9 +6,9 @@ import { SuccessReturn } from "../../../success-return";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
-import { Handler } from "../../../../../lib/mediator/mediator.decorator";
+import { HandlerFor } from "../../../../../lib/mediator/mediator.decorator";
 
-@Handler(GetUserQuery)
+@HandlerFor(GetUserQuery)
 export class GetUserHandler implements IReqHandler<GetUserQuery, IBaseReturn> {
   constructor(
     @inject(UserRepository) private _userRepository: IUserRepository,

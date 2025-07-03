@@ -2,7 +2,7 @@ export const METADATA_KEY = {
   handlerFor: Symbol.for("handlerFor"),
 };
 
-export function Handler<TReq>(
+export function HandlerFor<TReq>(
   req: new (...args: any[]) => TReq,
 ): ClassDecorator {
   return (target) => {

@@ -9,11 +9,11 @@ import { SuccessReturn } from "../../../success-return";
 import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
-import { Handler } from "../../../../../lib/mediator/mediator.decorator";
+import { HandlerFor } from "../../../../../lib/mediator/mediator.decorator";
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { JWT_TYPES } from "../../../../infra/jwtHelpers/types";
 
-@Handler(LoginCommand)
+@HandlerFor(LoginCommand)
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,
