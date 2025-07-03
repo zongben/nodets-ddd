@@ -13,6 +13,7 @@ import { JwTokenHelperModule } from "../lib/jwToken/jwtoken.module";
 import { JWT_TYPES } from "./infra/jwtHelpers/types";
 import { JwTokenSettings } from "../lib/jwToken/jwtoken-settings";
 import { JwTokenHelper } from "../lib/jwToken/jwtoken-helper";
+import { timerMiddleware } from "../lib/middleware/timer.middleware";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -55,6 +56,7 @@ app.useCors({
 });
 app.useJsonParser();
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
+app.useMiddleware(timerMiddleware(app.logger));
 app.mapController(controllers);
 app.useMiddleware(notFoundMiddleware(app.logger));
 app.useMiddleware(exceptionMiddleware(app.logger));
