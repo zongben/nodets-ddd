@@ -9,14 +9,11 @@ export function timerMiddleware(logger: ILogger) {
     onFinished(res, () => {
       const end = performance.now();
       const duration = end - start;
+      const msg = `Request: ${req.method} ${req.originalUrl} - Duration: ${duration.toFixed(2)} ms`;
       if (duration > 1000) {
-        logger.warn(
-          `Slow request: ${req.method} ${req.originalUrl} - Duration: ${duration.toFixed(2)} ms`,
-        );
+        logger.warn(msg);
       } else {
-        logger.debug(
-          `Request: ${req.method} ${req.originalUrl} - Duration: ${duration.toFixed(2)} ms`,
-        );
+        logger.debug(msg);
       }
     });
 
