@@ -12,6 +12,7 @@ import { APP_TYPES } from "./types";
 import http from "http";
 import { Socket } from "net";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 export class App {
   private _app: express.Application;
@@ -101,8 +102,8 @@ export class App {
     return this;
   }
 
-  useJsonParser() {
-    this._app.use(express.json());
+  useJsonParser(options?: bodyParser.OptionsJson) {
+    this._app.use(express.json(options));
     return this;
   }
 
