@@ -25,7 +25,7 @@ export class Logger implements ILogger {
           format: "YYYY-MM-DD HH:mm:ss",
         }),
         winston.format.printf(({ timestamp, level, message }) => {
-          return `${timestamp} ${level}: ${message}`;
+          return `${timestamp} [${level}] ${message}`;
         }),
       ),
       level: env === "dev" ? "debug" : "info",
