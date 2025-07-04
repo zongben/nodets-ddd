@@ -25,3 +25,8 @@ Content-Type: application/json
 
 GET {{host}}/error
 Content-Type: application/json
+
+###
+
+GET {{host}}/notfound
+Content-Type: application/json
