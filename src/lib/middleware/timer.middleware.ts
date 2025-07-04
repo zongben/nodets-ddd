@@ -1,9 +1,11 @@
 import { ILogger } from "../bootstrap/interfaces/logger.interface";
 import { performance } from "node:perf_hooks";
 import onFinished from "on-finished";
+import { Timer, timerStorage } from "../timer/timer";
 
 export function timerMiddleware(logger: ILogger) {
   return (req: any, res: any, next: any) => {
+    const timer = new Timer();
     const start = performance.now();
 
     onFinished(res, () => {
@@ -17,6 +19,8 @@ export function timerMiddleware(logger: ILogger) {
       }
     });
 
-    next();
+    timerStorage.run(timer, () => {
+      next();
+    });
   };
 }
