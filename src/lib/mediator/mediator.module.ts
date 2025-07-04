@@ -29,11 +29,11 @@ export class MediatorModule extends Module {
       bind<IMediatorMap>(MEDIATOR_TYPES.IMediatorMap).toConstantValue(
         this._mediatorMap,
       );
-      bind<IMediator>(MEDIATOR_TYPES.IMediator).to(Mediator).inTransientScope();
-      bind<ISender>(MEDIATOR_TYPES.ISender).to(Mediator).inTransientScope();
+      bind<IMediator>(MEDIATOR_TYPES.IMediator).to(Mediator).inSingletonScope();
+      bind<ISender>(MEDIATOR_TYPES.ISender).to(Mediator).inSingletonScope();
       bind<IPublisher>(MEDIATOR_TYPES.IPublisher)
         .to(Mediator)
-        .inTransientScope();
+        .inSingletonScope();
       bind<Container>("container").toConstantValue(this._container);
       bind<(typeof MediatorPipe)[]>(MEDIATOR_TYPES.PrePipeline).toConstantValue(
         this._prePipeline,
