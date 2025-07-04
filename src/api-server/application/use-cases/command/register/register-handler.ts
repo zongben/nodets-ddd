@@ -9,9 +9,9 @@ import { UserRepository } from "../../../../infra/repositories/user.repository.p
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
-import { HandlerFor } from "../../../../../lib/mediator/mediator.decorator";
+import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 
-@HandlerFor(RegisterCommand)
+@HandleFor(RegisterCommand)
 export class RegisterHandler
   implements IReqHandler<RegisterCommand, IBaseReturn>
 {
