@@ -55,6 +55,10 @@ export class AuthController extends BaseController {
     });
   }
 
+  async error() {
+    throw new Error("This is an error test");
+  }
+
   mapRoutes() {
     this.router.post(
       "/register",
@@ -66,6 +70,7 @@ export class AuthController extends BaseController {
       this.validate(new LoginRule()),
       this.action(this.login),
     );
+    this.router.get("/error", this.action(this.error));
     return this.router;
   }
 }
