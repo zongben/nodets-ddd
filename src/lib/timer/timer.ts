@@ -1,9 +1,8 @@
 import { performance } from "node:perf_hooks";
 import { AsyncLocalStorage } from "node:async_hooks";
-import { guid } from "../utils/guid";
 
 type TimeSpan = {
-  id: string;
+  id: number;
   label: string;
   start: number;
   end?: number;
@@ -12,14 +11,15 @@ type TimeSpan = {
 
 export class Timer {
   private _timeSpans: TimeSpan[] = [];
+  private index = 0;
 
-  start(label: string): string {
-    const id = guid();
+  start(label: string): number {
+    const id = this.index++;
     this._timeSpans.push({ id, label, start: performance.now() });
     return id;
   }
 
-  end(id: string): TimeSpan | undefined {
+  end(id: number): TimeSpan | undefined {
     const timeSpan = this.getTimeSpan(id);
     if (timeSpan) {
       timeSpan.end = performance.now();
@@ -28,7 +28,7 @@ export class Timer {
     return timeSpan;
   }
 
-  getTimeSpan(id: string): TimeSpan | undefined {
+  getTimeSpan(id: number): TimeSpan | undefined {
     return this._timeSpans.find((ts) => ts.id === id);
   }
 

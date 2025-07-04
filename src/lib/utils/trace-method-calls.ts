@@ -13,7 +13,7 @@ export function TrackMethodCalls(): ClassDecorator {
       target.prototype[name] = function (...args: any[]) {
         const timer = timerStorage.getStore();
         const label = `${target.name}.${name}`;
-        const id = timer?.start(label) ?? "";
+        const id = timer?.start(label) ?? -1;
 
         try {
           const result = original.apply(this, args);
