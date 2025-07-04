@@ -55,6 +55,7 @@ app.useCors({
   credentials: true,
 });
 app.useJsonParser();
+app.useUrlEncodedParser({ extended: true });
 app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
 app.useMiddleware(timerMiddleware(app.logger));
 app.mapController(controllers);

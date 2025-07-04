@@ -107,6 +107,11 @@ export class App {
     return this;
   }
 
+  useUrlEncodedParser(options?: bodyParser.OptionsUrlencoded) {
+    this._app.use(express.urlencoded(options));
+    return this;
+  }
+
   useCors(options: cors.CorsOptions) {
     this._app.use(cors(options));
     return this;
