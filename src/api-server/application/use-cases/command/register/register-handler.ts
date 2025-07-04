@@ -10,8 +10,10 @@ import { IUserRepository } from "../../../persistences/user.repository.interface
 import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
+import { TrackMethodCalls } from "../../../../../lib/utils/trace-method-calls";
 
 @HandleFor(RegisterCommand)
+@TrackMethodCalls()
 export class RegisterHandler
   implements IReqHandler<RegisterCommand, IBaseReturn>
 {

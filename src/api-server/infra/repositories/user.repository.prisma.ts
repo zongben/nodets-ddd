@@ -2,8 +2,10 @@ import { injectable } from "inversify";
 import { IUserRepository } from "../../application/persistences/user.repository.interface";
 import { UserRoot } from "../../domain/user/user.root";
 import { prisma } from "../prisma/client";
+import { TrackMethodCalls } from "../../../lib/utils/trace-method-calls";
 
 @injectable()
+@TrackMethodCalls()
 export class UserRepository implements IUserRepository {
   async create(user: UserRoot): Promise<UserRoot> {
     await prisma.user.create({
@@ -36,7 +38,7 @@ export class UserRepository implements IUserRepository {
   async getById(id: string): Promise<UserRoot | null> {
     const user = await prisma.user.findUnique({
       where: {
-        id: id
+        id: id,
       },
     });
 

@@ -12,8 +12,10 @@ import { UserRepository } from "../../../../infra/repositories/user.repository.p
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { JWT_TYPES } from "../../../../infra/jwtHelpers/types";
+import { TrackMethodCalls } from "../../../../../lib/utils/trace-method-calls";
 
 @HandleFor(LoginCommand)
+@TrackMethodCalls()
 export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,

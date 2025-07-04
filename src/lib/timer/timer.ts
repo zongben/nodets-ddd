@@ -1,7 +1,9 @@
 import { performance } from "node:perf_hooks";
 import { AsyncLocalStorage } from "node:async_hooks";
+import { guid } from "../utils/guid";
 
 type TimeSpan = {
+  id: string;
   label: string;
   start: number;
   end?: number;
@@ -11,19 +13,14 @@ type TimeSpan = {
 export class Timer {
   private _timeSpans: TimeSpan[] = [];
 
-  start(label: string): void {
-    const existing = this.getTimeSpan(label);
-    if (existing) {
-      existing.start = performance.now();
-      existing.end = undefined; // Reset end time if already exists
-      existing.duration = undefined; // Reset duration if already exists
-      return;
-    }
-    this._timeSpans.push({ label, start: performance.now() });
+  start(label: string): string {
+    const id = guid();
+    this._timeSpans.push({ id, label, start: performance.now() });
+    return id;
   }
 
-  end(label: string): TimeSpan | undefined {
-    const timeSpan = this.getTimeSpan(label);
+  end(id: string): TimeSpan | undefined {
+    const timeSpan = this.getTimeSpan(id);
     if (timeSpan) {
       timeSpan.end = performance.now();
       timeSpan.duration = timeSpan.end - timeSpan.start;
@@ -31,8 +28,8 @@ export class Timer {
     return timeSpan;
   }
 
-  getTimeSpan(label: string): TimeSpan | undefined {
-    return this._timeSpans.find((ts) => ts.label === label);
+  getTimeSpan(id: string): TimeSpan | undefined {
+    return this._timeSpans.find((ts) => ts.id === id);
   }
 
   getAllTimeSpans(): TimeSpan[] {

@@ -7,8 +7,10 @@ import { IBaseReturn } from "../../../../../lib/application/interfaces/base-retu
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
+import { TrackMethodCalls } from "../../../../../lib/utils/trace-method-calls";
 
 @HandleFor(GetUserQuery)
+@TrackMethodCalls()
 export class GetUserHandler implements IReqHandler<GetUserQuery, IBaseReturn> {
   constructor(
     @inject(UserRepository) private _userRepository: IUserRepository,
