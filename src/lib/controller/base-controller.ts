@@ -4,6 +4,7 @@ import { validationResult } from "express-validator";
 import { MEDIATOR_TYPES } from "../mediator/types";
 import { ISender } from "../mediator/interfaces/sender.interface";
 import { IBaseResponse } from "./interfaces/base-response.interface";
+import { DownloadResponse } from "./download-response";
 
 @injectable()
 export abstract class BaseController {
@@ -21,11 +22,22 @@ export abstract class BaseController {
     };
   }
 
-  action(fn: (req: any, res: any, next: any) => Promise<IBaseResponse | void>) {
+  action(
+    fn: (
+      req: any,
+      res: any,
+      next: any,
+    ) => Promise<IBaseResponse | DownloadResponse | void>,
+  ) {
     return this._asyncWrapper(async (req: any, res: any, next: any) => {
       const result = await fn.bind(this)(req, res, next);
-      if (!result)
+      if (!result) {
         throw new Error(`No response from action ${req.method} ${req.path}`);
+      }
+      if (result instanceof DownloadResponse) {
+        res.download(result.filePath, result.fileName);
+        return;
+      }
       res.status(result.status).json(result.body);
     });
   }
