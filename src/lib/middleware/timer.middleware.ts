@@ -11,9 +11,11 @@ export function timerMiddleware(logger: ILogger) {
     onFinished(res, () => {
       const end = performance.now();
       const duration = end - start;
-      let msg = `Request: ${req.method} ${req.originalUrl} - Duration: ${duration.toFixed(2)} ms`;
+      let msg = `Request: ${res.statusCode} ${req.method} ${req.originalUrl} - Duration: ${duration.toFixed(2)} ms`;
+      // console.log(timer.getAllTimeSpans());
       const tsMsg = timer.getAllTimeSpans().map((span) => {
-        return `\n${" ".repeat(28)}⎣__TimeSpan: ${span.duration?.toFixed(2) ?? "N/A"} ms - ${span.label}`;
+        const prefix = " ".repeat((span.depth ? span.depth * 3 : 0) + 28);
+        return `\n${prefix}⎣__TimeSpan: ${span.duration?.toFixed(2) ?? "N/A"} ms - ${span.label}`;
       });
       msg += tsMsg.join("");
       if (duration > 1000) {
