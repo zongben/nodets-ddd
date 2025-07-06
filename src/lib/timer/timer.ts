@@ -29,6 +29,9 @@ export class Timer {
 
   end(id: number): TimeSpan | undefined {
     const timeSpan = this._timeSpans[id];
+    if (!timeSpan) {
+      return;
+    }
     timeSpan.end = performance.now();
     timeSpan.duration = timeSpan.end - timeSpan.start;
     if (this._stack.length > 0 && this._stack[this._stack.length - 1] === id) {
