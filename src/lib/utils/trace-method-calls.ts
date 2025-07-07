@@ -12,19 +12,16 @@ export function TrackMethodCalls(): ClassDecorator {
 
       target.prototype[name] = function (...args: any[]) {
         const timer = timerStorage.getStore();
-        if (!timer) {
-          return;
-        }
         const label = `${target.name}.${name}`;
-        const id = timer.start(label);
+        const id = timer?.start(label) ?? -1;
 
         try {
           const result = original.apply(this, args);
           return result instanceof Promise
-            ? result.finally(() => timer.end(id))
-            : (timer.end(id), result);
+            ? result.finally(() => timer?.end(id))
+            : (timer?.end(id), result);
         } catch (err) {
-          timer.end(id);
+          timer?.end(id);
           throw err;
         }
       };
