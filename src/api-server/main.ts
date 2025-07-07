@@ -14,6 +14,7 @@ import { JWT_TYPES } from "./infra/jwtHelpers/types";
 import { JwTokenSettings } from "../lib/jwToken/jwtoken-settings";
 import { JwTokenHelper } from "../lib/jwToken/jwtoken-helper";
 import { timerMiddleware } from "../lib/middleware/timer.middleware";
+import { LOGGER_LEVEL } from "../lib/bootstrap/logger";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -23,6 +24,10 @@ const app = App.createBuilder((opt) => {
     },
   ];
   opt.envPath = path.join(__dirname, ".env");
+  opt.onEnvInitialized = (env) => {
+    opt.loggerlevel =
+      env.get("NODE_ENV") === "dev" ? LOGGER_LEVEL.DEBUG : LOGGER_LEVEL.INFO;
+  };
 });
 
 // const mongo = Mongo.create(app.env.get("MONGO_URL")).addModels(models);

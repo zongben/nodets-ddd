@@ -26,12 +26,15 @@ export class App {
   private constructor(options: AppOptions) {
     this.options = options;
     this.env = new Env(this.options.envPath);
+    if (this.options.onEnvInitialized) {
+      this.options.onEnvInitialized(this.env);
+    }
 
     this._app = express();
     this._connections = new Set<Socket>();
 
     this.logger = new Logger(
-      this.env.get("NODE_ENV"),
+      this.options.loggerlevel,
       this.options.loggerOptions,
     );
     this.logger.info(`Dotenv is loaded from ${this.options.envPath}`);

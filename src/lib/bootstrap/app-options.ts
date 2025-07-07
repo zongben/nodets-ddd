@@ -1,6 +1,7 @@
 import { interfaces } from "inversify";
 import { AllowAnonymousPath } from "./allowAnonymous-path.type";
 import DailyRotateFile from "winston-daily-rotate-file";
+import { Env } from "./env";
 
 export class AppOptions {
   routerPrefix: string = "/api";
@@ -16,4 +17,6 @@ export class AppOptions {
     maxSize: "20m",
     maxFiles: "14d",
   };
+  loggerlevel: string = "info";
+  onEnvInitialized?: (env: Env) => void;
 }

@@ -5,16 +5,23 @@ import { ILogger } from "./interfaces/logger.interface";
 import { injectable } from "inversify";
 import DailyRotateFile from "winston-daily-rotate-file";
 
+export enum LOGGER_LEVEL {
+  DEBUG = "debug",
+  INFO = "info",
+  WARN = "warn",
+  ERROR = "error",
+}
+
 @injectable()
 export class Logger implements ILogger {
   private logger: winston.Logger;
 
   constructor(
-    env: string,
+    level: string,
     options: DailyRotateFile.DailyRotateFileTransportOptions,
   ) {
-    if (!env) {
-      throw new Error("env is required");
+    if (!level) {
+      throw new Error("level is required");
     }
 
     const transport = new winston.transports.DailyRotateFile(options);
@@ -28,7 +35,7 @@ export class Logger implements ILogger {
           return `${timestamp} [${level}] ${message}`;
         }),
       ),
-      level: env === "dev" ? "debug" : "info",
+      level,
       transports: [transport, new winston.transports.Console()],
     });
   }
