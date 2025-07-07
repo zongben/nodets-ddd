@@ -10,9 +10,9 @@ import { CommonResponse } from "../../lib/controller/common-response";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorResponse } from "../../lib/controller/error-response";
 import { MESSAGE_CODES } from "../application/message-codes";
-import { TrackMethodCalls } from "../../lib/utils/trace-method-calls";
+import { TrackClassMethods } from "../../lib/utils/track";
 
-@TrackMethodCalls()
+@TrackClassMethods()
 export class AuthController extends BaseController {
   apiPath: string = "/auth";
 

@@ -2,10 +2,10 @@ import { injectable } from "inversify";
 import { IUserRepository } from "../../application/persistences/user.repository.interface";
 import { UserRoot } from "../../domain/user/user.root";
 import { prisma } from "../prisma/client";
-import { TrackMethodCalls } from "../../../lib/utils/trace-method-calls";
+import { TrackClassMethods } from "../../../lib/utils/track";
 
 @injectable()
-@TrackMethodCalls()
+@TrackClassMethods()
 export class UserRepository implements IUserRepository {
   async create(user: UserRoot): Promise<UserRoot> {
     await prisma.user.create({

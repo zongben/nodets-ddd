@@ -2,11 +2,11 @@ import { BaseController } from "../../lib/controller/base-controller";
 import { CommonResponse } from "../../lib/controller/common-response";
 import { ErrorResponse } from "../../lib/controller/error-response";
 import { Responses } from "../../lib/controller/responses";
-import { TrackMethodCalls } from "../../lib/utils/trace-method-calls";
+import { TrackClassMethods } from "../../lib/utils/track";
 import { MESSAGE_CODES } from "../application/message-codes";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user-query";
 
-@TrackMethodCalls()
+@TrackClassMethods()
 export class UserController extends BaseController {
   apiPath: string = "/user";
 
