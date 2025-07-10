@@ -36,8 +36,4 @@ export class Responses {
   static Conflict(error: any) {
     return new BaseResponse(409, error);
   }
-
-  static InternalServerError(error: any) {
-    return new BaseResponse(500, error);
-  }
 }
