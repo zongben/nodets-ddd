@@ -4,13 +4,13 @@ import {
   RegisterRule,
 } from "../contract/auth/register/register-rule";
 import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
-import { CommonResponse } from "../../lib/controller/common-response";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorResponse } from "../../lib/controller/error-response";
 import { ErrorCodes } from "../application/error-codes";
 import { RegisterCommand } from "../application/use-cases/command/register/register.command";
 import { LoginCommand } from "../application/use-cases/command/login/login.command";
 import { TrackClassMethods } from "../../lib/utils/tracker";
+import { resultHandler } from "../../lib/controller/result.handler";
 
 @TrackClassMethods()
 export class AuthController extends BaseController {
@@ -24,7 +24,7 @@ export class AuthController extends BaseController {
       username,
     });
     const result = await this.dispatch(command);
-    return CommonResponse(
+    return resultHandler(
       result,
       (data) => {
         return Responses.Created(data);
@@ -44,7 +44,7 @@ export class AuthController extends BaseController {
       password,
     });
     const result = await this.dispatch(command);
-    return CommonResponse(
+    return resultHandler(
       result,
       (data) => {
         res.cookie("refresh_token", data.refreshToken, {

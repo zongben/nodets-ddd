@@ -1,7 +1,7 @@
 import { BaseController } from "../../lib/controller/base-controller";
-import { CommonResponse } from "../../lib/controller/common-response";
 import { ErrorResponse } from "../../lib/controller/error-response";
 import { Responses } from "../../lib/controller/responses";
+import { resultHandler } from "../../lib/controller/result.handler";
 import { TrackClassMethods } from "../../lib/utils/tracker";
 import { ErrorCodes } from "../application/error-codes";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user.query";
@@ -14,7 +14,7 @@ export class UserController extends BaseController {
     const { userid } = res.locals.jwt;
     const query = new GetUserQuery(userid);
     const result = await this.dispatch(query);
-    return CommonResponse(
+    return resultHandler(
       result,
       (data) => {
         return Responses.OK(data);
