@@ -4,10 +4,10 @@ import { SuccessReturn } from "../../../success-return";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
-import { TrackClassMethods } from "../../../../../lib/utils/track";
 import { GetUserQuery } from "./get-user.query";
 import { BaseResult } from "../../../../../lib/application/result.type";
 import { GetUserResult, UserNotExistError } from "./get-user.result";
+import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 
 @HandleFor(GetUserQuery)
 @TrackClassMethods()

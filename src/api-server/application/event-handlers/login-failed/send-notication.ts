@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { IEventHandler } from "../../../../lib/mediator/interfaces/event-handler.interface";
 import { LoginFailedEvent } from "../../use-cases/command/login/events/login-failed-event";
-import { TrackClassMethods } from "../../../../lib/utils/track";
+import { TrackClassMethods } from "../../../../lib/utils/tracker";
 
 @injectable()
 @TrackClassMethods()

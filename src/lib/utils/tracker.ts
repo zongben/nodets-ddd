@@ -1,4 +1,4 @@
-import { timerStorage } from "../timer/timer";
+import { timerStorage } from "./timer";
 
 export function TrackClassMethods(): ClassDecorator {
   return (target: any) => {

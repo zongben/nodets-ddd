@@ -7,13 +7,13 @@ import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
 import { CommonResponse } from "../../lib/controller/common-response";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorResponse } from "../../lib/controller/error-response";
-import { TrackClassMethods } from "../../lib/utils/track";
 import { ErrorCodes } from "../application/error-codes";
 import { BaseResult } from "../../lib/application/result.type";
 import { RegisterCommand } from "../application/use-cases/command/register/register.command";
 import { RegisterResult } from "../application/use-cases/command/register/register.result";
 import { LoginCommand } from "../application/use-cases/command/login/login.command";
 import { LoginResult } from "../application/use-cases/command/login/loing.result";
+import { TrackClassMethods } from "../../lib/utils/tracker";
 
 @TrackClassMethods()
 export class AuthController extends BaseController {
@@ -68,10 +68,6 @@ export class AuthController extends BaseController {
     );
   }
 
-  async error() {
-    throw new Error("This is an error test");
-  }
-
   mapRoutes() {
     this.router.post(
       "/register",
@@ -83,7 +79,6 @@ export class AuthController extends BaseController {
       this.validate(new LoginRule()),
       this.action(this.login),
     );
-    this.router.get("/error", this.action(this.error));
     return this.router;
   }
 }

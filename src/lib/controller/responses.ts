@@ -9,6 +9,10 @@ export class Responses {
     return new BaseResponse(201, data);
   }
 
+  static Accepted(data: any) {
+    return new BaseResponse(202, data);
+  }
+
   static NoContent() {
     return new BaseResponse(204, null);
   }
@@ -31,5 +35,9 @@ export class Responses {
 
   static Conflict(error: any) {
     return new BaseResponse(409, error);
+  }
+
+  static InternalServerError(error: any) {
+    return new BaseResponse(500, error);
   }
 }

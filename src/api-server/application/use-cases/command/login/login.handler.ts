@@ -9,10 +9,10 @@ import { UserRepository } from "../../../../infra/repositories/user.repository.p
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { JWT_TYPES } from "../../../../infra/jwtHelpers/types";
-import { TrackClassMethods } from "../../../../../lib/utils/track";
 import { BaseResult } from "../../../../../lib/application/result.type";
 import { LoginCommand } from "./login.command";
 import { LoginFailError, LoginResult } from "./loing.result";
+import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 
 @HandleFor(LoginCommand)
 @TrackClassMethods()

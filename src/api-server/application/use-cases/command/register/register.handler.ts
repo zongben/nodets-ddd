@@ -7,10 +7,10 @@ import { IUserRepository } from "../../../persistences/user.repository.interface
 import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
-import { TrackClassMethods } from "../../../../../lib/utils/track";
 import { BaseResult } from "../../../../../lib/application/result.type";
 import { RegisterResult, UserExistError } from "./register.result";
 import { RegisterCommand } from "./register.command";
+import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 
 @HandleFor(RegisterCommand)
 @TrackClassMethods()

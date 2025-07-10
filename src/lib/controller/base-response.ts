@@ -1,6 +1,4 @@
-import { IBaseResponse } from "./interfaces/base-response.interface";
-
-export class BaseResponse implements IBaseResponse {
+export class BaseResponse {
   status: number;
   body: any;
 
