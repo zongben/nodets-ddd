@@ -1,15 +1,18 @@
 import { BaseResult } from "../application/result.type";
-import { BaseResponse } from "./base-response";
-import { DownloadResponse } from "./download-response";
 
-export const resultHandler = <T>(
-  result: BaseResult<T>,
-  onSuccess: (data: T) => BaseResponse | DownloadResponse,
-  onError?: (errorCode: string) => BaseResponse | undefined,
-) => {
+export const matchResult = <T, E extends string, R>(
+  result: BaseResult<T, E>,
+  handlers: {
+    ok: (value: T) => R;
+    err: Record<E, (error: E) => R>;
+  },
+): R => {
   if (result.isSuccess) {
-    return onSuccess(result.data);
-  } else if (onError) {
-    return onError(result.errorCode);
+    return handlers.ok(result.data);
   }
+  const handler = handlers.err[result.error];
+  if (!handler) {
+    throw new Error(`Unhandled error case: ${result.error}`);
+  }
+  return handler(result.error);
 };

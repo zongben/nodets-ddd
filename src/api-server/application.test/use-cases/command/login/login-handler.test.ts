@@ -34,7 +34,7 @@ describe("LoginHandler", () => {
 
     expect(result.isSuccess).toBe(false);
     if (!result.isSuccess) {
-      expect(result.errorCode).toBe(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
+      expect(result.error).toBe(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
     }
     expect(mockPublisher.publish).not.toHaveBeenCalled();
   });
@@ -62,7 +62,7 @@ describe("LoginHandler", () => {
 
     expect(result.isSuccess).toBe(false);
     if (!result.isSuccess) {
-      expect(result.errorCode).toBe(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
+      expect(result.error).toBe(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
     }
     expect(mockPublisher.publish).toHaveBeenCalled();
   });

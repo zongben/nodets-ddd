@@ -7,7 +7,7 @@ import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { BaseResult } from "../../../../../lib/application/result.type";
-import { RegisterResult } from "./register.result";
+import { RegisterError, RegisterResult } from "./register.result";
 import { RegisterCommand } from "./register.command";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 import { SuccessReturn } from "../../../../../lib/application/success-return";
@@ -17,13 +17,13 @@ import { ErrorCodes } from "../../../error-codes";
 @HandleFor(RegisterCommand)
 @TrackClassMethods()
 export class RegisterHandler
-  implements IReqHandler<RegisterCommand, BaseResult<RegisterResult>>
+  implements IReqHandler<RegisterCommand, BaseResult<RegisterResult, RegisterError>>
 {
   constructor(
     @inject(UserRepository) private readonly _userRepository: IUserRepository,
   ) {}
 
-  async handle(req: RegisterCommand): Promise<BaseResult<RegisterResult>> {
+  async handle(req: RegisterCommand): Promise<BaseResult<RegisterResult, RegisterError>> {
     const isUserExist =
       (await this._userRepository.getByAccount(req.account)) !== null;
     if (isUserExist) {

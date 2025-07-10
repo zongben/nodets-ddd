@@ -18,7 +18,7 @@ export class MediatorMap implements IMediatorMap {
     for (const handler of handlers) {
       const req = Reflect.getMetadata(METADATA_KEY.handlerFor, handler);
       if (!req) {
-        throw new Error(`Handler ${handler.name} is missing @Handler() decorator`);
+        throw new Error(`Handler ${handler.name} is missing decorator`);
       }
       this._map.set(req, handler);
     }

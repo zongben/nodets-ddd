@@ -3,9 +3,9 @@ export type SuccessResult<T> = {
   data: T;
 };
 
-export type FailResult = {
+export type ErrorResult<E> = {
   isSuccess: false;
-  errorCode: string;
+  error: E;
 };
 
-export type BaseResult<T> = SuccessResult<T> | FailResult;
+export type BaseResult<T, E> = SuccessResult<T> | ErrorResult<E>;

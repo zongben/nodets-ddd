@@ -1,8 +1,10 @@
 import { BaseResult } from "../../../../../lib/application/result.type";
 import { Request } from "../../../../../lib/mediator/request.abstract";
-import { RegisterResult } from "./register.result";
+import { RegisterError, RegisterResult } from "./register.result";
 
-export class RegisterCommand extends Request<BaseResult<RegisterResult>> {
+export class RegisterCommand extends Request<
+  BaseResult<RegisterResult, RegisterError>
+> {
   readonly account: string;
   readonly password: string;
   readonly username: string;

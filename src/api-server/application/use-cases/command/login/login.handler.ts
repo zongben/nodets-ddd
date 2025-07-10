@@ -14,12 +14,12 @@ import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 import { SuccessReturn } from "../../../../../lib/application/success-return";
 import { FailReturn } from "../../../../../lib/application/fail-return";
 import { ErrorCodes } from "../../../error-codes";
-import { LoginResult } from "./loing.result";
+import { LoginError, LoginResult } from "./loing.result";
 
 @HandleFor(LoginCommand)
 @TrackClassMethods()
 export class LoginHandler
-  implements IReqHandler<LoginCommand, BaseResult<LoginResult>>
+  implements IReqHandler<LoginCommand, BaseResult<LoginResult, LoginError>>
 {
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,
@@ -30,9 +30,14 @@ export class LoginHandler
     private _refreshTokenHelper: IJwTokenHelper,
   ) {}
 
-  async handle(req: LoginCommand): Promise<BaseResult<LoginResult>> {
+  async handle(
+    req: LoginCommand,
+  ): Promise<BaseResult<LoginResult, LoginError>> {
     const user = await this._userRepository.getByAccount(req.account);
-    if (!user) return new FailReturn(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
+    if (!user)
+      return new FailReturn<LoginError>(
+        ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT,
+      );
 
     const isPasswordCorrect = await user.isPasswordCorrect(req.password);
     if (!isPasswordCorrect) {

@@ -1,7 +1,7 @@
 import { BaseController } from "../../lib/controller/base-controller";
 import { ErrorResponse } from "../../lib/controller/error-response";
 import { Responses } from "../../lib/controller/responses";
-import { resultHandler } from "../../lib/controller/result.handler";
+import { matchResult } from "../../lib/controller/result.handler";
 import { TrackClassMethods } from "../../lib/utils/tracker";
 import { ErrorCodes } from "../application/error-codes";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user.query";
@@ -14,17 +14,16 @@ export class UserController extends BaseController {
     const { userid } = res.locals.jwt;
     const query = new GetUserQuery(userid);
     const result = await this.dispatch(query);
-    return resultHandler(
-      result,
-      (data) => {
-        return Responses.OK(data);
+    return matchResult(result, {
+      ok: (v) => {
+        return Responses.OK(v);
       },
-      (e) => {
-        if (e === ErrorCodes.USER_NOT_EXISTS) {
+      err: {
+        [ErrorCodes.USER_NOT_EXISTS]: (e) => {
           return Responses.NotFound(new ErrorResponse(e, ""));
-        }
+        },
       },
-    );
+    });
   }
 
   mapRoutes() {

@@ -49,7 +49,7 @@ describe("registerHandler", () => {
 
     expect(result.isSuccess).toBe(false);
     if (!result.isSuccess) {
-      expect(result.errorCode).toBe(ErrorCodes.USER_ALREADY_EXISTS);
+      expect(result.error).toBe(ErrorCodes.USER_ALREADY_EXISTS);
     }
   });
 });

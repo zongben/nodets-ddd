@@ -1,11 +1,11 @@
-import { FailResult } from "../../lib/application/result.type";
+import { ErrorResult } from "../../lib/application/result.type";
 
-export class FailReturn implements FailResult {
+export class FailReturn<E> implements ErrorResult<E> {
   isSuccess: false;
-  errorCode: string;
+  error: E;
 
-  constructor(errorCode: string) {
+  constructor(err: E) {
     this.isSuccess = false;
-    this.errorCode = errorCode;
+    this.error = err;
   }
 }

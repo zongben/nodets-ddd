@@ -1,8 +1,8 @@
 import { BaseResult } from "../../../../../lib/application/result.type";
 import { Request } from "../../../../../lib/mediator/request.abstract";
-import { LoginResult } from "./loing.result";
+import { LoginError, LoginResult } from "./loing.result";
 
-export class LoginCommand extends Request<BaseResult<LoginResult>> {
+export class LoginCommand extends Request<BaseResult<LoginResult, LoginError>> {
   readonly account: string;
   readonly password: string;
 

@@ -20,7 +20,7 @@ describe("getuserHandler", () => {
 
     expect(result.isSuccess).toBe(false);
     if (!result.isSuccess) {
-      expect(result.errorCode).toBe(ErrorCodes.USER_NOT_EXISTS);
+      expect(result.error).toBe(ErrorCodes.USER_NOT_EXISTS);
     }
   });
 

@@ -10,7 +10,7 @@ import { ErrorCodes } from "../application/error-codes";
 import { RegisterCommand } from "../application/use-cases/command/register/register.command";
 import { LoginCommand } from "../application/use-cases/command/login/login.command";
 import { TrackClassMethods } from "../../lib/utils/tracker";
-import { resultHandler } from "../../lib/controller/result.handler";
+import { matchResult } from "../../lib/controller/result.handler";
 
 @TrackClassMethods()
 export class AuthController extends BaseController {
@@ -24,17 +24,16 @@ export class AuthController extends BaseController {
       username,
     });
     const result = await this.dispatch(command);
-    return resultHandler(
-      result,
-      (data) => {
-        return Responses.Created(data);
+    return matchResult(result, {
+      ok: (v) => {
+        return Responses.Created(v);
       },
-      (e) => {
-        if (e === ErrorCodes.USER_ALREADY_EXISTS) {
+      err: {
+        [ErrorCodes.USER_ALREADY_EXISTS]: (e) => {
           return Responses.Conflict(new ErrorResponse(e, ""));
-        }
+        },
       },
-    );
+    });
   }
 
   async login(req: any, res: any) {
@@ -44,25 +43,24 @@ export class AuthController extends BaseController {
       password,
     });
     const result = await this.dispatch(command);
-    return resultHandler(
-      result,
-      (data) => {
-        res.cookie("refresh_token", data.refreshToken, {
+    return matchResult(result, {
+      ok: (v) => {
+        res.cookie("refresh_token", v.refreshToken, {
           httpOnly: true,
           secure: true,
           sameSite: "Strict",
           maxAge: 60 * 60 * 24 * 30, // 30 days
         });
         return Responses.OK({
-          accessToken: data.accessToken,
+          accessToken: v.accessToken,
         });
       },
-      (e) => {
-        if (e === ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT) {
+      err: {
+        [ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT]: (e) => {
           return Responses.Unauthorized(new ErrorResponse(e, ""));
-        }
+        },
       },
-    );
+    });
   }
 
   mapRoutes() {
