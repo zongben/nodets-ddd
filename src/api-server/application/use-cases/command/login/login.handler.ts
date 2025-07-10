@@ -1,22 +1,24 @@
 import { inject } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
-import { LoginCommand } from "./login-command";
 import { MEDIATOR_TYPES } from "../../../../../lib/mediator/types";
 import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.interface";
-import { LoginFailError } from "./login-fail-error";
 import { LoginFailedEvent } from "./events/login-failed-event";
 import { SuccessReturn } from "../../../success-return";
-import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { JWT_TYPES } from "../../../../infra/jwtHelpers/types";
 import { TrackClassMethods } from "../../../../../lib/utils/track";
+import { BaseResult } from "../../../../../lib/application/result.type";
+import { LoginCommand } from "./login.command";
+import { LoginFailError, LoginResult } from "./loing.result";
 
 @HandleFor(LoginCommand)
 @TrackClassMethods()
-export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
+export class LoginHandler
+  implements IReqHandler<LoginCommand, BaseResult<LoginResult>>
+{
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,
     @inject(UserRepository) private _userRepository: IUserRepository,
@@ -26,7 +28,7 @@ export class LoginHandler implements IReqHandler<LoginCommand, IBaseReturn> {
     private _refreshTokenHelper: IJwTokenHelper,
   ) {}
 
-  async handle(req: LoginCommand): Promise<IBaseReturn> {
+  async handle(req: LoginCommand): Promise<BaseResult<LoginResult>> {
     const user = await this._userRepository.getByAccount(req.account);
     if (!user) return new LoginFailError();
 

@@ -1,10 +1,10 @@
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.interface";
-import { LoginHandler } from "../../../../application/use-cases/command/login/login-handler";
 import { Crypto } from "../../../../../lib/utils/crypto";
 import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
 import { UserRoot } from "../../../../domain/user/user.root";
-import { MESSAGE_CODES } from "../../../../application/message-codes";
+import { LoginHandler } from "../../../../application/use-cases/command/login/login.handler";
+import { ErrorCodes } from "../../../../application/error-codes";
 
 let mockUserRepository: IUserRepository;
 let mockPublisher: IPublisher;
@@ -32,10 +32,10 @@ describe("LoginHandler", () => {
       password: "password",
     });
 
-    expect(result.messageCode).toBe(
-      MESSAGE_CODES.ACCOUNT_OR_PASSWORD_INCORRECT,
-    );
     expect(result.isSuccess).toBe(false);
+    if (!result.isSuccess) {
+      expect(result.errorCode).toBe(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
+    }
     expect(mockPublisher.publish).not.toHaveBeenCalled();
   });
 
@@ -60,10 +60,10 @@ describe("LoginHandler", () => {
       password: "incorrectPassword",
     });
 
-    expect(result.messageCode).toBe(
-      MESSAGE_CODES.ACCOUNT_OR_PASSWORD_INCORRECT,
-    );
     expect(result.isSuccess).toBe(false);
+    if (!result.isSuccess) {
+      expect(result.errorCode).toBe(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
+    }
     expect(mockPublisher.publish).toHaveBeenCalled();
   });
 
@@ -93,8 +93,10 @@ describe("LoginHandler", () => {
     });
 
     expect(result.isSuccess).toBe(true);
-    expect(result.data.accessToken).toBeDefined();
-    expect(result.data.refreshToken).toBeDefined();
+    if (result.isSuccess) {
+      expect(result.data.accessToken).toBeDefined();
+      expect(result.data.refreshToken).toBeDefined();
+    }
     expect(mockPublisher.publish).not.toHaveBeenCalled();
   });
 });

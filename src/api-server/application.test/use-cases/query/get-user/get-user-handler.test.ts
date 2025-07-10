@@ -1,7 +1,7 @@
-import { MESSAGE_CODES } from "../../../../application/message-codes";
+import { ErrorCodes } from "../../../../application/error-codes";
 import { IUserRepository } from "../../../../application/persistences/user.repository.interface";
-import { GetUserHandler } from "../../../../application/use-cases/query/get-user/get-user-handler";
-import { GetUserQuery } from "../../../../application/use-cases/query/get-user/get-user-query";
+import { GetUserHandler } from "../../../../application/use-cases/query/get-user/get-user.handler";
+import { GetUserQuery } from "../../../../application/use-cases/query/get-user/get-user.query";
 
 let mockUserRepository: IUserRepository;
 
@@ -19,7 +19,9 @@ describe("getuserHandler", () => {
     const result = await handler.handle(query);
 
     expect(result.isSuccess).toBe(false);
-    expect(result.messageCode).toBe(MESSAGE_CODES.USER_NOT_EXISTS);
+    if (!result.isSuccess) {
+      expect(result.errorCode).toBe(ErrorCodes.USER_NOT_EXISTS);
+    }
   });
 
   test("when user exists return user", async () => {
@@ -34,11 +36,13 @@ describe("getuserHandler", () => {
     const handler = new GetUserHandler(mockUserRepository);
     const result = await handler.handle(query);
 
-    expect(result.data).toEqual({
-      id: "id",
-      account: "account",
-      username: "username",
-    });
     expect(result.isSuccess).toBe(true);
+    if (result.isSuccess) {
+      expect(result.data).toEqual({
+        id: "id",
+        account: "account",
+        username: "username",
+      });
+    }
   });
 });

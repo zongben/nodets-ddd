@@ -1,19 +1,14 @@
-import { IBaseReturn } from "../application/interfaces/base-return.interface";
+import { BaseResult } from "../application/result.type";
 import { BaseResponse } from "./base-response";
-import { ErrorResponse } from "./error-response";
-import { Responses } from "./responses";
 
-export const CommonResponse = (
-  ret: IBaseReturn,
-  errorHandler?: (ret: IBaseReturn) => BaseResponse | undefined,
+export const CommonResponse = <T>(
+  result: BaseResult<T>,
+  successHandler: (data: T) => BaseResponse,
+  errorHandler?: (errorCode: string) => BaseResponse | undefined,
 ) => {
-  if (ret.isSuccess) {
-    return Responses.OK(ret.data);
+  if (result.isSuccess) {
+    return successHandler(result.data);
   } else if (errorHandler) {
-    const errorRet = errorHandler(ret);
-    if (errorRet) {
-      return errorRet;
-    }
+    return errorHandler(result.errorCode);
   }
-  return Responses.BadRequest(new ErrorResponse(ret.messageCode, ""));
 };

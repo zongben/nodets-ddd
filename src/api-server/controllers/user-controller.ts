@@ -1,10 +1,12 @@
+import { BaseResult } from "../../lib/application/result.type";
 import { BaseController } from "../../lib/controller/base-controller";
 import { CommonResponse } from "../../lib/controller/common-response";
 import { ErrorResponse } from "../../lib/controller/error-response";
 import { Responses } from "../../lib/controller/responses";
 import { TrackClassMethods } from "../../lib/utils/track";
-import { MESSAGE_CODES } from "../application/message-codes";
-import { GetUserQuery } from "../application/use-cases/query/get-user/get-user-query";
+import { ErrorCodes } from "../application/error-codes";
+import { GetUserQuery } from "../application/use-cases/query/get-user/get-user.query";
+import { GetUserResult } from "../application/use-cases/query/get-user/get-user.result";
 
 @TrackClassMethods()
 export class UserController extends BaseController {
@@ -13,12 +15,18 @@ export class UserController extends BaseController {
   async getUser(_req: any, res: any) {
     const { userid } = res.locals.jwt;
     const query = new GetUserQuery(userid);
-    const ret = await this._sender.send(query);
-    return CommonResponse(ret, (ret) => {
-      if (ret.messageCode === MESSAGE_CODES.USER_NOT_EXISTS) {
-        return Responses.NotFound(new ErrorResponse(ret.messageCode, ""));
-      }
-    });
+    const result = await this._sender.send<BaseResult<GetUserResult>>(query);
+    return CommonResponse(
+      result,
+      (data) => {
+        return Responses.OK(data);
+      },
+      (e) => {
+        if (e === ErrorCodes.USER_NOT_EXISTS) {
+          return Responses.NotFound(new ErrorResponse(e, ""));
+        }
+      },
+    );
   }
 
   mapRoutes() {

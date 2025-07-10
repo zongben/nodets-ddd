@@ -1,12 +1,11 @@
-import { IBaseReturn } from "../../lib/application/interfaces/base-return.interface";
+import { FailResult } from "../../lib/application/result.type";
 
-export class FailReturn implements IBaseReturn {
-  isSuccess: boolean = false;
-  messageCode: string;
-  data: any;
+export class FailReturn implements FailResult {
+  isSuccess: false;
+  errorCode: string;
 
-  constructor(code: string, data: any = null) {
-    this.messageCode = code;
-    this.data = data;
+  constructor(errorCode: string) {
+    this.isSuccess = false;
+    this.errorCode = errorCode;
   }
 }

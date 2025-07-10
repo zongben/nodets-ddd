@@ -1,12 +1,11 @@
-import { IBaseReturn } from "../../lib/application/interfaces/base-return.interface";
-import { MESSAGE_CODES } from "./message-codes";
+import { SuccessResult } from "../../lib/application/result.type";
 
-export class SuccessReturn implements IBaseReturn {
-  isSuccess = true;
-  messageCode = MESSAGE_CODES.SUCCESS;
-  data: any;
+export class SuccessReturn<T> implements SuccessResult<T> {
+  isSuccess: true;
+  data: T;
 
-  constructor(data: any) {
+  constructor(data: T) {
+    this.isSuccess = true;
     this.data = data;
   }
 }

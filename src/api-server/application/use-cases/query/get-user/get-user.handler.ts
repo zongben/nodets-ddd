@@ -1,21 +1,23 @@
 import { inject } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
-import { GetUserQuery } from "./get-user-query";
-import { UserNotExistError } from "./user-not-exist-error";
 import { SuccessReturn } from "../../../success-return";
-import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { TrackClassMethods } from "../../../../../lib/utils/track";
+import { GetUserQuery } from "./get-user.query";
+import { BaseResult } from "../../../../../lib/application/result.type";
+import { GetUserResult, UserNotExistError } from "./get-user.result";
 
 @HandleFor(GetUserQuery)
 @TrackClassMethods()
-export class GetUserHandler implements IReqHandler<GetUserQuery, IBaseReturn> {
+export class GetUserHandler
+  implements IReqHandler<GetUserQuery, BaseResult<GetUserResult>>
+{
   constructor(
     @inject(UserRepository) private _userRepository: IUserRepository,
   ) {}
-  async handle(query: GetUserQuery): Promise<IBaseReturn> {
+  async handle(query: GetUserQuery): Promise<BaseResult<GetUserResult>> {
     const user = await this._userRepository.getById(query.id);
     if (!user) {
       return new UserNotExistError();

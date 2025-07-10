@@ -1,6 +1,4 @@
 import { BaseController } from "../../lib/controller/base-controller";
-import { RegisterCommand } from "../application/use-cases/command/register/register-command";
-import { LoginCommand } from "../application/use-cases/command/login/login-command";
 import {
   RegisterReq,
   RegisterRule,
@@ -9,8 +7,13 @@ import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
 import { CommonResponse } from "../../lib/controller/common-response";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorResponse } from "../../lib/controller/error-response";
-import { MESSAGE_CODES } from "../application/message-codes";
 import { TrackClassMethods } from "../../lib/utils/track";
+import { ErrorCodes } from "../application/error-codes";
+import { BaseResult } from "../../lib/application/result.type";
+import { RegisterCommand } from "../application/use-cases/command/register/register.command";
+import { RegisterResult } from "../application/use-cases/command/register/register.result";
+import { LoginCommand } from "../application/use-cases/command/login/login.command";
+import { LoginResult } from "../application/use-cases/command/login/loing.result";
 
 @TrackClassMethods()
 export class AuthController extends BaseController {
@@ -23,12 +26,18 @@ export class AuthController extends BaseController {
       password,
       username,
     });
-    const ret = await this._sender.send(command);
-    return CommonResponse(ret, (ret) => {
-      if (ret.messageCode === MESSAGE_CODES.USER_ALREADY_EXISTS) {
-        return Responses.Conflict(new ErrorResponse(ret.messageCode, ""));
-      }
-    });
+    const result = await this._sender.send<BaseResult<RegisterResult>>(command);
+    return CommonResponse(
+      result,
+      (data) => {
+        return Responses.OK(data);
+      },
+      (e) => {
+        if (e === ErrorCodes.USER_ALREADY_EXISTS) {
+          return Responses.Conflict(new ErrorResponse(e, ""));
+        }
+      },
+    );
   }
 
   async login(req: any, res: any) {
@@ -37,24 +46,26 @@ export class AuthController extends BaseController {
       account,
       password,
     });
-    const ret = await this._sender.send(command);
-    if (ret.isSuccess) {
-      res.cookie("refresh_token", ret.data.refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "Strict",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-      });
-
-      ret.data = {
-        accessToken: ret.data.accessToken,
-      };
-    }
-    return CommonResponse(ret, (ret) => {
-      if (ret.messageCode === MESSAGE_CODES.ACCOUNT_OR_PASSWORD_INCORRECT) {
-        return Responses.Unauthorized(new ErrorResponse(ret.messageCode, ""));
-      }
-    });
+    const result = await this._sender.send<BaseResult<LoginResult>>(command);
+    return CommonResponse(
+      result,
+      (data) => {
+        res.cookie("refresh_token", data.refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "Strict",
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+        });
+        return Responses.OK({
+          accessToken: data.accessToken,
+        });
+      },
+      (e) => {
+        if (e === ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT) {
+          return Responses.Unauthorized(new ErrorResponse(e, ""));
+        }
+      },
+    );
   }
 
   async error() {

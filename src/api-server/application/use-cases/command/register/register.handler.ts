@@ -1,27 +1,27 @@
 import { inject } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
-import { RegisterCommand } from "./register-command";
-import { UserExistError } from "./user-exist-error";
 import { SuccessReturn } from "../../../success-return";
 import { Crypto } from "../../../../../lib/utils/crypto";
-import { IBaseReturn } from "../../../../../lib/application/interfaces/base-return.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { TrackClassMethods } from "../../../../../lib/utils/track";
+import { BaseResult } from "../../../../../lib/application/result.type";
+import { RegisterResult, UserExistError } from "./register.result";
+import { RegisterCommand } from "./register.command";
 
 @HandleFor(RegisterCommand)
 @TrackClassMethods()
 export class RegisterHandler
-  implements IReqHandler<RegisterCommand, IBaseReturn>
+  implements IReqHandler<RegisterCommand, BaseResult<RegisterResult>>
 {
   constructor(
     @inject(UserRepository) private readonly _userRepository: IUserRepository,
   ) {}
 
-  async handle(req: RegisterCommand): Promise<IBaseReturn> {
+  async handle(req: RegisterCommand): Promise<BaseResult<RegisterResult>> {
     const isUserExist =
       (await this._userRepository.getByAccount(req.account)) !== null;
     if (isUserExist) {
