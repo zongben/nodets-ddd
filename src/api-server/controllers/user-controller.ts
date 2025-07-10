@@ -13,7 +13,7 @@ export class UserController extends BaseController {
   async getUser(_req: any, res: any) {
     const { userid } = res.locals.jwt;
     const query = new GetUserQuery(userid);
-    const result = await this._sender.send(query);
+    const result = await this.dispatch(query);
     return CommonResponse(
       result,
       (data) => {

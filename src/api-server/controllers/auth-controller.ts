@@ -23,7 +23,7 @@ export class AuthController extends BaseController {
       password,
       username,
     });
-    const result = await this._sender.send(command);
+    const result = await this.dispatch(command);
     return CommonResponse(
       result,
       (data) => {
@@ -43,7 +43,7 @@ export class AuthController extends BaseController {
       account,
       password,
     });
-    const result = await this._sender.send(command);
+    const result = await this.dispatch(command);
     return CommonResponse(
       result,
       (data) => {

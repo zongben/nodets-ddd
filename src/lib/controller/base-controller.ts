@@ -5,6 +5,7 @@ import { MEDIATOR_TYPES } from "../mediator/types";
 import { ISender } from "../mediator/interfaces/sender.interface";
 import { DownloadResponse } from "./download-response";
 import { BaseResponse } from "./base-response";
+import { IRequest } from "../mediator/interfaces/req-handler.interface";
 
 @injectable()
 export abstract class BaseController {
@@ -13,13 +14,20 @@ export abstract class BaseController {
   abstract mapRoutes(): Router;
 
   constructor(
-    @inject(MEDIATOR_TYPES.ISender) protected readonly _sender: ISender,
+    @inject(MEDIATOR_TYPES.ISender) private readonly _sender: ISender,
   ) {}
 
   private _asyncWrapper(fn: any) {
     return (req: any, res: any, next: any) => {
       Promise.resolve(fn(req, res, next)).catch((err) => next(err));
     };
+  }
+
+  async dispatch<
+    TReq extends IRequest<TRes>,
+    TRes = TReq extends IRequest<infer R> ? R : never,
+  >(req: TReq): Promise<TRes> {
+    return await this._sender.send(req);
   }
 
   action(
