@@ -30,7 +30,7 @@ export class AuthController extends BaseController {
     return CommonResponse(
       result,
       (data) => {
-        return Responses.OK(data);
+        return Responses.Created(data);
       },
       (e) => {
         if (e === ErrorCodes.USER_ALREADY_EXISTS) {
