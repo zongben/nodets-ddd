@@ -1,6 +1,5 @@
 import { inject } from "inversify";
 import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
-import { SuccessReturn } from "../../../success-return";
 import { Crypto } from "../../../../../lib/utils/crypto";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
@@ -8,9 +7,12 @@ import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { BaseResult } from "../../../../../lib/application/result.type";
-import { RegisterResult, UserExistError } from "./register.result";
+import { RegisterResult } from "./register.result";
 import { RegisterCommand } from "./register.command";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
+import { SuccessReturn } from "../../../../../lib/application/success-return";
+import { FailReturn } from "../../../../../lib/application/fail-return";
+import { ErrorCodes } from "../../../error-codes";
 
 @HandleFor(RegisterCommand)
 @TrackClassMethods()
@@ -25,7 +27,7 @@ export class RegisterHandler
     const isUserExist =
       (await this._userRepository.getByAccount(req.account)) !== null;
     if (isUserExist) {
-      return new UserExistError();
+      return new FailReturn(ErrorCodes.USER_ALREADY_EXISTS);
     }
     const hashedPassword = await Crypto.hash(req.password);
     const userRoot = UserRoot.create({
