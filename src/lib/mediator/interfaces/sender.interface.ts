@@ -1,4 +1,10 @@
+import { IRequest } from "./req-handler.interface";
+
 export interface ISender {
-  send(req: any): Promise<any>;
-  send<T>(req: any): Promise<T>;
+  send<
+    TReq extends IRequest<TRes>,
+    TRes = TReq extends IRequest<infer R> ? R : never,
+  >(
+    req: TReq,
+  ): Promise<TRes>;
 }

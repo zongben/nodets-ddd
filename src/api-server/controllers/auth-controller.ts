@@ -8,11 +8,8 @@ import { CommonResponse } from "../../lib/controller/common-response";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorResponse } from "../../lib/controller/error-response";
 import { ErrorCodes } from "../application/error-codes";
-import { BaseResult } from "../../lib/application/result.type";
 import { RegisterCommand } from "../application/use-cases/command/register/register.command";
-import { RegisterResult } from "../application/use-cases/command/register/register.result";
 import { LoginCommand } from "../application/use-cases/command/login/login.command";
-import { LoginResult } from "../application/use-cases/command/login/loing.result";
 import { TrackClassMethods } from "../../lib/utils/tracker";
 
 @TrackClassMethods()
@@ -26,7 +23,7 @@ export class AuthController extends BaseController {
       password,
       username,
     });
-    const result = await this._sender.send<BaseResult<RegisterResult>>(command);
+    const result = await this._sender.send(command);
     return CommonResponse(
       result,
       (data) => {
@@ -46,7 +43,7 @@ export class AuthController extends BaseController {
       account,
       password,
     });
-    const result = await this._sender.send<BaseResult<LoginResult>>(command);
+    const result = await this._sender.send(command);
     return CommonResponse(
       result,
       (data) => {
