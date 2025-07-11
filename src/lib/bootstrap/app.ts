@@ -19,20 +19,15 @@ export class App {
   private _server?: http.Server;
   private _connections: Set<Socket>;
   logger: ILogger;
-  env: Env;
+  env!: Env;
   serviceContainer: Container;
   options: AppOptions;
 
   private constructor(options: AppOptions) {
     this.options = options;
-    this.env = new Env(this.options.envPath);
-
     this._app = express();
     this._connections = new Set<Socket>();
-
     this.logger = new Logger();
-    this.logger.info(`Dotenv is loaded from ${this.options.envPath}`);
-
     this.serviceContainer = new Container(this.options.container);
     this.options.allowAnonymousPath = this.options.allowAnonymousPath.map(
       (p) => {
@@ -42,7 +37,6 @@ export class App {
         };
       },
     );
-    this.serviceContainer.bind<IEnv>(APP_TYPES.IEnv).toConstantValue(this.env);
     this._bindLogger();
   }
 
@@ -50,6 +44,12 @@ export class App {
     const options = new AppOptions();
     fn(options);
     return new App(options);
+  }
+
+  useDotEnv(path: string) {
+    this.env = new Env(path);
+    this.serviceContainer.bind<IEnv>(APP_TYPES.IEnv).toConstantValue(this.env);
+    this.logger.info(`Dotenv is loaded from ${path}`);
   }
 
   useLogger(logger: ILogger) {
@@ -130,8 +130,7 @@ export class App {
   }
 
   run() {
-    this.logger.info(`NODE_ENV: ${this.env.get("NODE_ENV")}`);
-    const port = Number(this.env.get("PORT")) || 3000;
+    const port = Number(this.env?.get("PORT")) || 3000;
     this._server = this._app.listen(port, () => {
       this.logger.info(`Listening on port ${port}`);
     });

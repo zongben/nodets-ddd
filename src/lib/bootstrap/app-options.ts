@@ -7,5 +7,4 @@ export class AppOptions {
     autoBindInjectable: true,
   };
   allowAnonymousPath: AllowAnonymousPath[] = [];
-  envPath: string = "";
 }
