@@ -1,5 +1,5 @@
 import { BaseController } from "../../lib/controller/base-controller";
-import { ErrorResponse } from "../../lib/controller/error-response";
+import { ErrorBody } from "../../lib/controller/error-body";
 import { Responses } from "../../lib/controller/responses";
 import { matchResult } from "../../lib/controller/result.handler";
 import { TrackClassMethods } from "../../lib/utils/tracker";
@@ -20,7 +20,9 @@ export class UserController extends BaseController {
       },
       err: {
         [ErrorCodes.USER_NOT_EXISTS]: (e) => {
-          return Responses.NotFound(new ErrorResponse(e, ""));
+          return Responses.NotFound<ErrorBody>({
+            errorCode: e,
+          });
         },
       },
     });

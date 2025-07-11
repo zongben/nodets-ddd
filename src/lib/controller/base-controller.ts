@@ -3,9 +3,8 @@ import { inject, injectable } from "inversify";
 import { validationResult } from "express-validator";
 import { MEDIATOR_TYPES } from "../mediator/types";
 import { ISender } from "../mediator/interfaces/sender.interface";
-import { DownloadResponse } from "./download-response";
-import { BaseResponse } from "./base-response";
 import { IRequest } from "../mediator/interfaces/req-handler.interface";
+import { DownloadResponse, JsonResponse } from "./responses";
 
 @injectable()
 export abstract class BaseController {
@@ -35,7 +34,7 @@ export abstract class BaseController {
       req: any,
       res: any,
       next: any,
-    ) => Promise<BaseResponse | DownloadResponse | undefined>,
+    ) => Promise<JsonResponse | DownloadResponse | undefined>,
   ) {
     return this._asyncWrapper(async (req: any, res: any, next: any) => {
       const result = await fn.bind(this)(req, res, next);

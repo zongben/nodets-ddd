@@ -1,39 +1,54 @@
-import { BaseResponse } from "./base-response";
+export class JsonResponse {
+  status: number;
+  body: any;
+
+  constructor(status: number, body: any) {
+    this.status = status;
+    this.body = body;
+  }
+}
+
+export class DownloadResponse {
+  constructor(
+    public readonly filePath: string,
+    public readonly fileName: string,
+  ) {}
+}
 
 export class Responses {
-  static OK(data: any) {
-    return new BaseResponse(200, data);
+  static OK<T = any>(data: T) {
+    return new JsonResponse(200, data);
   }
 
-  static Created(data: any) {
-    return new BaseResponse(201, data);
+  static Created<T = any>(data: T) {
+    return new JsonResponse(201, data);
   }
 
-  static Accepted(data: any) {
-    return new BaseResponse(202, data);
+  static Accepted<T = any>(data: T) {
+    return new JsonResponse(202, data);
   }
 
   static NoContent() {
-    return new BaseResponse(204, null);
+    return new JsonResponse(204, null);
   }
 
-  static BadRequest(error: any) {
-    return new BaseResponse(400, error);
+  static BadRequest<T = any>(error: T) {
+    return new JsonResponse(400, error);
   }
 
-  static Unauthorized(error: any) {
-    return new BaseResponse(401, error);
+  static Unauthorized<T = any>(error: T) {
+    return new JsonResponse(401, error);
   }
 
-  static Forbidden(error: any) {
-    return new BaseResponse(403, error);
+  static Forbidden<T = any>(error: T) {
+    return new JsonResponse(403, error);
   }
 
-  static NotFound(error: any) {
-    return new BaseResponse(404, error);
+  static NotFound<T = any>(error: T) {
+    return new JsonResponse(404, error);
   }
 
-  static Conflict(error: any) {
-    return new BaseResponse(409, error);
+  static Conflict<T = any>(error: T) {
+    return new JsonResponse(409, error);
   }
 }

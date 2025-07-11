@@ -4,13 +4,13 @@ import {
   RegisterRule,
 } from "../contract/auth/register/register-rule";
 import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
-import { Responses } from "../../lib/controller/responses";
-import { ErrorResponse } from "../../lib/controller/error-response";
 import { ErrorCodes } from "../application/error-codes";
 import { RegisterCommand } from "../application/use-cases/command/register/register.command";
 import { LoginCommand } from "../application/use-cases/command/login/login.command";
 import { TrackClassMethods } from "../../lib/utils/tracker";
 import { matchResult } from "../../lib/controller/result.handler";
+import { Responses } from "../../lib/controller/responses";
+import { ErrorBody } from "../../lib/controller/error-body";
 
 @TrackClassMethods()
 export class AuthController extends BaseController {
@@ -30,7 +30,9 @@ export class AuthController extends BaseController {
       },
       err: {
         [ErrorCodes.USER_ALREADY_EXISTS]: (e) => {
-          return Responses.Conflict(new ErrorResponse(e, ""));
+          return Responses.Conflict<ErrorBody>({
+            errorCode: e,
+          });
         },
       },
     });
@@ -57,7 +59,9 @@ export class AuthController extends BaseController {
       },
       err: {
         [ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT]: (e) => {
-          return Responses.Unauthorized(new ErrorResponse(e, ""));
+          return Responses.Unauthorized<ErrorBody>({
+            errorCode: e,
+          });
         },
       },
     });
