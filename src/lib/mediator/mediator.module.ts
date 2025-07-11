@@ -8,16 +8,20 @@ import { ISender } from "./interfaces/sender.interface";
 import { IPublisher } from "./interfaces/publisher.interface";
 import { Module } from "../container/container.module";
 import { MediatorMap } from "./mediator.map";
+import { IReqHandler } from "./interfaces/req-handler.interface";
 
 @injectable()
 export class MediatorModule extends Module {
+  private readonly _mediatorMap: MediatorMap;
+
   constructor(
     private readonly _container: Container,
-    private readonly _mediatorMap: MediatorMap,
+    handlers: Array<new (...args: any[]) => IReqHandler<any, any>>,
     private readonly _prePipeline: (typeof MediatorPipe)[] = [],
     private readonly _postPipeline: (typeof MediatorPipe)[] = [],
   ) {
     super();
+    this._mediatorMap = new MediatorMap().loadFromHandlers(handlers);
   }
 
   protected bindModule(

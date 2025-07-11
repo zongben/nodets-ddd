@@ -5,13 +5,13 @@ import path from "node:path";
 import { MediatorModule } from "../lib/mediator/mediator.module";
 import { notFoundMiddleware } from "../lib/middleware/notfound.middleware";
 import { exceptionMiddleware } from "../lib/middleware/exception.middleware";
-import { map } from "./application/handler.map";
 import { JwTokenHelperModule } from "../lib/jwToken/jwtoken.module";
 import { JWT_TYPES } from "./infra/jwtHelpers/types";
 import { JwTokenSettings } from "../lib/jwToken/jwtoken-settings";
 import { JwTokenHelper } from "../lib/jwToken/jwtoken-helper";
 import { timerMiddleware } from "../lib/middleware/timer.middleware";
 import { LOGGER_LEVEL } from "../lib/bootstrap/logger";
+import { handlers } from "./application/handlers";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -28,7 +28,7 @@ const app = App.createBuilder((opt) => {
 });
 
 app.loadModules(
-  new MediatorModule(app.serviceContainer, map),
+  new MediatorModule(app.serviceContainer, handlers),
   new JwTokenHelperModule(
     JWT_TYPES.ACCESSTOKEN,
     new JwTokenHelper(
