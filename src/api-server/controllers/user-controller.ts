@@ -2,6 +2,7 @@ import { BaseController } from "../../lib/controller/base-controller";
 import {
   Controller,
   Get,
+  Locals,
 } from "../../lib/controller/decorator/controller.decorator";
 import { ErrorBody } from "../../lib/controller/error-body";
 import { Responses } from "../../lib/controller/responses";
@@ -9,13 +10,14 @@ import { matchResult } from "../../lib/controller/result.handler";
 import { TrackClassMethods } from "../../lib/utils/tracker";
 import { ErrorCodes } from "../application/error-codes";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user.query";
+import { locals } from "../contract/locals";
 
 @TrackClassMethods()
 @Controller("/user")
 export class UserController extends BaseController {
   @Get("/")
-  async getUser(_req: any, res: any) {
-    const { userid } = res.locals.jwt;
+  async getUser(@Locals() locals: locals) {
+    const { userid } = locals.jwt;
     const query = new GetUserQuery(userid);
     const result = await this.dispatch(query);
     return matchResult(result, {

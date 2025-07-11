@@ -13,6 +13,7 @@ import { Responses } from "../../lib/controller/responses";
 import { ErrorBody } from "../../lib/controller/error-body";
 import { validate } from "../../lib/controller/validater";
 import {
+  Body,
   Controller,
   Post,
 } from "../../lib/controller/decorator/controller.decorator";
@@ -21,8 +22,8 @@ import {
 @Controller("/auth")
 export class AuthController extends BaseController {
   @Post("/register", ...validate(new RegisterRule()))
-  async register(req: any) {
-    const { account, password, username } = req.body as RegisterReq;
+  async register(@Body() req: RegisterReq) {
+    const { account, password, username } = req;
     const command = new RegisterCommand({
       account,
       password,
@@ -44,8 +45,8 @@ export class AuthController extends BaseController {
   }
 
   @Post("/login", ...validate(new LoginRule()))
-  async login(req: any, res: any) {
-    const { account, password } = req.body as LoginReq;
+  async login(@Body() req: LoginReq) {
+    const { account, password } = req;
     const command = new LoginCommand({
       account,
       password,
@@ -53,12 +54,12 @@ export class AuthController extends BaseController {
     const result = await this.dispatch(command);
     return matchResult(result, {
       ok: (v) => {
-        res.cookie("refresh_token", v.refreshToken, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "Strict",
-          maxAge: 60 * 60 * 24 * 30, // 30 days
-        });
+        // res.cookie("refresh_token", v.refreshToken, {
+        //   httpOnly: true,
+        //   secure: true,
+        //   sameSite: "Strict",
+        //   maxAge: 60 * 60 * 24 * 30, // 30 days
+        // });
         return Responses.OK({
           accessToken: v.accessToken,
         });

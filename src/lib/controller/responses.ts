@@ -8,7 +8,7 @@ export class JsonResponse {
   }
 }
 
-export class DownloadResponse {
+export class FileResponse {
   constructor(
     public readonly filePath: string,
     public readonly fileName: string,

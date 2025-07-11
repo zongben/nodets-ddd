@@ -71,10 +71,7 @@ export class App {
     return this;
   }
 
-  mapController(
-    controllers: Array<new (...args: any[]) => any>,
-    action?: (handler: any) => any,
-  ) {
+  mapController(controllers: Array<new (...args: any[]) => any>) {
     controllers.forEach((ControllerClass) => {
       const controllerPath: string = Reflect.getMetadata(
         CONTROLLER_METADATA.PATH,
@@ -95,7 +92,7 @@ export class App {
         (router as any)[route.method](
           route.path,
           ...[...classMiddleware, ...middleware],
-          action ? action(handler) : handler,
+          handler,
         );
       }
       const fullMountPath = `${this.options.routerPrefix}/${controllerPath}`
