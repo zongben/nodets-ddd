@@ -1,6 +1,6 @@
 import { ErrorResult } from "../../lib/application/result.type";
 
-export class FailReturn<E> implements ErrorResult<E> {
+export class ErrorReturn<E> implements ErrorResult<E> {
   isSuccess: false;
   error: E;
 

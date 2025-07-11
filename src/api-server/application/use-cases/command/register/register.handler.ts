@@ -10,9 +10,9 @@ import { Result } from "../../../../../lib/application/result.type";
 import { RegisterError, RegisterResult } from "./register.result";
 import { RegisterCommand } from "./register.command";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
-import { FailReturn } from "../../../../../lib/application/fail-return";
 import { ErrorCodes } from "../../../error-codes";
 import { OkReturn } from "../../../../../lib/application/ok-return";
+import { ErrorReturn } from "../../../../../lib/application/error-return";
 
 @HandleFor(RegisterCommand)
 @TrackClassMethods()
@@ -27,7 +27,7 @@ export class RegisterHandler
     const isUserExist =
       (await this._userRepository.getByAccount(req.account)) !== null;
     if (isUserExist) {
-      return new FailReturn(ErrorCodes.USER_ALREADY_EXISTS);
+      return new ErrorReturn(ErrorCodes.USER_ALREADY_EXISTS);
     }
     const hashedPassword = await Crypto.hash(req.password);
     const userRoot = UserRoot.create({

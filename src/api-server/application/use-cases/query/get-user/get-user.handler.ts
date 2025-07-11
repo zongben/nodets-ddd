@@ -7,9 +7,9 @@ import { GetUserQuery } from "./get-user.query";
 import { Result } from "../../../../../lib/application/result.type";
 import { GetUserError, GetUserResult } from "./get-user.result";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
-import { FailReturn } from "../../../../../lib/application/fail-return";
 import { ErrorCodes } from "../../../error-codes";
 import { OkReturn } from "../../../../../lib/application/ok-return";
+import { ErrorReturn } from "../../../../../lib/application/error-return";
 
 @HandleFor(GetUserQuery)
 @TrackClassMethods()
@@ -24,7 +24,7 @@ export class GetUserHandler
   ): Promise<Result<GetUserResult, GetUserError>> {
     const user = await this._userRepository.getById(query.id);
     if (!user) {
-      return new FailReturn(ErrorCodes.USER_NOT_EXISTS);
+      return new ErrorReturn(ErrorCodes.USER_NOT_EXISTS);
     }
 
     return new OkReturn({

@@ -11,10 +11,10 @@ import { JWT_TYPES } from "../../../../infra/jwtHelpers/types";
 import { Result } from "../../../../../lib/application/result.type";
 import { LoginCommand } from "./login.command";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
-import { FailReturn } from "../../../../../lib/application/fail-return";
 import { ErrorCodes } from "../../../error-codes";
 import { LoginError, LoginResult } from "./loing.result";
 import { OkReturn } from "../../../../../lib/application/ok-return";
+import { ErrorReturn } from "../../../../../lib/application/error-return";
 
 @HandleFor(LoginCommand)
 @TrackClassMethods()
@@ -35,14 +35,14 @@ export class LoginHandler
   ): Promise<Result<LoginResult, LoginError>> {
     const user = await this._userRepository.getByAccount(req.account);
     if (!user)
-      return new FailReturn<LoginError>(
+      return new ErrorReturn<LoginError>(
         ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT,
       );
 
     const isPasswordCorrect = await user.isPasswordCorrect(req.password);
     if (!isPasswordCorrect) {
       await this._publisher.publish(new LoginFailedEvent(req.account));
-      return new FailReturn(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
+      return new ErrorReturn(ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT);
     }
 
     const accessToken = this._accessTokenHelper.generateToken({
