@@ -1,4 +1,4 @@
-export type SuccessResult<T> = {
+export type OkResult<T> = {
   isSuccess: true;
   data: T;
 };
@@ -8,4 +8,4 @@ export type ErrorResult<E> = {
   error: E;
 };
 
-export type BaseResult<T, E> = SuccessResult<T> | ErrorResult<E>;
+export type Result<T, E> = OkResult<T> | ErrorResult<E>;

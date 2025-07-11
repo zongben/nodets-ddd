@@ -1,7 +1,7 @@
-import { BaseResult } from "../application/result.type";
+import { Result } from "../application/result.type";
 
 export const matchResult = <T, E extends string, R>(
-  result: BaseResult<T, E>,
+  result: Result<T, E>,
   handlers: {
     ok: (value: T) => R;
     err: Record<E, (error: E) => R>;

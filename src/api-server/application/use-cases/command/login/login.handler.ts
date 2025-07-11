@@ -8,18 +8,18 @@ import { UserRepository } from "../../../../infra/repositories/user.repository.p
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { JWT_TYPES } from "../../../../infra/jwtHelpers/types";
-import { BaseResult } from "../../../../../lib/application/result.type";
+import { Result } from "../../../../../lib/application/result.type";
 import { LoginCommand } from "./login.command";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
-import { SuccessReturn } from "../../../../../lib/application/success-return";
 import { FailReturn } from "../../../../../lib/application/fail-return";
 import { ErrorCodes } from "../../../error-codes";
 import { LoginError, LoginResult } from "./loing.result";
+import { OkReturn } from "../../../../../lib/application/ok-return";
 
 @HandleFor(LoginCommand)
 @TrackClassMethods()
 export class LoginHandler
-  implements IReqHandler<LoginCommand, BaseResult<LoginResult, LoginError>>
+  implements IReqHandler<LoginCommand, Result<LoginResult, LoginError>>
 {
   constructor(
     @inject(MEDIATOR_TYPES.IPublisher) private _publisher: IPublisher,
@@ -32,7 +32,7 @@ export class LoginHandler
 
   async handle(
     req: LoginCommand,
-  ): Promise<BaseResult<LoginResult, LoginError>> {
+  ): Promise<Result<LoginResult, LoginError>> {
     const user = await this._userRepository.getByAccount(req.account);
     if (!user)
       return new FailReturn<LoginError>(
@@ -54,7 +54,7 @@ export class LoginHandler
     const refreshToken = this._refreshTokenHelper.generateToken({
       userid: user.id,
     });
-    return new SuccessReturn({
+    return new OkReturn({
       accessToken,
       refreshToken,
     });
