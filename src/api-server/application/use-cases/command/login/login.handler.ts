@@ -30,9 +30,7 @@ export class LoginHandler
     private _refreshTokenHelper: IJwTokenHelper,
   ) {}
 
-  async handle(
-    req: LoginCommand,
-  ): Promise<Result<LoginResult, LoginError>> {
+  async handle(req: LoginCommand): Promise<Result<LoginResult, LoginError>> {
     const user = await this._userRepository.getByAccount(req.account);
     if (!user)
       return new ErrorReturn<LoginError>(

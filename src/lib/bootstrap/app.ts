@@ -1,8 +1,7 @@
-import express from "express";
+import express, { Router } from "express";
 import "reflect-metadata";
 import { Container } from "inversify";
 import { AppOptions } from "./app-options";
-import { BaseController } from "../controller/base-controller";
 import { Env } from "./env";
 import { Module } from "../container/container.module";
 import { Logger } from "./logger";
@@ -13,6 +12,12 @@ import { Socket } from "net";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { ILogger } from "./interfaces/logger.interface";
+import {
+  CONTROLLER_METADATA,
+  ExpressMiddleware,
+  ROUTE_METADATA_KEY,
+  RouteDefinition,
+} from "../controller/decorator/controller.decorator";
 
 export class App {
   private _app: express.Application;
@@ -66,14 +71,39 @@ export class App {
     return this;
   }
 
-  mapController(controllers: Array<new (...args: any[]) => BaseController>) {
-    controllers.forEach((c) => {
-      const _ctor = this.serviceContainer.resolve(c);
-      this._app.use(
-        `${this.options.routerPrefix}${_ctor.apiPath}`.toLowerCase(),
-        _ctor.mapRoutes(),
+  mapController(
+    controllers: Array<new (...args: any[]) => any>,
+    action?: (handler: any) => any,
+  ) {
+    controllers.forEach((ControllerClass) => {
+      const controllerPath: string = Reflect.getMetadata(
+        CONTROLLER_METADATA.PATH,
+        ControllerClass,
       );
+      const classMiddleware: ExpressMiddleware[] =
+        Reflect.getMetadata(CONTROLLER_METADATA.MIDDLEWARE, ControllerClass) ||
+        [];
+
+      const instance = this.serviceContainer.resolve(ControllerClass);
+      const routes: RouteDefinition[] =
+        Reflect.getMetadata(ROUTE_METADATA_KEY, ControllerClass) || [];
+
+      const router = Router();
+      for (const route of routes) {
+        const handler = instance[route.handlerName].bind(instance);
+        const middleware = route.middleware || [];
+        (router as any)[route.method](
+          route.path,
+          ...[...classMiddleware, ...middleware],
+          action ? action(handler) : handler,
+        );
+      }
+      const fullMountPath = `${this.options.routerPrefix}/${controllerPath}`
+        .replace(/\/+/g, "/")
+        .toLowerCase();
+      this._app.use(fullMountPath, router);
     });
+
     return this;
   }
 
@@ -117,20 +147,17 @@ export class App {
     return this;
   }
 
-  addHeaders(...headers: Record<string, string>[]) {
+  addHeaders(headers: Record<string, string>) {
     this._app.use((_req, res, next) => {
-      headers.forEach((header) => {
-        Object.keys(header).forEach((key) => {
-          res.setHeader(key, header[key]);
-        });
-      });
+      for (const [key, value] of Object.entries(headers)) {
+        res.setHeader(key, value);
+      }
       next();
     });
     return this;
   }
 
-  run() {
-    const port = Number(this.env?.get("PORT")) || 3000;
+  run(port: number = 3000) {
     this._server = this._app.listen(port, () => {
       this.logger.info(`Listening on port ${port}`);
     });

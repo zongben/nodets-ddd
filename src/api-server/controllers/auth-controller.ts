@@ -11,11 +11,16 @@ import { TrackClassMethods } from "../../lib/utils/tracker";
 import { matchResult } from "../../lib/controller/result.handler";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorBody } from "../../lib/controller/error-body";
+import { validate } from "../../lib/controller/validater";
+import {
+  Controller,
+  Post,
+} from "../../lib/controller/decorator/controller.decorator";
 
 @TrackClassMethods()
+@Controller("/auth")
 export class AuthController extends BaseController {
-  apiPath: string = "/auth";
-
+  @Post("/register", ...validate(new RegisterRule()))
   async register(req: any) {
     const { account, password, username } = req.body as RegisterReq;
     const command = new RegisterCommand({
@@ -38,6 +43,7 @@ export class AuthController extends BaseController {
     });
   }
 
+  @Post("/login", ...validate(new LoginRule()))
   async login(req: any, res: any) {
     const { account, password } = req.body as LoginReq;
     const command = new LoginCommand({
@@ -65,19 +71,5 @@ export class AuthController extends BaseController {
         },
       },
     });
-  }
-
-  mapRoutes() {
-    this.router.post(
-      "/register",
-      this.validate(new RegisterRule()),
-      this.action(this.register),
-    );
-    this.router.post(
-      "/login",
-      this.validate(new LoginRule()),
-      this.action(this.login),
-    );
-    return this.router;
   }
 }

@@ -1,4 +1,8 @@
 import { BaseController } from "../../lib/controller/base-controller";
+import {
+  Controller,
+  Get,
+} from "../../lib/controller/decorator/controller.decorator";
 import { ErrorBody } from "../../lib/controller/error-body";
 import { Responses } from "../../lib/controller/responses";
 import { matchResult } from "../../lib/controller/result.handler";
@@ -7,9 +11,9 @@ import { ErrorCodes } from "../application/error-codes";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user.query";
 
 @TrackClassMethods()
+@Controller("/user")
 export class UserController extends BaseController {
-  apiPath: string = "/user";
-
+  @Get("/")
   async getUser(_req: any, res: any) {
     const { userid } = res.locals.jwt;
     const query = new GetUserQuery(userid);
@@ -26,10 +30,5 @@ export class UserController extends BaseController {
         },
       },
     });
-  }
-
-  mapRoutes() {
-    this.router.get("/", this.action(this.getUser));
-    return this.router;
   }
 }

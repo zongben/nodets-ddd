@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Request, Response } from "express";
-import { ILogger } from "../bootstrap/interfaces/logger.interface";
 import { ErrorBody } from "../controller/error-body";
+import { ILogger } from "../bootstrap/interfaces/logger.interface";
 
 export function exceptionMiddleware(logger: ILogger) {
   return (err: Error, _req: Request, res: Response, _next: any) => {

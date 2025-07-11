@@ -1,6 +1,6 @@
-import { ILogger } from "../bootstrap/interfaces/logger.interface";
 import type { Request, Response } from "express";
 import { ErrorBody } from "../controller/error-body";
+import { ILogger } from "../bootstrap/interfaces/logger.interface";
 
 export function notFoundMiddleware(logger: ILogger) {
   return (req: Request, res: Response) => {
