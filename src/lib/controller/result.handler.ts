@@ -1,6 +1,6 @@
 import { Result } from "../application/result.type";
 
-export const matchResult = <T, E extends string, R>(
+export const matchResult = <T, E extends string | number | symbol, R>(
   result: Result<T, E>,
   handlers: {
     ok: (value: T) => R;
@@ -12,7 +12,7 @@ export const matchResult = <T, E extends string, R>(
   }
   const handler = handlers.err[result.error];
   if (!handler) {
-    throw new Error(`Unhandled error case: ${result.error}`);
+    throw new Error(`Unhandled error case: ${result.error.toString()}`);
   }
   return handler(result.error);
 };
