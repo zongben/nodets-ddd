@@ -10,8 +10,8 @@ import { JWT_TYPES } from "./infra/jwtHelpers/types";
 import { JwTokenSettings } from "../lib/jwToken/jwtoken-settings";
 import { JwTokenHelper } from "../lib/jwToken/jwtoken-helper";
 import { timerMiddleware } from "../lib/middleware/timer.middleware";
-import { LOGGER_LEVEL } from "../lib/bootstrap/logger";
 import { handlers } from "./application/handlers";
+import { Logger, LOGGER_LEVEL } from "../lib/logger";
 
 const app = App.createBuilder((opt) => {
   opt.allowAnonymousPath = [
@@ -21,12 +21,12 @@ const app = App.createBuilder((opt) => {
     },
   ];
   opt.envPath = path.join(__dirname, ".env");
-  opt.onEnvInitialized = (env) => {
-    opt.loggerlevel =
-      env.get("NODE_ENV") === "dev" ? LOGGER_LEVEL.DEBUG : LOGGER_LEVEL.INFO;
-  };
 });
-
+app.useLogger(
+  new Logger(
+    app.env.get("NODE_ENV") === "dev" ? LOGGER_LEVEL.DEBUG : LOGGER_LEVEL.INFO,
+  ),
+);
 app.loadModules(
   new MediatorModule(app.serviceContainer, handlers),
   new JwTokenHelperModule(

@@ -1,7 +1,7 @@
 import { body } from "express-validator";
 import { INVALID_CODES } from "../../invalid-codes";
 import { Ruler } from "../../../../lib/controller/ruler";
-import { ErrorResponse } from "../../../../lib/controller/error-response";
+import { ErrorBody } from "../../../../lib/controller/error-body";
 
 export type RegisterReq = {
   account: string;
@@ -15,33 +15,33 @@ export class RegisterRule extends Ruler<RegisterReq> {
       body(req("account"))
         .notEmpty()
         .withMessage(
-          new ErrorResponse(
-            INVALID_CODES.ACCOUNT_IS_REQUIRED,
-            "Account is required",
-          ),
+          new ErrorBody({
+            errorCode: INVALID_CODES.ACCOUNT_IS_REQUIRED,
+            message: "Account is required",
+          }),
         ),
       body(req("password"))
         .notEmpty()
         .withMessage(
-          new ErrorResponse(
-            INVALID_CODES.PASSWORD_IS_REQUIRED,
-            "Password is required",
-          ),
+          new ErrorBody({
+            errorCode: INVALID_CODES.PASSWORD_IS_REQUIRED,
+            message: "Password is required",
+          }),
         )
         .isLength({ min: 6 })
         .withMessage(
-          new ErrorResponse(
-            INVALID_CODES.PASSWORD_IS_TOO_SHORT,
-            "Password must be at least 6 characters long",
-          ),
+          new ErrorBody({
+            errorCode: INVALID_CODES.PASSWORD_IS_TOO_SHORT,
+            message: "Password must be at least 6 characters long",
+          }),
         ),
       body(req("username"))
         .notEmpty()
         .withMessage(
-          new ErrorResponse(
-            INVALID_CODES.USERNAME_IS_REQUIRED,
-            "Username is required",
-          ),
+          new ErrorBody({
+            errorCode: INVALID_CODES.USERNAME_IS_REQUIRED,
+            message: "Username is required",
+          }),
         ),
     ]);
   }

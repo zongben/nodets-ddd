@@ -6,13 +6,13 @@ import { BaseController } from "../controller/base-controller";
 import { Env } from "./env";
 import { Module } from "../container/container.module";
 import { Logger } from "./logger";
-import { ILogger } from "./interfaces/logger.interface";
 import { IEnv } from "../controller/interfaces/env.interface";
 import { APP_TYPES } from "./types";
 import http from "http";
 import { Socket } from "net";
 import cors from "cors";
 import bodyParser from "body-parser";
+import { ILogger } from "./interfaces/logger.interface";
 
 export class App {
   private _app: express.Application;
@@ -26,17 +26,11 @@ export class App {
   private constructor(options: AppOptions) {
     this.options = options;
     this.env = new Env(this.options.envPath);
-    if (this.options.onEnvInitialized) {
-      this.options.onEnvInitialized(this.env);
-    }
 
     this._app = express();
     this._connections = new Set<Socket>();
 
-    this.logger = new Logger(
-      this.options.loggerlevel,
-      this.options.loggerOptions,
-    );
+    this.logger = new Logger();
     this.logger.info(`Dotenv is loaded from ${this.options.envPath}`);
 
     this.serviceContainer = new Container(this.options.container);
@@ -49,15 +43,18 @@ export class App {
       },
     );
     this.serviceContainer.bind<IEnv>(APP_TYPES.IEnv).toConstantValue(this.env);
-    this.serviceContainer
-      .bind<ILogger>(APP_TYPES.ILogger)
-      .toConstantValue(this.logger);
+    this._bindLogger();
   }
 
   static createBuilder(fn: (options: AppOptions) => void = () => {}) {
     const options = new AppOptions();
     fn(options);
     return new App(options);
+  }
+
+  useLogger(logger: ILogger) {
+    this.logger = logger;
+    this._bindLogger();
   }
 
   loadModules(...modules: Module[]) {
@@ -146,11 +143,17 @@ export class App {
       });
     });
 
-    process.on("SIGINT", this.gracefulShutdown.bind(this));
-    process.on("SIGTERM", this.gracefulShutdown.bind(this));
+    process.on("SIGINT", this._gracefulShutdown.bind(this));
+    process.on("SIGTERM", this._gracefulShutdown.bind(this));
   }
 
-  private gracefulShutdown() {
+  private _bindLogger() {
+    this.serviceContainer
+      .bind<ILogger>(APP_TYPES.ILogger)
+      .toConstantValue(this.logger);
+  }
+
+  private _gracefulShutdown() {
     this.logger.info("Starting graceful shutdown...");
 
     this._server?.close(() => {

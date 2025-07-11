@@ -12,7 +12,6 @@ export function timerMiddleware(logger: ILogger) {
       const end = performance.now();
       const duration = end - start;
       let msg = `Request: ${res.statusCode} ${req.method} ${req.originalUrl} - Duration: ${duration.toFixed(2)} ms`;
-      // console.log(timer.getAllTimeSpans());
       const tsMsg = timer.getAllTimeSpans().map((span) => {
         const prefix = " ".repeat((span.depth ? span.depth * 3 : 0) + 28);
         return `\n${prefix}⎣__TimeSpan: ${span.duration?.toFixed(2) ?? "N/A"} ms - ${span.label}`;
