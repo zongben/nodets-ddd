@@ -5,8 +5,11 @@ export abstract class ResWith {
 
   with(data: ResponseWith): this {
     this._withData = {
-      ...this._withData,
-      ...data,
+      headers: {
+        ...(this._withData.headers || {}),
+        ...(data.headers || {}),
+      },
+      cookies: [...(this._withData.cookies || []), ...(data.cookies || [])],
     };
     return this;
   }
@@ -40,10 +43,26 @@ export class JsonResponse extends ResWith {
 
 export class FileResponse extends ResWith {
   constructor(
-    public readonly filePath: string,
     public readonly fileName: string,
+    public readonly filePath: string,
   ) {
     super();
+  }
+}
+
+export class BufferResponse extends ResWith {
+  constructor(
+    public readonly data: Buffer,
+    public readonly fileName: string,
+    public readonly mimeType: string = "application/octet-stream",
+  ) {
+    super();
+    this.with({
+      headers: {
+        "Content-Disposition": `attachment; filename="${fileName}"`,
+        "Content-Type": mimeType,
+      },
+    });
   }
 }
 
@@ -84,7 +103,11 @@ export class Responses {
     return new JsonResponse(409, error);
   }
 
-  static File(filePath: string, fileName: string) {
-    return new FileResponse(filePath, fileName);
+  static File(fileName: string, filePath: string) {
+    return new FileResponse(fileName, filePath);
+  }
+
+  static Buffer(buffer: Buffer, fileName: string, mimeType: string) {
+    return new BufferResponse(buffer, fileName, mimeType);
   }
 }

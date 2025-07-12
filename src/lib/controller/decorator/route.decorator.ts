@@ -4,6 +4,7 @@ import {
   FileResponse,
   JsonResponse,
   ResponseWith,
+  BufferResponse,
 } from "../responses";
 import { ExpressMiddleware } from "./controller.decorator";
 import { PARAM_METADATA_KEY, ParamMetadata } from "./param.decorator";
@@ -32,7 +33,10 @@ export type RouteDefinition = {
 };
 
 function _createRouteDecorator(method: RouteDefinition["method"]) {
-  return (path: string, ...middleware: ExpressMiddleware[]): MethodDecorator => {
+  return (
+    path: string,
+    ...middleware: ExpressMiddleware[]
+  ): MethodDecorator => {
     return (target, propertyKey, descriptor: PropertyDescriptor) => {
       const original = descriptor.value;
 
@@ -92,11 +96,14 @@ function _createRouteDecorator(method: RouteDefinition["method"]) {
           if (result instanceof ResWith) {
             _applyWithData(res, result.getWithData());
           }
+          if (result instanceof JsonResponse) {
+            return res.status(result.status).json(result.body);
+          }
           if (result instanceof FileResponse) {
             return res.download(result.filePath, result.fileName);
           }
-          if (result instanceof JsonResponse) {
-            return res.status(result.status).json(result.body);
+          if (result instanceof BufferResponse) {
+            return res.end(result.data);
           }
         } catch (err) {
           next(err);
