@@ -21,12 +21,12 @@ const app = App.createBuilder((opt) => {
     },
   ];
 });
-app.useDotEnv(path.join(__dirname, ".env"));
 app.useLogger(
   new Logger(
     app.env.get("NODE_ENV") === "dev" ? LOGGER_LEVEL.DEBUG : LOGGER_LEVEL.INFO,
   ),
 );
+app.useDotEnv(path.join(__dirname, ".env"));
 app.loadModules(
   new MediatorModule(app.serviceContainer, handlers),
   new JwTokenHelperModule(
