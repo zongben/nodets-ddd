@@ -81,15 +81,10 @@ function _createRouteDecorator(method: RouteDefinition["method"]) {
                 rawValue = undefined;
             }
 
-            if (meta.name) {
-              args[i] = rawValue[meta.name];
-            } else {
-              args[i] = rawValue;
-            }
+            args[i] = meta.name ? rawValue[meta.name] : rawValue;
           }
 
           const result = await original.apply(this, args);
-
           if (res.headersSent) return;
           if (!result) {
             throw new Error(
