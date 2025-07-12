@@ -21,12 +21,7 @@ import { matchResult } from "../../lib/result/result.handler";
 export class AuthController extends BaseController {
   @Post("/register", validate(RegisterRule))
   async register(@Body() req: RegisterReq) {
-    const { account, password, username } = req;
-    const command = new RegisterCommand({
-      account,
-      password,
-      username,
-    });
+    const command = new RegisterCommand(req);
     const result = await this.dispatch(command);
     return matchResult(result, {
       ok: (v) => {
@@ -44,11 +39,7 @@ export class AuthController extends BaseController {
 
   @Post("/login", validate(LoginRule))
   async login(@Body() req: LoginReq) {
-    const { account, password } = req;
-    const command = new LoginCommand({
-      account,
-      password,
-    });
+    const command = new LoginCommand(req);
     const result = await this.dispatch(command);
     return matchResult(result, {
       ok: (v) => {
