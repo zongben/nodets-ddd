@@ -1,7 +1,7 @@
 import { ValidationChain } from "express-validator";
 
-export abstract class Ruler<T> {
-  constructor(handler: (req: (key: keyof T) => keyof T) => ValidationChain[]) {
-    return handler((key: keyof T) => key);
-  }
-}
+export const createRule = <T>(
+  handler: (key: (k: keyof T) => string) => ValidationChain[],
+): ValidationChain[] => {
+  return handler((k) => k as string);
+};

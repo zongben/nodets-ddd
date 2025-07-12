@@ -1,4 +1,4 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
 export const CONTROLLER_METADATA = {
   PATH: Symbol("controller_path"),

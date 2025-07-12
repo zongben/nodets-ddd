@@ -7,7 +7,7 @@ export type AllowAnonymousPath = {
 
 export class AppOptions {
   routerPrefix: string = "/api";
-  container?: interfaces.ContainerOptions = {
+  container: interfaces.ContainerOptions = {
     autoBindInjectable: true,
   };
   allowAnonymousPath: AllowAnonymousPath[] = [];
