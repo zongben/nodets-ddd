@@ -1,7 +1,6 @@
 import { controllers } from "./controllers";
 import { jwtValidHandler } from "../lib/controller/jwt-valid-handler";
 import path from "node:path";
-import { MediatorModule } from "../lib/mediator/mediator.module";
 import { notFoundMiddleware } from "../lib/middleware/notfound.middleware";
 import { exceptionMiddleware } from "../lib/middleware/exception.middleware";
 import { JwTokenHelperModule } from "../lib/jwToken/jwtoken.module";
@@ -27,8 +26,8 @@ app.useLogger(
     app.env.get("NODE_ENV") === "dev" ? LOGGER_LEVEL.DEBUG : LOGGER_LEVEL.INFO,
   ),
 );
+app.useMediator(handlers)
 app.loadModules(
-  new MediatorModule(app.serviceContainer, handlers),
   new JwTokenHelperModule(
     JWT_TYPES.ACCESSTOKEN,
     new JwTokenHelper(

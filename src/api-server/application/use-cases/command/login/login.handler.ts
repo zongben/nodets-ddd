@@ -5,7 +5,6 @@ import { IPublisher } from "../../../../../lib/mediator/interfaces/publisher.int
 import { LoginFailedEvent } from "./events/login-failed-event";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
-import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { JWT_TYPES } from "../../../../infra/jwtHelpers/types";
 import { LoginCommand } from "./login.command";
@@ -15,6 +14,7 @@ import { LoginError, LoginResult } from "./loing.result";
 import { Result } from "../../../../../lib/result/result.type";
 import { ErrorReturn } from "../../../../../lib/result/error-return";
 import { OkReturn } from "../../../../../lib/result/ok-return";
+import { HandleFor } from "../../../../../lib/mediator/decorator/mediator.decorator";
 
 @HandleFor(LoginCommand)
 @TrackClassMethods()

@@ -19,6 +19,9 @@ import {
   RouteDefinition,
 } from "../controller/decorator/route.decorator";
 import { ILogger } from "../logger";
+import { IReqHandler } from "../mediator/interfaces/req-handler.interface";
+import { MediatorModule } from "../mediator/mediator.module";
+import { MediatorPipe } from "../mediator/mediator-pipe";
 
 export class App {
   private _app: express.Application;
@@ -61,6 +64,19 @@ export class App {
   useLogger(logger: ILogger) {
     this.logger = logger;
     this._bindLogger();
+  }
+
+  useMediator(
+    handlers: Array<new (...args: any[]) => IReqHandler<any, any>>,
+    pipeline?: {
+      pre?: MediatorPipe[];
+      post?: MediatorPipe[];
+    },
+  ) {
+    this.serviceContainer.load(
+      new MediatorModule(this.serviceContainer, handlers, pipeline).getModule(),
+    );
+    return this;
   }
 
   loadModules(...modules: Module[]) {

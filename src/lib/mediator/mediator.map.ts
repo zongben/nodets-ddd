@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IMediatorMap } from "./interfaces/mediator-map.interface";
-import { METADATA_KEY } from "./mediator.decorator";
+import { METADATA_KEY } from "./decorator/mediator.decorator";
 
 @injectable()
 export class MediatorMap implements IMediatorMap {

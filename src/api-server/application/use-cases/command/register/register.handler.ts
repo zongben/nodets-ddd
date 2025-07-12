@@ -5,7 +5,6 @@ import { UserRepository } from "../../../../infra/repositories/user.repository.p
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
-import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { RegisterError, RegisterResult } from "./register.result";
 import { RegisterCommand } from "./register.command";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
@@ -13,6 +12,7 @@ import { ErrorCodes } from "../../../error-codes";
 import { Result } from "../../../../../lib/result/result.type";
 import { ErrorReturn } from "../../../../../lib/result/error-return";
 import { OkReturn } from "../../../../../lib/result/ok-return";
+import { HandleFor } from "../../../../../lib/mediator/decorator/mediator.decorator";
 
 @HandleFor(RegisterCommand)
 @TrackClassMethods()
