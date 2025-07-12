@@ -1,7 +1,8 @@
 import { performance } from "node:perf_hooks";
 import onFinished from "on-finished";
-import { Timer, timerStorage } from "../utils/timer";
-import { ILogger } from "../bootstrap/interfaces/logger.interface";
+import { Timer } from "../utils/timer";
+import { timerStorage } from "../utils/tracker";
+import { ILogger } from "../logger";
 
 export function timerMiddleware(logger: ILogger) {
   return (req: any, res: any, next: any) => {

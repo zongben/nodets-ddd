@@ -8,13 +8,13 @@ import { UserRepository } from "../../../../infra/repositories/user.repository.p
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { IJwTokenHelper } from "../../../../../lib/jwToken/interfaces/jwtoken-helper.interface";
 import { JWT_TYPES } from "../../../../infra/jwtHelpers/types";
-import { Result } from "../../../../../lib/application/result.type";
 import { LoginCommand } from "./login.command";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 import { ErrorCodes } from "../../../error-codes";
 import { LoginError, LoginResult } from "./loing.result";
-import { OkReturn } from "../../../../../lib/application/ok-return";
-import { ErrorReturn } from "../../../../../lib/application/error-return";
+import { Result } from "../../../../../lib/result/result.type";
+import { ErrorReturn } from "../../../../../lib/result/error-return";
+import { OkReturn } from "../../../../../lib/result/ok-return";
 
 @HandleFor(LoginCommand)
 @TrackClassMethods()

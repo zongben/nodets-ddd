@@ -4,7 +4,7 @@ import { Locals } from "../../lib/controller/decorator/param.decorator";
 import { Get } from "../../lib/controller/decorator/route.decorator";
 import { ErrorBody } from "../../lib/controller/error-body";
 import { Responses } from "../../lib/controller/responses";
-import { matchResult } from "../../lib/controller/result.handler";
+import { matchResult } from "../../lib/result/result.handler";
 import { TrackClassMethods } from "../../lib/utils/tracker";
 import { ErrorCodes } from "../application/error-codes";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user.query";

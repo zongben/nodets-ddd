@@ -6,13 +6,13 @@ import { IUserRepository } from "../../../persistences/user.repository.interface
 import { UserRoot } from "../../../../domain/user/user.root";
 import { guid } from "../../../../../lib/utils/guid";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
-import { Result } from "../../../../../lib/application/result.type";
 import { RegisterError, RegisterResult } from "./register.result";
 import { RegisterCommand } from "./register.command";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 import { ErrorCodes } from "../../../error-codes";
-import { OkReturn } from "../../../../../lib/application/ok-return";
-import { ErrorReturn } from "../../../../../lib/application/error-return";
+import { Result } from "../../../../../lib/result/result.type";
+import { ErrorReturn } from "../../../../../lib/result/error-return";
+import { OkReturn } from "../../../../../lib/result/ok-return";
 
 @HandleFor(RegisterCommand)
 @TrackClassMethods()

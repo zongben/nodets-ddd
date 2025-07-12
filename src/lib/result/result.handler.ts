@@ -1,4 +1,4 @@
-import { Result } from "../application/result.type";
+import { Result } from "./result.type";
 
 export const matchResult = <T, E extends string | number | symbol, R>(
   result: Result<T, E>,

@@ -1,4 +1,4 @@
-import { ILogger } from "./interfaces/logger.interface";
+import { ILogger } from "../logger";
 
 export class Logger implements ILogger {
   error(err: Error) {

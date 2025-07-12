@@ -4,12 +4,12 @@ import { UserRepository } from "../../../../infra/repositories/user.repository.p
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { HandleFor } from "../../../../../lib/mediator/mediator.decorator";
 import { GetUserQuery } from "./get-user.query";
-import { Result } from "../../../../../lib/application/result.type";
 import { GetUserError, GetUserResult } from "./get-user.result";
 import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 import { ErrorCodes } from "../../../error-codes";
-import { OkReturn } from "../../../../../lib/application/ok-return";
-import { ErrorReturn } from "../../../../../lib/application/error-return";
+import { Result } from "../../../../../lib/result/result.type";
+import { ErrorReturn } from "../../../../../lib/result/error-return";
+import { OkReturn } from "../../../../../lib/result/ok-return";
 
 @HandleFor(GetUserQuery)
 @TrackClassMethods()

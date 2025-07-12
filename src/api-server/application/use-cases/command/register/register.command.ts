@@ -1,5 +1,5 @@
-import { Result } from "../../../../../lib/application/result.type";
 import { Request } from "../../../../../lib/mediator/request.abstract";
+import { Result } from "../../../../../lib/result/result.type";
 import { RegisterError, RegisterResult } from "./register.result";
 
 export class RegisterCommand extends Request<

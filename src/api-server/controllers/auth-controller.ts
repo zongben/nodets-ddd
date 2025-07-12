@@ -8,18 +8,18 @@ import { ErrorCodes } from "../application/error-codes";
 import { RegisterCommand } from "../application/use-cases/command/register/register.command";
 import { LoginCommand } from "../application/use-cases/command/login/login.command";
 import { TrackClassMethods } from "../../lib/utils/tracker";
-import { matchResult } from "../../lib/controller/result.handler";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorBody } from "../../lib/controller/error-body";
 import { validate } from "../../lib/controller/validater";
 import { Controller } from "../../lib/controller/decorator/controller.decorator";
 import { Post } from "../../lib/controller/decorator/route.decorator";
 import { Body } from "../../lib/controller/decorator/param.decorator";
+import { matchResult } from "../../lib/result/result.handler";
 
 @TrackClassMethods()
 @Controller("/auth")
 export class AuthController extends BaseController {
-  @Post("/register", ...validate(new RegisterRule()))
+  @Post("/register", validate(RegisterRule))
   async register(@Body() req: RegisterReq) {
     const { account, password, username } = req;
     const command = new RegisterCommand({
@@ -42,7 +42,7 @@ export class AuthController extends BaseController {
     });
   }
 
-  @Post("/login", ...validate(new LoginRule()))
+  @Post("/login", validate(LoginRule))
   async login(@Body() req: LoginReq) {
     const { account, password } = req;
     const command = new LoginCommand({

@@ -1,5 +1,5 @@
-import { Result } from "../../../../../lib/application/result.type";
 import { Request } from "../../../../../lib/mediator/request.abstract";
+import { Result } from "../../../../../lib/result/result.type";
 import { LoginError, LoginResult } from "./loing.result";
 
 export class LoginCommand extends Request<Result<LoginResult, LoginError>> {

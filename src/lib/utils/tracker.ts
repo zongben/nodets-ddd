@@ -1,4 +1,7 @@
-import { timerStorage } from "./timer";
+import { AsyncLocalStorage } from "node:async_hooks";
+import { Timer } from "./timer";
+
+export const timerStorage = new AsyncLocalStorage<Timer>();
 
 export function TrackClassMethods(): ClassDecorator {
   return (target: any) => {

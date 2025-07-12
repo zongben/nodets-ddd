@@ -1,4 +1,4 @@
-import { ErrorResult } from "../../lib/application/result.type";
+import { ErrorResult } from "./result.type";
 
 export class ErrorReturn<E> implements ErrorResult<E> {
   isSuccess: false;

@@ -1,5 +1,4 @@
 import { performance } from "node:perf_hooks";
-import { AsyncLocalStorage } from "node:async_hooks";
 
 type TimeSpan = {
   id: number;
@@ -44,5 +43,3 @@ export class Timer {
     return this._timeSpans;
   }
 }
-
-export const timerStorage = new AsyncLocalStorage<Timer>();

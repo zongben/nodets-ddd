@@ -1,5 +1,9 @@
 import { interfaces } from "inversify";
-import { AllowAnonymousPath } from "./allowAnonymous-path.type";
+
+export type AllowAnonymousPath = {
+  path: string;
+  method: string;
+};
 
 export class AppOptions {
   routerPrefix: string = "/api";

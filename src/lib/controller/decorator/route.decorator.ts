@@ -32,10 +32,7 @@ export type RouteDefinition = {
 };
 
 function _createRouteDecorator(method: RouteDefinition["method"]) {
-  return (
-    path: string,
-    ...middleware: ExpressMiddleware[]
-  ): MethodDecorator => {
+  return (path: string, middleware?: ExpressMiddleware[]): MethodDecorator => {
     return (target, propertyKey, descriptor: PropertyDescriptor) => {
       const original = descriptor.value;
 

@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
-import { IEnv } from "../controller/interfaces/env.interface";
+
+export interface IEnv {
+  get(key: string): any;
+}
 
 export class Env implements IEnv {
-  private _env
+  private _env;
 
   constructor(path: string) {
     dotenv.config({ path });

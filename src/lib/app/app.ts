@@ -2,16 +2,14 @@ import express, { Router } from "express";
 import "reflect-metadata";
 import { Container } from "inversify";
 import { AppOptions } from "./app-options";
-import { Env } from "./env";
+import { Env, IEnv } from "./env";
 import { Module } from "../container/container.module";
 import { Logger } from "./logger";
-import { IEnv } from "../controller/interfaces/env.interface";
 import { APP_TYPES } from "./types";
 import http from "http";
 import { Socket } from "net";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { ILogger } from "./interfaces/logger.interface";
 import {
   CONTROLLER_METADATA,
   ExpressMiddleware,
@@ -20,6 +18,7 @@ import {
   ROUTE_METADATA_KEY,
   RouteDefinition,
 } from "../controller/decorator/route.decorator";
+import { ILogger } from "../logger";
 
 export class App {
   private _app: express.Application;

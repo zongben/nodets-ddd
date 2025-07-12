@@ -1,4 +1,4 @@
-import { OkResult } from "../../lib/application/result.type";
+import { OkResult } from "./result.type";
 
 export class OkReturn<T> implements OkResult<T> {
   isSuccess: true;
