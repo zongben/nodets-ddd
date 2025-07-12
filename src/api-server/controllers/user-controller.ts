@@ -1,9 +1,7 @@
 import { BaseController } from "../../lib/controller/base-controller";
-import {
-  Controller,
-  Get,
-  Locals,
-} from "../../lib/controller/decorator/controller.decorator";
+import { Controller } from "../../lib/controller/decorator/controller.decorator";
+import { Locals } from "../../lib/controller/decorator/param.decorator";
+import { Get } from "../../lib/controller/decorator/route.decorator";
 import { ErrorBody } from "../../lib/controller/error-body";
 import { Responses } from "../../lib/controller/responses";
 import { matchResult } from "../../lib/controller/result.handler";

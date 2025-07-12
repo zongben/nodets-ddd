@@ -15,9 +15,11 @@ import { ILogger } from "./interfaces/logger.interface";
 import {
   CONTROLLER_METADATA,
   ExpressMiddleware,
+} from "../controller/decorator/controller.decorator";
+import {
   ROUTE_METADATA_KEY,
   RouteDefinition,
-} from "../controller/decorator/controller.decorator";
+} from "../controller/decorator/route.decorator";
 
 export class App {
   private _app: express.Application;

@@ -12,11 +12,9 @@ import { matchResult } from "../../lib/controller/result.handler";
 import { Responses } from "../../lib/controller/responses";
 import { ErrorBody } from "../../lib/controller/error-body";
 import { validate } from "../../lib/controller/validater";
-import {
-  Body,
-  Controller,
-  Post,
-} from "../../lib/controller/decorator/controller.decorator";
+import { Controller } from "../../lib/controller/decorator/controller.decorator";
+import { Post } from "../../lib/controller/decorator/route.decorator";
+import { Body } from "../../lib/controller/decorator/param.decorator";
 
 @TrackClassMethods()
 @Controller("/auth")

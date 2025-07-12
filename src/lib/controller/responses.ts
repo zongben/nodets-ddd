@@ -1,6 +1,6 @@
 import { CookieOptions } from "express";
 
-export abstract class ExtendWith {
+export abstract class ResWith {
   private _withData: ResponseWith = {};
 
   with(data: ResponseWith): this {
@@ -27,7 +27,7 @@ export type Cookie = {
   options: CookieOptions;
 };
 
-export class JsonResponse extends ExtendWith {
+export class JsonResponse extends ResWith {
   status: number;
   body: any;
 
@@ -38,7 +38,7 @@ export class JsonResponse extends ExtendWith {
   }
 }
 
-export class FileResponse extends ExtendWith {
+export class FileResponse extends ResWith {
   constructor(
     public readonly filePath: string,
     public readonly fileName: string,
