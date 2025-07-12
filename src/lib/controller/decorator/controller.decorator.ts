@@ -1,5 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { FileResponse, JsonResponse } from "../responses";
+import {
+  ExtendWith,
+  FileResponse,
+  JsonResponse,
+  ResponseWith,
+} from "../responses";
 
 export const ROUTE_METADATA_KEY = Symbol("route_metadata");
 
@@ -31,6 +36,20 @@ export function Controller(
   };
 }
 
+function applyWithData(res: Response, withData: ResponseWith = {}) {
+  if (withData.headers) {
+    for (const [key, value] of Object.entries(withData.headers)) {
+      res.setHeader(key, value);
+    }
+  }
+
+  if (withData.cookies) {
+    for (const cookie of withData.cookies) {
+      res.cookie(cookie.key, cookie.value, cookie.options);
+    }
+  }
+}
+
 function createRouteDecorator(method: RouteDefinition["method"]) {
   return (
     path: string,
@@ -45,13 +64,10 @@ function createRouteDecorator(method: RouteDefinition["method"]) {
         next: NextFunction,
       ) {
         try {
-          // 讀取參數 metadata
           const paramMeta: ParamMetadata[] =
             Reflect.getMetadata(PARAM_METADATA_KEY, target, propertyKey) || [];
 
-          // 依參數 index 組裝 arguments
           const args: any[] = [];
-
           for (let i = 0; i < original.length; i++) {
             const meta = paramMeta.find((p) => p.index === i);
 
@@ -74,32 +90,39 @@ function createRouteDecorator(method: RouteDefinition["method"]) {
               case "locals":
                 rawValue = res.locals;
                 break;
+              case "req":
+                rawValue = req;
+                break;
+              case "res":
+                rawValue = res;
+                break;
               default:
                 rawValue = undefined;
             }
 
-            if (meta.type) {
-              // 建立類別實例並 assign 值
-              args[i] = Object.assign(new meta.type(), rawValue);
+            if (meta.name) {
+              args[i] = rawValue[meta.name];
             } else {
               args[i] = rawValue;
             }
           }
 
-          // 呼叫原本 handler
           const result = await original.apply(this, args);
-          // 若 response 已送出，直接返回
-          if (res.headersSent) return;
 
+          if (res.headersSent) return;
           if (!result) {
             throw new Error(
               `No response returned from action ${req.method} ${req.path}`,
             );
           }
+
+          if (result instanceof ExtendWith) {
+            applyWithData(res, result.getWithData());
+          }
+
           if (result instanceof FileResponse) {
             return res.download(result.filePath, result.fileName);
           }
-
           if (result instanceof JsonResponse) {
             return res.status(result.status).json(result.body);
           }
@@ -108,17 +131,14 @@ function createRouteDecorator(method: RouteDefinition["method"]) {
         }
       };
 
-      // 取得並更新 routes metadata
       const routes: RouteDefinition[] =
         Reflect.getMetadata(ROUTE_METADATA_KEY, target.constructor) || [];
-
       routes.push({
         method,
         path,
         handlerName: propertyKey as string,
         middleware,
       });
-
       Reflect.defineMetadata(ROUTE_METADATA_KEY, routes, target.constructor);
     };
   };
@@ -131,16 +151,16 @@ export const Delete = createRouteDecorator("delete");
 export const Patch = createRouteDecorator("patch");
 
 const PARAM_METADATA_KEY = Symbol("param_metadata");
-type ParamSource = "body" | "query" | "param" | "locals";
+type ParamSource = "body" | "query" | "param" | "locals" | "req" | "res";
 
 interface ParamMetadata {
   index: number;
   source: ParamSource;
-  type?: new (...args: any[]) => any;
+  name?: string;
 }
 
 function createParamDecorator(source: ParamSource) {
-  return function (type?: new (...args: any[]) => any): ParameterDecorator {
+  return function (name?: string): ParameterDecorator {
     return (target, propertyKey, parameterIndex) => {
       const existingParams: ParamMetadata[] =
         Reflect.getMetadata(PARAM_METADATA_KEY, target, propertyKey as any) ||
@@ -149,7 +169,7 @@ function createParamDecorator(source: ParamSource) {
       existingParams.push({
         index: parameterIndex,
         source,
-        type,
+        name,
       });
 
       Reflect.defineMetadata(
@@ -166,3 +186,5 @@ export const Body = createParamDecorator("body");
 export const Query = createParamDecorator("query");
 export const Param = createParamDecorator("param");
 export const Locals = createParamDecorator("locals");
+export const Req = createParamDecorator("req");
+export const Res = createParamDecorator("res");

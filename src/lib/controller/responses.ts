@@ -1,18 +1,50 @@
-export class JsonResponse {
+import { CookieOptions } from "express";
+
+export abstract class ExtendWith {
+  private _withData: ResponseWith = {};
+
+  with(data: ResponseWith): this {
+    this._withData = {
+      ...this._withData,
+      ...data,
+    };
+    return this;
+  }
+
+  getWithData(): ResponseWith {
+    return this._withData;
+  }
+}
+
+export type ResponseWith = {
+  cookies?: Cookie[];
+  headers?: Record<string, string>;
+};
+
+export type Cookie = {
+  key: string;
+  value: string;
+  options: CookieOptions;
+};
+
+export class JsonResponse extends ExtendWith {
   status: number;
   body: any;
 
   constructor(status: number, body: any) {
+    super();
     this.status = status;
     this.body = body;
   }
 }
 
-export class FileResponse {
+export class FileResponse extends ExtendWith {
   constructor(
     public readonly filePath: string,
     public readonly fileName: string,
-  ) {}
+  ) {
+    super();
+  }
 }
 
 export class Responses {
@@ -50,5 +82,9 @@ export class Responses {
 
   static Conflict<T = any>(error: T) {
     return new JsonResponse(409, error);
+  }
+
+  static File(filePath: string, fileName: string) {
+    return new FileResponse(filePath, fileName);
   }
 }

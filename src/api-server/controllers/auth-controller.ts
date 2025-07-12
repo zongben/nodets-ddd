@@ -54,14 +54,21 @@ export class AuthController extends BaseController {
     const result = await this.dispatch(command);
     return matchResult(result, {
       ok: (v) => {
-        // res.cookie("refresh_token", v.refreshToken, {
-        //   httpOnly: true,
-        //   secure: true,
-        //   sameSite: "Strict",
-        //   maxAge: 60 * 60 * 24 * 30, // 30 days
-        // });
         return Responses.OK({
           accessToken: v.accessToken,
+        }).with({
+          cookies: [
+            {
+              key: "refresh_token",
+              value: v.refreshToken,
+              options: {
+                httpOnly: true,
+                secure: true,
+                sameSite: "strict",
+                maxAge: 60 * 60 * 24 * 30, // 30days
+              },
+            },
+          ],
         });
       },
       err: {
