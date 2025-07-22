@@ -1,8 +1,7 @@
-import { Request } from "../../../../../lib/mediator/request.abstract";
-import { Result } from "../../../../../lib/result/result.type";
-import { LoginError, LoginResult } from "./loing.result";
+import { MediatedRequest, OneOf } from "empack";
+import { LoginError, LoginResult } from "./login.result";
 
-export class LoginCommand extends Request<Result<LoginResult, LoginError>> {
+export class LoginCommand extends MediatedRequest<OneOf<LoginResult, LoginError>> {
   readonly account: string;
   readonly password: string;
 

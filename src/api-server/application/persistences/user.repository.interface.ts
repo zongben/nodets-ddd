@@ -1,4 +1,4 @@
-import { UserRoot } from "../../domain/user/user.root";
+import { UserRoot } from "../../domain/user/user.root.js";
 
 export interface IUserRepository {
   create(user: UserRoot): Promise<UserRoot>;

@@ -1,9 +1,8 @@
-import { Request } from "../../../../../lib/mediator/request.abstract";
-import { Result } from "../../../../../lib/result/result.type";
+import { MediatedRequest, OneOf } from "empack";
 import { GetUserError, GetUserResult } from "./get-user.result";
 
-export class GetUserQuery extends Request<
-  Result<GetUserResult, GetUserError>
+export class GetUserQuery extends MediatedRequest<
+  OneOf<GetUserResult, GetUserError>
 > {
   constructor(public id: string) {
     super();

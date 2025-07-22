@@ -1,7 +1,7 @@
-import { body } from "express-validator";
-import { INVALID_CODES } from "../../invalid-codes";
+import { body, createRule } from "empack";
 import { ErrorBody } from "../../../../lib/controller/error-body";
-import { createRule } from "../../../../lib/controller/ruler";
+import { INVALID_CODES } from "../../invalid-codes";
+
 
 export type RegisterReq = {
   account: string;

@@ -6,7 +6,7 @@ POST {{host}}/register
 Content-Type: application/json
 
 {
-    "account": "test",
+    "account": "test6",
     "password": "testtest",
     "username": "test"
 }
@@ -17,7 +17,7 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-    "account": "test",
+    "account": "",
     "password": "testtest"
 }
 
@@ -30,3 +30,8 @@ Content-Type: application/json
 
 GET {{host}}/notfound
 Content-Type: application/json
+
+###
+
+GET {{host}}/download
+

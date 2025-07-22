@@ -1,8 +1,7 @@
-import { injectable } from "inversify";
+import { injectable, TrackClassMethods } from "empack";
 import { IUserRepository } from "../../application/persistences/user.repository.interface";
 import { UserRoot } from "../../domain/user/user.root";
 import { prisma } from "../prisma/client";
-import { TrackClassMethods } from "../../../lib/utils/tracker";
 
 @injectable()
 @TrackClassMethods()

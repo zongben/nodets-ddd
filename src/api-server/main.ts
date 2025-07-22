@@ -1,48 +1,32 @@
-import { controllers } from "./controllers";
-import { jwtValidHandler } from "../lib/controller/jwt-valid-handler";
-import path from "node:path";
-import { notFoundMiddleware } from "../lib/middleware/notfound.middleware";
-import { exceptionMiddleware } from "../lib/middleware/exception.middleware";
-import { JwTokenHelperModule } from "../lib/jwToken/jwtoken.module";
-import { JWT_TYPES } from "./infra/jwtHelpers/types";
-import { JwTokenSettings } from "../lib/jwToken/jwtoken-settings";
-import { JwTokenHelper } from "../lib/jwToken/jwtoken-helper";
-import { timerMiddleware } from "../lib/middleware/timer.middleware";
+import path from "path";
+import { App, jwtGuard, Logger, LOGGER_LEVEL } from "empack";
 import { handlers } from "./application/handlers";
-import { Logger, LOGGER_LEVEL } from "../lib/logger";
-import { App } from "../lib/app/app";
+import { JwtModule } from "./infra/jwtHelpers/types";
+import { controllers } from "./controllers";
 
-const app = App.createBuilder((opt) => {
-  opt.allowAnonymousPath = [
-    {
-      path: "/auth/*",
-      method: "^GET|POST$",
-    },
-  ];
-});
-app.useDotEnv(path.join(__dirname, ".env"));
-app.useLogger(
+const app = App.createBuilder();
+app.setDotEnv(path.join(__dirname, ".env"));
+app.setLogger(
   new Logger(
     app.env.get("NODE_ENV") === "dev" ? LOGGER_LEVEL.DEBUG : LOGGER_LEVEL.INFO,
   ),
 );
-app.useMediator(handlers)
+app.setAuthGuard(jwtGuard(app.env.get("JWT_SECRET")));
+app.setMediator(handlers);
 app.loadModules(
-  new JwTokenHelperModule(
-    JWT_TYPES.ACCESSTOKEN,
-    new JwTokenHelper(
-      new JwTokenSettings(app.env.get("JWT_SECRET"), {
-        expiresIn: app.env.get("ACCESSTOKEN_EXPIRES_IN"),
-      }),
-    ),
-  ),
-  new JwTokenHelperModule(
-    JWT_TYPES.REFRESHTOKEN,
-    new JwTokenHelper(
-      new JwTokenSettings(app.env.get("JWT_SECRET"), {
-        expiresIn: app.env.get("REFRESHTOKEN_EXPIRES_IN"),
-      }),
-    ),
+  new JwtModule(
+    {
+      secret: app.env.get("JWT_SECRET"),
+      options: {
+        expiresIn: parseInt(app.env.get("ACCESSTOKEN_EXPIRES_IN")),
+      },
+    },
+    {
+      secret: app.env.get("JWT_SECRET"),
+      options: {
+        expiresIn: parseInt(app.env.get("REFRESHTOKEN_EXPIRES_IN")),
+      },
+    },
   ),
 );
 app.useCors({
@@ -52,9 +36,7 @@ app.useCors({
 });
 app.useJsonParser();
 app.useUrlEncodedParser({ extended: true });
-app.useJwtValidMiddleware(jwtValidHandler(app.env.get("JWT_SECRET")));
-app.useMiddleware(timerMiddleware(app.logger));
+app.useTimerMiddleware();
 app.mapController(controllers);
-app.useMiddleware(notFoundMiddleware(app.logger));
-app.useMiddleware(exceptionMiddleware(app.logger));
-app.run(app.env.get("PORT"));
+// app.enableWebSocket(wsControllers);
+app.run(parseInt(app.env.get("PORT")));

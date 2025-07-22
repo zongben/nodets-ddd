@@ -1,20 +1,14 @@
-import { BaseController } from "../../lib/controller/base-controller";
-import { Controller } from "../../lib/controller/decorator/controller.decorator";
-import { Locals } from "../../lib/controller/decorator/param.decorator";
-import { Get } from "../../lib/controller/decorator/route.decorator";
-import { ErrorBody } from "../../lib/controller/error-body";
-import { Responses } from "../../lib/controller/responses";
-import { matchResult } from "../../lib/result/result.handler";
-import { TrackClassMethods } from "../../lib/utils/tracker";
-import { ErrorCodes } from "../application/error-codes";
 import { GetUserQuery } from "../application/use-cases/query/get-user/get-user.query";
-import { locals } from "../contract/locals";
+import { ErrorBody } from "../../lib/controller/error-body";
+import { ErrorCodes } from "../application/error-codes";
+import { Locals } from "../contract/locals";
+import { Controller, FromLocals, Get, matchResult, MediatedController, Responses, TrackClassMethods } from "empack";
 
 @TrackClassMethods()
 @Controller("/user")
-export class UserController extends BaseController {
+export class UserController extends MediatedController {
   @Get("/")
-  async getUser(@Locals() locals: locals) {
+  async getUser(@FromLocals() locals: Locals) {
     const { userid } = locals.jwt;
     const query = new GetUserQuery(userid);
     const result = await this.dispatch(query);

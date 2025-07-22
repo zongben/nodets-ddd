@@ -1,26 +1,19 @@
-import { BaseController } from "../../lib/controller/base-controller";
 import {
   RegisterReq,
   RegisterRule,
 } from "../contract/auth/register/register-rule";
-import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
-import { ErrorCodes } from "../application/error-codes";
 import { RegisterCommand } from "../application/use-cases/command/register/register.command";
-import { LoginCommand } from "../application/use-cases/command/login/login.command";
-import { TrackClassMethods } from "../../lib/utils/tracker";
-import { Responses } from "../../lib/controller/responses";
 import { ErrorBody } from "../../lib/controller/error-body";
-import { validate } from "../../lib/controller/validater";
-import { Controller } from "../../lib/controller/decorator/controller.decorator";
-import { Post } from "../../lib/controller/decorator/route.decorator";
-import { Body } from "../../lib/controller/decorator/param.decorator";
-import { matchResult } from "../../lib/result/result.handler";
+import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
+import { LoginCommand } from "../application/use-cases/command/login/login.command";
+import { ErrorCodes } from "../application/error-codes";
+import { Controller, FromBody, matchResult, MediatedController, Post, Responses, TrackClassMethods, validate } from "empack";
 
 @TrackClassMethods()
 @Controller("/auth")
-export class AuthController extends BaseController {
+export class AuthController extends MediatedController {
   @Post("/register", validate(RegisterRule))
-  async register(@Body() req: RegisterReq) {
+  async register(@FromBody() req: RegisterReq) {
     const command = new RegisterCommand(req);
     const result = await this.dispatch(command);
     return matchResult(result, {
@@ -38,7 +31,7 @@ export class AuthController extends BaseController {
   }
 
   @Post("/login", validate(LoginRule))
-  async login(@Body() req: LoginReq) {
+  async login(@FromBody() req: LoginReq) {
     const command = new LoginCommand(req);
     const result = await this.dispatch(command);
     return matchResult(result, {

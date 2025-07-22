@@ -1,27 +1,21 @@
-import { inject } from "inversify";
-import { IReqHandler } from "../../../../../lib/mediator/interfaces/req-handler.interface";
+import { GetUserError, GetUserResult } from "./get-user.result";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
-import { GetUserQuery } from "./get-user.query";
-import { GetUserError, GetUserResult } from "./get-user.result";
-import { TrackClassMethods } from "../../../../../lib/utils/tracker";
 import { ErrorCodes } from "../../../error-codes";
-import { Result } from "../../../../../lib/result/result.type";
-import { ErrorReturn } from "../../../../../lib/result/error-return";
-import { OkReturn } from "../../../../../lib/result/ok-return";
-import { HandleFor } from "../../../../../lib/mediator/decorator/mediator.decorator";
+import { GetUserQuery } from "./get-user.query";
+import { ErrorReturn, HandleFor, inject, IReqHandler, OkReturn, OneOf, TrackClassMethods } from "empack";
 
 @HandleFor(GetUserQuery)
 @TrackClassMethods()
 export class GetUserHandler
-  implements IReqHandler<GetUserQuery, Result<GetUserResult, GetUserError>>
+  implements IReqHandler<GetUserQuery, OneOf<GetUserResult, GetUserError>>
 {
   constructor(
     @inject(UserRepository) private _userRepository: IUserRepository,
   ) {}
   async handle(
     query: GetUserQuery,
-  ): Promise<Result<GetUserResult, GetUserError>> {
+  ): Promise<OneOf<GetUserResult, GetUserError>> {
     const user = await this._userRepository.getById(query.id);
     if (!user) {
       return new ErrorReturn(ErrorCodes.USER_NOT_EXISTS);

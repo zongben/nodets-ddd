@@ -1,7 +1,7 @@
+import { IEventHandler } from "empack/mediator";
+import { TrackClassMethods } from "empack/utils";
 import { injectable } from "inversify";
-import { IEventHandler } from "../../../../lib/mediator/interfaces/event-handler.interface";
-import { LoginFailedEvent } from "../../use-cases/command/login/events/login-failed-event";
-import { TrackClassMethods } from "../../../../lib/utils/tracker";
+import { LoginFailedEvent } from "../../use-cases/command/login/events/login-failed-event.js";
 
 @injectable()
 @TrackClassMethods()

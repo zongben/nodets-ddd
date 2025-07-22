@@ -1,4 +1,4 @@
-import { Crypto } from "../../../lib/utils/crypto";
+import { bcrypt } from "../../../lib/crypto";
 
 interface UserProps {
   id: string;
@@ -25,6 +25,6 @@ export class UserRoot implements UserProps {
   }
 
   async isPasswordCorrect(password: string): Promise<boolean> {
-    return await Crypto.compare(password, this.password);
+    return await bcrypt.compare(password, this.password);
   }
 }

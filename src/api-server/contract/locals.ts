@@ -1,4 +1,4 @@
-export type locals = {
+export type Locals = {
   jwt: {
     userid: string;
   };

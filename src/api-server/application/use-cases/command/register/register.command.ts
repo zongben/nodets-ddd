@@ -1,9 +1,8 @@
-import { Request } from "../../../../../lib/mediator/request.abstract";
-import { Result } from "../../../../../lib/result/result.type";
+import { MediatedRequest, OneOf } from "empack";
 import { RegisterError, RegisterResult } from "./register.result";
 
-export class RegisterCommand extends Request<
-  Result<RegisterResult, RegisterError>
+export class RegisterCommand extends MediatedRequest<
+  OneOf<RegisterResult, RegisterError>
 > {
   readonly account: string;
   readonly password: string;
