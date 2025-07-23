@@ -1,8 +1,8 @@
 import path from "path";
-import { App, jwtGuard, Logger, LOGGER_LEVEL } from "empack";
 import { handlers } from "./application/handlers";
 import { JwtModule } from "./infra/jwtHelpers/types";
-import { controllers } from "./controllers";
+import { controllers, wsController } from "./controllers";
+import { App, jwtGuard, Logger, LOGGER_LEVEL } from "empack";
 
 const app = App.createBuilder();
 app.setDotEnv(path.join(__dirname, ".env"));
@@ -38,5 +38,5 @@ app.useJsonParser();
 app.useUrlEncodedParser({ extended: true });
 app.useTimerMiddleware();
 app.mapController(controllers);
-// app.enableWebSocket(wsControllers);
+app.enableWebSocket(wsController);
 app.run(parseInt(app.env.get("PORT")));

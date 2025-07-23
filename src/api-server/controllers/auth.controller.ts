@@ -31,8 +31,8 @@ export class AuthController extends MediatedController {
   }
 
   @Post("/login", validate(LoginRule))
-  async login(@FromBody() req: LoginReq) {
-    const command = new LoginCommand(req);
+  async login(@FromBody() body: LoginReq) {
+    const command = new LoginCommand(body);
     const result = await this.dispatch(command);
     return matchResult(result, {
       ok: (v) => {

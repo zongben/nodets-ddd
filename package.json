@@ -31,7 +31,7 @@
   "dependencies": {
     "@prisma/client": "^6.12.0",
     "bcrypt": "^6.0.0",
-    "empack": "^0.0.24",
+    "empack": "^0.0.25",
     "mongoose": "^8.16.4"
   }
 }
