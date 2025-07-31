@@ -7,10 +7,19 @@ import { ErrorBody } from "../../lib/controller/error-body";
 import { LoginReq, LoginRule } from "../contract/auth/login/login-rule";
 import { LoginCommand } from "../application/use-cases/command/login/login.command";
 import { ErrorCodes } from "../application/error-codes";
-import { Controller, FromBody, matchResult, MediatedController, Post, Responses, TrackClassMethods, validate } from "empack";
+import { matchResult, Track, validate } from "@empackjs/utils";
+import {
+  Controller,
+  FromBody,
+  Guard,
+  MediatedController,
+  Post,
+  Responses,
+} from "@empackjs/core";
 
-@TrackClassMethods()
+@Track()
 @Controller("/auth")
+@Guard("none")
 export class AuthController extends MediatedController {
   @Post("/register", validate(RegisterRule))
   async register(@FromBody() req: RegisterReq) {
@@ -22,7 +31,7 @@ export class AuthController extends MediatedController {
       },
       err: {
         [ErrorCodes.USER_ALREADY_EXISTS]: (e) => {
-          return Responses.Conflict<ErrorBody>({
+          return Responses.ClientError.Conflict<ErrorBody>({
             errorCode: e,
           });
         },
@@ -55,7 +64,7 @@ export class AuthController extends MediatedController {
       },
       err: {
         [ErrorCodes.ACCOUNT_OR_PASSWORD_INCORRECT]: (e) => {
-          return Responses.Unauthorized<ErrorBody>({
+          return Responses.ClientError.Unauthorized<ErrorBody>({
             errorCode: e,
           });
         },

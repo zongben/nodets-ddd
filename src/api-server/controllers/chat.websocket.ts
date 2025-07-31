@@ -1,4 +1,4 @@
-import { IWebSocket, RawData, WebSocketContext, WsController } from "empack";
+import { IWebSocket, RawData, WebSocketContext, WsController } from "@empackjs/core";
 
 @WsController("/chat")
 export class ChatWebSocketController implements IWebSocket {

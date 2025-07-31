@@ -1,4 +1,5 @@
-import { BindingFluentAPI, JwTokenHelper, JwTokenSettings, Module } from "empack";
+import { BindingScope, Module } from "@empackjs/core";
+import { JwTokenHelper, JwTokenSettings } from "@empackjs/utils";
 
 export const AccessTokenSymbol = Symbol.for("ACCESSTOKEN");
 export const RefreshTokenSymbol = Symbol.for("REFRESHTOKEN");
@@ -10,7 +11,7 @@ export class JwtModule extends Module {
   ) {
     super();
   }
-  register(bind: BindingFluentAPI): void {
+  register(bind: BindingScope): void {
     bind.addConstant(
       AccessTokenSymbol,
       new JwTokenHelper(this.accessTokenSetting),

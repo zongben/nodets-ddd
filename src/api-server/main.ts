@@ -1,17 +1,25 @@
-import path from "path";
 import { handlers } from "./application/handlers";
 import { JwtModule } from "./infra/jwtHelpers/types";
 import { controllers, wsController } from "./controllers";
-import { App, jwtGuard, Logger, LOGGER_LEVEL } from "empack";
+import { App } from "@empackjs/core";
+import {
+  jwtGuard,
+  Logger,
+  LOGGER_LEVEL,
+  timerMiddleware,
+} from "@empackjs/utils";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = App.createBuilder();
-app.setDotEnv(path.join(__dirname, ".env"));
+app.setDotEnv();
 app.setLogger(
   new Logger(
     app.env.get("NODE_ENV") === "dev" ? LOGGER_LEVEL.DEBUG : LOGGER_LEVEL.INFO,
   ),
 );
-app.setAuthGuard(jwtGuard(app.env.get("JWT_SECRET")));
+app.enableAuthGuard(jwtGuard(app.env.get("JWT_SECRET")));
 app.setMediator(handlers);
 app.loadModules(
   new JwtModule(
@@ -35,8 +43,8 @@ app.useCors({
   credentials: true,
 });
 app.useJsonParser();
-app.useUrlEncodedParser({ extended: true });
-app.useTimerMiddleware();
+app.useUrlEncodedParser();
+app.useMiddleware(timerMiddleware(app.logger));
 app.mapController(controllers);
 app.enableWebSocket(wsController);
 app.run(parseInt(app.env.get("PORT")));

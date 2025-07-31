@@ -1,10 +1,11 @@
-import { injectable, TrackClassMethods } from "empack";
+import { injectable } from "@empackjs/core";
 import { IUserRepository } from "../../application/persistences/user.repository.interface";
 import { UserRoot } from "../../domain/user/user.root";
 import { prisma } from "../prisma/client";
+import { Track } from "@empackjs/utils";
 
 @injectable()
-@TrackClassMethods()
+@Track()
 export class UserRepository implements IUserRepository {
   async create(user: UserRoot): Promise<UserRoot> {
     await prisma.user.create({

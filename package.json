@@ -29,9 +29,11 @@
     "typescript-eslint": "^8.38.0"
   },
   "dependencies": {
+    "@empackjs/core": "^0.0.3",
+    "@empackjs/utils": "^0.0.1",
     "@prisma/client": "^6.12.0",
     "bcrypt": "^6.0.0",
-    "empack": "^0.0.25",
+    "dotenv": "^17.2.1",
     "mongoose": "^8.16.4"
   }
 }

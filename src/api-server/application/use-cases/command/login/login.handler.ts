@@ -4,16 +4,17 @@ import { IUserRepository } from "../../../persistences/user.repository.interface
 import { AccessTokenSymbol, RefreshTokenSymbol } from "../../../../infra/jwtHelpers/types";
 import { ErrorCodes } from "../../../error-codes";
 import { LoginFailedEvent } from "./events/login-failed-event";
-import { ErrorReturn, HandleFor, IJwTokenHelper, inject, IPublisher, IPublisherSymbol, IReqHandler, OkReturn, OneOf, TrackClassMethods } from "empack";
 import { LoginCommand } from "./login.command";
+import { APP_TOKEN, HandleFor, inject, IPublisher, IReqHandler } from "@empackjs/core";
+import { ErrorReturn, IJwTokenHelper, OkReturn, OneOf, Track } from "@empackjs/utils";
 
 @HandleFor(LoginCommand)
-@TrackClassMethods()
+@Track()
 export class LoginHandler
   implements IReqHandler<LoginCommand, OneOf<LoginResult, LoginError>>
 {
   constructor(
-    @inject(IPublisherSymbol) private _publisher: IPublisher,
+    @inject(APP_TOKEN.IPublisher) private _publisher: IPublisher,
     @inject(UserRepository) private _userRepository: IUserRepository,
     @inject(AccessTokenSymbol)
     private _accessTokenHelper: IJwTokenHelper,

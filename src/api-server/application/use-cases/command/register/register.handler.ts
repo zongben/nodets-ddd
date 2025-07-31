@@ -4,10 +4,11 @@ import { IUserRepository } from "../../../persistences/user.repository.interface
 import { ErrorCodes } from "../../../error-codes";
 import { bcrypt } from "../../../../../lib/crypto";
 import { UserRoot } from "../../../../domain/user/user.root";
-import { ErrorReturn, HandleFor, inject, IReqHandler, OkReturn, OneOf, TrackClassMethods, uuid } from "empack";
+import { HandleFor, inject, IReqHandler } from "@empackjs/core";
+import { ErrorReturn, OkReturn, OneOf, Track, uuid } from "@empackjs/utils";
 
 @HandleFor(RegisterCommand)
-@TrackClassMethods()
+@Track()
 export class RegisterHandler
   implements IReqHandler<RegisterCommand, OneOf<RegisterResult, RegisterError>>
 {

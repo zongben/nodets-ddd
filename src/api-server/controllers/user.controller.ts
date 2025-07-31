@@ -2,9 +2,16 @@ import { GetUserQuery } from "../application/use-cases/query/get-user/get-user.q
 import { ErrorBody } from "../../lib/controller/error-body";
 import { ErrorCodes } from "../application/error-codes";
 import { Locals } from "../contract/locals";
-import { Controller, FromLocals, Get, matchResult, MediatedController, Responses, TrackClassMethods } from "empack";
+import { matchResult, Track } from "@empackjs/utils";
+import {
+  Controller,
+  FromLocals,
+  Get,
+  MediatedController,
+  Responses,
+} from "@empackjs/core";
 
-@TrackClassMethods()
+@Track()
 @Controller("/user")
 export class UserController extends MediatedController {
   @Get("/")
@@ -18,7 +25,7 @@ export class UserController extends MediatedController {
       },
       err: {
         [ErrorCodes.USER_NOT_EXISTS]: (e) => {
-          return Responses.NotFound<ErrorBody>({
+          return Responses.ClientError.NotFound<ErrorBody>({
             errorCode: e,
           });
         },

@@ -2,11 +2,12 @@ import { GetUserError, GetUserResult } from "./get-user.result";
 import { UserRepository } from "../../../../infra/repositories/user.repository.prisma";
 import { IUserRepository } from "../../../persistences/user.repository.interface";
 import { ErrorCodes } from "../../../error-codes";
+import { HandleFor, inject, IReqHandler } from "@empackjs/core";
+import { ErrorReturn, OkReturn, OneOf, Track } from "@empackjs/utils";
 import { GetUserQuery } from "./get-user.query";
-import { ErrorReturn, HandleFor, inject, IReqHandler, OkReturn, OneOf, TrackClassMethods } from "empack";
 
 @HandleFor(GetUserQuery)
-@TrackClassMethods()
+@Track()
 export class GetUserHandler
   implements IReqHandler<GetUserQuery, OneOf<GetUserResult, GetUserError>>
 {
